@@ -27,8 +27,10 @@ social:
 superuser: true
 ---
 
-My name is Min R Tamang. I am a quality engineer at Kite Hill where responsibility includes developing and deploying statistical process controlto documentation and data analysis.
+My name is Min R Tamang. I am a quality engineer at Kite Hill. Professionally my responsibilities included developing and deploying statistical process control to documentation and data analysis.
 
-I hold a Master's degree in Statistics with concentration in Data Science from Cal State Bay. I also earned bachelor's degree in Biological Science and Associate degree in Natural Science from Southeast Missouri State University and Quincy College respectively. Additionally, I completed Bachelor's degree from TU, Kathmandu. 
+I hold a Master's degree in Statistics with concentration in Data Science from Cal State Bay. I also earned bachelor's degree in Biological Science and Associate degree in Natural Science from Southeast Missouri State University and Quincy College respectively. Additionally, I completed Bachelor's degree from Tribhuvan University, Kathmandu. 
 
-I was born in Nepal. Currently I live in Bay Area, California. I love playing with data. 
+I was born in Nepal. Currently I live in Bay Area, California. 
+
+This is a data science blog built with R package [blogdown](https://cran.r-project.org/web/packages/blogdown/index.html), [Hugo](https://gohugo.io/),[GitHub](https://github.com/knitdata/minrblog), and deoployed through [Netlify](https://www.netlify.com/). If you like my posts or have a feedback, please leave a comment. 

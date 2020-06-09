@@ -9,7 +9,7 @@ This is a data science library for references,books,blogs and data sets.
 
 **Reference**
 * [R for Data Science](https://r4ds.had.co.nz/)
-* [Modern Dive](https://moderndive.com/)
+* [ModernDive](https://moderndive.com/)
 * [Mastering Shiny](https://mastering-shiny.org/)
 * [Spatial Data Science with R](https://rspatial.org/),[R-Spatial](https://www.r-spatial.org/)
 * [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3),
