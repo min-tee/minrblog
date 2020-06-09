@@ -1,1 +1,1 @@
-# minrblog
+This is for my data science blog [knitdata](knitdata.org).

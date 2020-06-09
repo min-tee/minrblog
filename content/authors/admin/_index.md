@@ -33,4 +33,4 @@ I hold a Master's degree in Statistics with concentration in Data Science from C
 
 I was born in Nepal. Currently I live in Bay Area, California. 
 
-This is a data science blog built with R package [blogdown](https://cran.r-project.org/web/packages/blogdown/index.html), [Hugo](https://gohugo.io/),[GitHub](https://github.com/knitdata/minrblog), and deoployed through [Netlify](https://www.netlify.com/). If you like my posts or have a feedback, please leave a comment. 
+This is a data science blog built with R package [blogdown](https://cran.r-project.org/web/packages/blogdown/index.html), [Hugo](https://gohugo.io/),[GitHub](https://github.com/knitdata/minrblog), and deployed through [Netlify](https://www.netlify.com/). If you like my posts or have a feedback, please leave a comment. 
