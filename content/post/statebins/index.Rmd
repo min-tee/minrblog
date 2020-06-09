@@ -1,0 +1,69 @@
+---
+title: "Statebins"
+summary: Statebins using data from GeoFRED
+authors: [minr]
+date: 2019-12-09T21:13:14-05:00
+categories: ["Data Viz"]
+tags: ["Data Viz"]
+
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+    toc_depth: 1   
+---
+
+**Statebins** are U.S. State Cartogram Heatmaps, alternative to Choropleth Maps for USA States.
+
+```{r}
+# load packages
+library(pacman)
+p_load(statebins,readxl,dplyr)
+```
+
+
+**Statebins with 2018 Bachelor's Degree or Higher by State (percent) data.**
+```{r}
+# upload data
+ data1 <- read_excel("GeoFRED_Bachelor's_Degree_or_Higher_by_State_Percent.xls", skip = 1)
+data1 %>% sample_n(5)
+```
+
+```{r}
+# statebins
+statebins_continuous(state_data = data1, state_col = "State",
+                     text_color = "white", value_col = "Year_2018",
+                     brewer_pal="Blues", font_size = 3,
+                     legend_title="2018 Bachelor's Degree or Higher by State (percent)")
+```
+
+
+
+**Statebins with 2018 Median Household Income by State Data**
+```{r}
+data2 <- read_excel("GeoFRED_Median_Household_Income_by_State_Percent_Change.xls", skip = 1)
+data2 %>% sample_n(5)
+```
+
+```{r}
+statebins_continuous(state_data = data2, state_col = "State",
+                     text_color = "white", value_col = "Year_2018",
+                     brewer_pal="Greens", font_size = 3,
+                     legend_title="
+Median Household Income by State")
+```
+
+
+**Statebins with 2018 Resident Population by State (change, thousands of persons) Data**
+```{r}
+data3 <- read_excel("GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls", skip=1)
+data3 %>% sample_n(5)
+```
+
+```{r}
+statebins_continuous(state_data = data3, state_col = "State",
+                     text_color = "white", value_col = "Year_2018",
+                     brewer_pal="Reds", font_size = 3, 
+                     legend_title="2018 Resident Population by State (change, thousands of persons) ")
+```
+

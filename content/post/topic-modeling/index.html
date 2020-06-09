@@ -1,0 +1,314 @@
+---
+title: "Topic Modeling"
+summary: Topic Modeling using LDA algorithm on books from  Gutenberg
+authors: [minr]
+date: 2020-05-09T21:13:14-05:00
+categories: ["NLP"]
+tags: ["NLP"]
+
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+    toc_depth: 1
+
+---
+
+
+
+<p>For this project, I selected four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups.</p>
+<p><strong>Step-by-step explanations are as follows:</strong></p>
+<pre class="r"><code>library(pacman)
+p_load(topicmodels,gutenbergr,tidyverse,tidytext,stringr,scales)</code></pre>
+<p><strong>1.Book Titles</strong></p>
+<pre class="r"><code># four books for topic models
+titles &lt;- c(&quot;Buccaneers and Pirates of Our Coasts&quot;, &quot;Beethoven&quot;, &quot;Astronomy for Amateurs&quot;,&quot;The Psychology of Revolution&quot;)
+titles</code></pre>
+<pre><code>## [1] &quot;Buccaneers and Pirates of Our Coasts&quot;
+## [2] &quot;Beethoven&quot;                           
+## [3] &quot;Astronomy for Amateurs&quot;              
+## [4] &quot;The Psychology of Revolution&quot;</code></pre>
+<pre class="r"><code># retrieve books from gutenbergr
+books &lt;- gutenberg_download(c(448,15141,25267,17188), meta_fields = &quot;title&quot;)</code></pre>
+<pre><code>## Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest</code></pre>
+<pre><code>## Using mirror http://aleph.gutenberg.org</code></pre>
+<p><strong>2.Pre-Processing</strong></p>
+<pre class="r"><code># divide into documents, each representing one chapter
+by_chapter &lt;- books %&gt;%
+  group_by(title) %&gt;%
+  mutate(chapter = cumsum(str_detect(text, regex(&quot;^chapter &quot;, ignore_case = TRUE)))) %&gt;%
+  ungroup() %&gt;%
+  filter(chapter &gt; 0) %&gt;%
+  unite(document, title, chapter)
+
+# split into words
+by_chapter_word &lt;- by_chapter %&gt;%
+  unnest_tokens(word, text)
+
+# find document-word counts
+word_counts &lt;- by_chapter_word %&gt;%
+  anti_join(stop_words) %&gt;%
+  count(document, word, sort = TRUE) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>word_counts</code></pre>
+<pre><code>## # A tibble: 67,284 x 3
+##    document                                                       word         n
+##    &lt;chr&gt;                                                          &lt;chr&gt;    &lt;int&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s indeb… beethov…    87
+##  2 Astronomy for Amateurs_11                                      distance    77
+##  3 Astronomy for Amateurs_4                                       sun         66
+##  4 Astronomy for Amateurs_9                                       moon        64
+##  5 Astronomy for Amateurs_3                                       stars       63
+##  6 Astronomy for Amateurs_11                                      sun         58
+##  7 Astronomy for Amateurs_8                                       earth       56
+##  8 Astronomy for Amateurs_10                                      sun         54
+##  9 Astronomy for Amateurs_2                                       stars       53
+## 10 The Psychology of Revolution_53                                revolut…    52
+## # … with 67,274 more rows</code></pre>
+<p><strong>3.LDA on Chapters</strong></p>
+<pre class="r"><code># convert tidy data to document term matrix
+chapters_dtm &lt;- word_counts %&gt;% cast_dtm(document, word, n)
+chapters_dtm</code></pre>
+<pre><code>## &lt;&lt;DocumentTermMatrix (documents: 117, terms: 16265)&gt;&gt;
+## Non-/sparse entries: 67284/1835721
+## Sparsity           : 96%
+## Maximal term length: 41
+## Weighting          : term frequency (tf)</code></pre>
+<pre class="r"><code># create topic model with LDA function for four books, k = 4
+chapters_lda &lt;- LDA(chapters_dtm, k = 4, control = list(seed = 1999))
+chapters_lda</code></pre>
+<pre><code>## A LDA_VEM topic model with 4 topics.</code></pre>
+<pre class="r"><code>#per-topic-per-word probabilities : beta
+chapter_topics &lt;- tidy(chapters_lda, matrix = &quot;beta&quot;)
+chapter_topics</code></pre>
+<pre><code>## # A tibble: 65,060 x 3
+##    topic term           beta
+##    &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;
+##  1     1 beethoven 6.55e-135
+##  2     2 beethoven 4.39e- 18
+##  3     3 beethoven 1.34e-132
+##  4     4 beethoven 2.09e-  2
+##  5     1 distance  7.99e-  4
+##  6     2 distance  9.49e-  5
+##  7     3 distance  7.75e-  3
+##  8     4 distance  7.62e-  5
+##  9     1 sun       8.19e-  5
+## 10     2 sun       3.16e-  5
+## # … with 65,050 more rows</code></pre>
+<p>For example, the term “beethoven” has zero probability of being generated from topics 1, 3, or 4, but it makes up 2% of topic 2.</p>
+<pre class="r"><code># top 10 terms in each topic
+top_terms &lt;- chapter_topics %&gt;% group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;% ungroup() %&gt;%
+  arrange(topic, -beta)
+top_terms</code></pre>
+<pre><code>## # A tibble: 40 x 3
+##    topic term          beta
+##    &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;
+##  1     1 pirate     0.0117 
+##  2     1 pirates    0.0108 
+##  3     1 town       0.00865
+##  4     1 vessel     0.00851
+##  5     1 ship       0.00733
+##  6     1 buccaneers 0.00622
+##  7     1 time       0.00606
+##  8     1 captain    0.00602
+##  9     1 spanish    0.00585
+## 10     1 people     0.00483
+## # … with 30 more rows</code></pre>
+<pre class="r"><code># visualize top terms from each topic
+top_terms %&gt;% mutate(term = reorder_within(term, beta, topic)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = F) + facet_wrap(~topic, scales = &quot;free&quot;) +
+  coord_flip() + scale_x_reordered() + 
+  labs(caption = &quot;Fig:The terms that are most common within each topic&quot;) + theme(plot.caption = element_text(hjust = 0.5, size = 10))</code></pre>
+<p><img src="/post/topic-modeling/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The topics are clearly associated with the four books.</p>
+<p><strong>4.Per-document Classification</strong></p>
+<pre class="r"><code>#per-document-per-topic probabilities: gamma
+chapters_gamma &lt;- tidy(chapters_lda, matrix = &quot;gamma&quot;)
+chapters_gamma</code></pre>
+<pre><code>## # A tibble: 468 x 3
+##    document                                                      topic     gamma
+##    &lt;chr&gt;                                                         &lt;int&gt;     &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s inde…     1   4.05e-6
+##  2 Astronomy for Amateurs_11                                         1   7.54e-6
+##  3 Astronomy for Amateurs_4                                          1   9.32e-6
+##  4 Astronomy for Amateurs_9                                          1   1.05e-5
+##  5 Astronomy for Amateurs_3                                          1   8.14e-6
+##  6 Astronomy for Amateurs_8                                          1   8.58e-6
+##  7 Astronomy for Amateurs_10                                         1   8.42e-6
+##  8 Astronomy for Amateurs_2                                          1   9.93e-6
+##  9 The Psychology of Revolution_53                                   1   7.75e-6
+## 10 Buccaneers and Pirates of Our Coasts_33                           1  10.00e-1
+## # … with 458 more rows</code></pre>
+<p>Astronomy for Amateurs_11 document has 0% probability of coming from topic 1(Buccaneers and Pirates of Our Coasts).</p>
+<pre class="r"><code>#separate out chapter and title
+chapters_gamma &lt;- chapters_gamma %&gt;%
+  separate(document, c(&quot;title&quot;, &quot;chapter&quot;), sep= &quot;_&quot;, convert = TRUE)
+chapters_gamma</code></pre>
+<pre><code>## # A tibble: 468 x 4
+##    title                                                 chapter topic     gamma
+##    &lt;chr&gt;                                                   &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagne…      19     1   4.05e-6
+##  2 Astronomy for Amateurs                                     11     1   7.54e-6
+##  3 Astronomy for Amateurs                                      4     1   9.32e-6
+##  4 Astronomy for Amateurs                                      9     1   1.05e-5
+##  5 Astronomy for Amateurs                                      3     1   8.14e-6
+##  6 Astronomy for Amateurs                                      8     1   8.58e-6
+##  7 Astronomy for Amateurs                                     10     1   8.42e-6
+##  8 Astronomy for Amateurs                                      2     1   9.93e-6
+##  9 The Psychology of Revolution                               53     1   7.75e-6
+## 10 Buccaneers and Pirates of Our Coasts                       33     1  10.00e-1
+## # … with 458 more rows</code></pre>
+<pre class="r"><code># reorder titles and plot
+chapters_gamma %&gt;% mutate(title = reorder(title, gamma*topic)) %&gt;%
+  ggplot(aes(factor(topic),gamma)) + geom_boxplot() + facet_wrap(~title) +
+  labs(caption = &quot;Fig: The gamma probabilities for each chapter within each book&quot;) + theme(plot.caption = element_text(hjust = 0.5, size = 12))</code></pre>
+<p><img src="/post/topic-modeling/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>It appears all of the chapters are uniquely identified as a single topic.</p>
+<pre class="r"><code>#topic most associated with a chapter 
+chapter_classifications &lt;- chapters_gamma %&gt;%
+  group_by(title, chapter) %&gt;% top_n(1, gamma) %&gt;%
+  ungroup()
+chapter_classifications</code></pre>
+<pre><code>## # A tibble: 117 x 4
+##    title                                chapter topic gamma
+##    &lt;chr&gt;                                  &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+##  1 Buccaneers and Pirates of Our Coasts      33     1 1.000
+##  2 Buccaneers and Pirates of Our Coasts      11     1 1.000
+##  3 Buccaneers and Pirates of Our Coasts      31     1 1.000
+##  4 Buccaneers and Pirates of Our Coasts      32     1 0.981
+##  5 Buccaneers and Pirates of Our Coasts      30     1 1.000
+##  6 Buccaneers and Pirates of Our Coasts      20     1 1.000
+##  7 Buccaneers and Pirates of Our Coasts      21     1 1.000
+##  8 Buccaneers and Pirates of Our Coasts      23     1 1.000
+##  9 Buccaneers and Pirates of Our Coasts      15     1 1.000
+## 10 Buccaneers and Pirates of Our Coasts      16     1 1.000
+## # … with 107 more rows</code></pre>
+<pre class="r"><code># consensus topics
+book_topics &lt;- chapter_classifications %&gt;% count(title, topic) %&gt;%
+  group_by(title) %&gt;% top_n(1,n) %&gt;% ungroup() %&gt;%
+  transmute(consensus = title, topic)
+book_topics%&gt;% arrange((topic))</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   consensus                                                                topic
+##   &lt;chr&gt;                                                                    &lt;int&gt;
+## 1 Buccaneers and Pirates of Our Coasts                                         1
+## 2 The Psychology of Revolution                                                 2
+## 3 Astronomy for Amateurs                                                       3
+## 4 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s indebtedness to…     4</code></pre>
+<pre class="r"><code>#misidentified topics
+chapter_classifications %&gt;% inner_join(book_topics, by = &quot;topic&quot;) %&gt;%
+  filter(title != consensus)</code></pre>
+<pre><code>## # A tibble: 0 x 5
+## # … with 5 variables: title &lt;chr&gt;, chapter &lt;int&gt;, topic &lt;int&gt;, gamma &lt;dbl&gt;,
+## #   consensus &lt;chr&gt;</code></pre>
+<p>Indeed, no chapters were mis-classified.</p>
+<p><strong>5.By Word Assignments: Augment</strong></p>
+<pre class="r"><code># see which words are assigned to which topic with augment function
+assignments &lt;- augment(chapters_lda, data = chapters_dtm)
+assignments</code></pre>
+<pre><code>## # A tibble: 67,284 x 4
+##    document                                                 term    count .topic
+##    &lt;chr&gt;                                                    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    87      4
+##  2 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    45      4
+##  3 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    44      4
+##  4 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    43      4
+##  5 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    43      4
+##  6 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    39      4
+##  7 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    38      4
+##  8 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    28      4
+##  9 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    25      4
+## 10 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    24      4
+## # … with 67,274 more rows</code></pre>
+<pre class="r"><code># combine assignments with true book titles to find incorrect classification
+assignments &lt;- assignments %&gt;% 
+  separate(document, c(&quot;title&quot;, &quot;chapter&quot;), sep = &quot;_&quot;, convert = TRUE)%&gt;%
+  inner_join(book_topics, by = c(&quot;.topic&quot; = &quot;topic&quot;))
+assignments</code></pre>
+<pre><code>## # A tibble: 67,284 x 6
+##    title                   chapter term   count .topic consensus                
+##    &lt;chr&gt;                     &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                    
+##  1 &quot;Beethoven, a characte…      19 beeth…    87      4 &quot;Beethoven, a character …
+##  2 &quot;Beethoven, a characte…      13 beeth…    45      4 &quot;Beethoven, a character …
+##  3 &quot;Beethoven, a characte…       8 beeth…    44      4 &quot;Beethoven, a character …
+##  4 &quot;Beethoven, a characte…       1 beeth…    43      4 &quot;Beethoven, a character …
+##  5 &quot;Beethoven, a characte…       6 beeth…    43      4 &quot;Beethoven, a character …
+##  6 &quot;Beethoven, a characte…       2 beeth…    39      4 &quot;Beethoven, a character …
+##  7 &quot;Beethoven, a characte…      10 beeth…    38      4 &quot;Beethoven, a character …
+##  8 &quot;Beethoven, a characte…       5 beeth…    28      4 &quot;Beethoven, a character …
+##  9 &quot;Beethoven, a characte…      11 beeth…    25      4 &quot;Beethoven, a character …
+## 10 &quot;Beethoven, a characte…      14 beeth…    24      4 &quot;Beethoven, a character …
+## # … with 67,274 more rows</code></pre>
+<pre class="r"><code>#visualize a confusion matrix
+assignments %&gt;%
+count(title, consensus, wt = count) %&gt;%
+group_by(title) %&gt;%
+mutate(percent = n / sum(n)) %&gt;%
+ggplot(aes(consensus, title, fill = percent)) +
+geom_tile() + 
+scale_fill_gradient2(high = &quot;blue&quot;, label = percent_format()) +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 90, hjust = 1),
+panel.grid = element_blank()) +
+labs(x = &quot;book words were assigned to&quot;,
+y = &quot;book words came from&quot;,
+fill = &quot;% of assignments&quot;) + 
+labs(caption = &quot;Fig: Confusion matrix showing where LDA assigned the words from each book&quot;) +
+theme(plot.caption = element_text( size = 10),legend.key.size = unit(0.5, &quot;cm&quot;)) </code></pre>
+<p><img src="/post/topic-modeling/index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Almost all words were correctly assigned to each topic.</p>
+<pre class="r"><code># most commonly mistaken words
+wrong_words &lt;- assignments %&gt;% filter(title!= consensus)
+wrong_words</code></pre>
+<pre><code>## # A tibble: 45 x 6
+##    title                   chapter term   count .topic consensus                
+##    &lt;chr&gt;                     &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                    
+##  1 Buccaneers and Pirates…      32 moon       3      3 Astronomy for Amateurs   
+##  2 Buccaneers and Pirates…      32 stars      2      3 Astronomy for Amateurs   
+##  3 &quot;Beethoven, a characte…       4 revol…     1      2 The Psychology of Revolu…
+##  4 The Psychology of Revo…      45 capta…     1      1 Buccaneers and Pirates o…
+##  5 The Psychology of Revo…      45 town       2      1 Buccaneers and Pirates o…
+##  6 Buccaneers and Pirates…      32 heave…     1      3 Astronomy for Amateurs   
+##  7 The Psychology of Revo…      45 vessel     1      1 Buccaneers and Pirates o…
+##  8 &quot;Beethoven, a characte…       4 armies     2      2 The Psychology of Revolu…
+##  9 Buccaneers and Pirates…       1 1          1      4 &quot;Beethoven, a character …
+## 10 &quot;Beethoven, a characte…       4 bonap…     3      2 The Psychology of Revolu…
+## # … with 35 more rows</code></pre>
+<pre class="r"><code>wrong_words %&gt;% count(title, consensus, term , wt = count) %&gt;% 
+  ungroup() %&gt;% arrange(-n)</code></pre>
+<pre><code>## # A tibble: 45 x 4
+##    title                                    consensus               term       n
+##    &lt;chr&gt;                                    &lt;chr&gt;                   &lt;chr&gt;  &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… france     6
+##  2 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… bonap…     3
+##  3 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  moon       3
+##  4 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… armies     2
+##  5 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… louis      2
+##  6 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  stars      2
+##  7 The Psychology of Revolution             Buccaneers and Pirates… town       2
+##  8 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… equal…     1
+##  9 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… gover…     1
+## 10 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… illus…     1
+## # … with 35 more rows</code></pre>
+<p>The word “moon” and “stars” appear in “Buccaneers and Pirates of Our Coasts” but they are wrongly classified into “Astronomy for Amateurs” becuase they are more common in the later.</p>
+<pre class="r"><code># wrongly classified word, eg. &quot;moon&quot;
+word_counts %&gt;% filter(word == &quot;moon&quot;)</code></pre>
+<pre><code>## # A tibble: 12 x 3
+##    document                                word      n
+##    &lt;chr&gt;                                   &lt;chr&gt; &lt;int&gt;
+##  1 Astronomy for Amateurs_9                moon     64
+##  2 Astronomy for Amateurs_10               moon     49
+##  3 Astronomy for Amateurs_11               moon     35
+##  4 Astronomy for Amateurs_4                moon     10
+##  5 Astronomy for Amateurs_12               moon      9
+##  6 Astronomy for Amateurs_5                moon      8
+##  7 Astronomy for Amateurs_8                moon      4
+##  8 Astronomy for Amateurs_3                moon      3
+##  9 Astronomy for Amateurs_6                moon      3
+## 10 Buccaneers and Pirates of Our Coasts_32 moon      3
+## 11 Astronomy for Amateurs_1                moon      2
+## 12 Astronomy for Amateurs_7                moon      2</code></pre>
+<p>Although the words are presumably different for each topic since books are selected from different genre, LDA algorithm performed really well on identifying topics to the document and words to the topic. Really great for unsupervised clustering!</p>

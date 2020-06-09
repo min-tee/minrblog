@@ -1,0 +1,75 @@
+---
+title: "Statebins"
+summary: Statebins using data from GeoFRED
+authors: [minr]
+date: 2019-12-09T21:13:14-05:00
+categories: ["Data Viz"]
+tags: ["Data Viz"]
+
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+    toc_depth: 1   
+---
+
+
+
+<p><strong>Statebins</strong> are U.S. State Cartogram Heatmaps, alternative to Choropleth Maps for USA States.</p>
+<pre class="r"><code># load packages
+library(pacman)
+p_load(statebins,readxl,dplyr)</code></pre>
+<p><strong>Statebins with 2018 Bachelor’s Degree or Higher by State (percent) data.</strong></p>
+<pre class="r"><code># upload data
+ data1 &lt;- read_excel(&quot;GeoFRED_Bachelor&#39;s_Degree_or_Higher_by_State_Percent.xls&quot;, skip = 1)
+data1 %&gt;% sample_n(5)</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##   `Series ID` State                Code  Year_2018
+##   &lt;chr&gt;       &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt;
+## 1 GCT1502HI   Hawaii               15         33.5
+## 2 GCT1502CA   California           06         34.2
+## 3 GCT1502LA   Louisiana            22         24.3
+## 4 GCT1502OH   Ohio                 39         29  
+## 5 GCT1502DC   District of Columbia 11         60.4</code></pre>
+<pre class="r"><code># statebins
+statebins_continuous(state_data = data1, state_col = &quot;State&quot;,
+                     text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
+                     brewer_pal=&quot;Blues&quot;, font_size = 3,
+                     legend_title=&quot;2018 Bachelor&#39;s Degree or Higher by State (percent)&quot;)</code></pre>
+<pre><code>## Warning: `show_guide` has been deprecated. Please use `show.legend` instead.</code></pre>
+<p><img src="/post/statebins/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><strong>Statebins with 2018 Median Household Income by State Data</strong></p>
+<pre class="r"><code>data2 &lt;- read_excel(&quot;GeoFRED_Median_Household_Income_by_State_Percent_Change.xls&quot;, skip = 1)
+data2 %&gt;% sample_n(5)</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##   `Series ID`     State       Code  Year_2018
+##   &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt;
+## 1 MEHOINUSUTA646N Utah        49        10.4 
+## 2 MEHOINUSAKA646N Alaska      02       -11.9 
+## 3 MEHOINUSMSA646N Mississippi 28        -1.16
+## 4 MEHOINUSNMA646N New Mexico  35         5.88
+## 5 MEHOINUSVAA646N Virginia    51         8.95</code></pre>
+<pre class="r"><code>statebins_continuous(state_data = data2, state_col = &quot;State&quot;,
+                     text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
+                     brewer_pal=&quot;Greens&quot;, font_size = 3,
+                     legend_title=&quot;
+Median Household Income by State&quot;)</code></pre>
+<pre><code>## Warning: `show_guide` has been deprecated. Please use `show.legend` instead.</code></pre>
+<p><img src="/post/statebins/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><strong>Statebins with 2018 Resident Population by State (change, thousands of persons) Data</strong></p>
+<pre class="r"><code>data3 &lt;- read_excel(&quot;GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls&quot;, skip=1)
+data3 %&gt;% sample_n(5)</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##   `Series ID` State        Code  Year_2018
+##   &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;     &lt;dbl&gt;
+## 1 UTPOP       Utah         49       58.0  
+## 2 RIPOP       Rhode Island 44        0.829
+## 3 MSPOP       Mississippi  28       -3.13 
+## 4 INPOP       Indiana      18       31.8  
+## 5 MTPOP       Montana      30        9.22</code></pre>
+<pre class="r"><code>statebins_continuous(state_data = data3, state_col = &quot;State&quot;,
+                     text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
+                     brewer_pal=&quot;Reds&quot;, font_size = 3, 
+                     legend_title=&quot;2018 Resident Population by State (change, thousands of persons) &quot;)</code></pre>
+<pre><code>## Warning: `show_guide` has been deprecated. Please use `show.legend` instead.</code></pre>
+<p><img src="/post/statebins/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>

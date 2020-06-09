@@ -1,0 +1,239 @@
+---
+title: "Topic Modeling"
+summary: Topic Modeling using LDA algorithm on books from  Gutenberg
+authors: [minr]
+date: 2020-05-09T21:13:14-05:00
+categories: ["NLP"]
+tags: ["NLP"]
+
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+    toc_depth: 1
+
+---
+
+
+For this project, I selected four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups. 
+
+**Step-by-step explanations are as follows:**
+
+```{r}
+library(pacman)
+p_load(topicmodels,gutenbergr,tidyverse,tidytext,stringr,scales)
+```
+
+
+**1.Book Titles**
+```{r}
+# four books for topic models
+titles <- c("Buccaneers and Pirates of Our Coasts", "Beethoven", "Astronomy for Amateurs","The Psychology of Revolution")
+titles
+```
+
+```{r}
+# retrieve books from gutenbergr
+books <- gutenberg_download(c(448,15141,25267,17188), meta_fields = "title")
+```
+
+
+
+**2.Pre-Processing**
+```{r}
+# divide into documents, each representing one chapter
+by_chapter <- books %>%
+  group_by(title) %>%
+  mutate(chapter = cumsum(str_detect(text, regex("^chapter ", ignore_case = TRUE)))) %>%
+  ungroup() %>%
+  filter(chapter > 0) %>%
+  unite(document, title, chapter)
+
+# split into words
+by_chapter_word <- by_chapter %>%
+  unnest_tokens(word, text)
+
+# find document-word counts
+word_counts <- by_chapter_word %>%
+  anti_join(stop_words) %>%
+  count(document, word, sort = TRUE) %>%
+  ungroup()
+
+word_counts
+```
+
+
+
+
+**3.LDA on Chapters**
+```{r}
+# convert tidy data to document term matrix
+chapters_dtm <- word_counts %>% cast_dtm(document, word, n)
+chapters_dtm
+
+```
+
+
+```{r}
+# create topic model with LDA function for four books, k = 4
+chapters_lda <- LDA(chapters_dtm, k = 4, control = list(seed = 1999))
+chapters_lda
+```
+
+
+```{r}
+#per-topic-per-word probabilities : beta
+chapter_topics <- tidy(chapters_lda, matrix = "beta")
+chapter_topics
+```
+
+For example, the term “beethoven” has zero probability of being generated from topics 1, 3, or 4, but it makes up 2% of topic 2.
+
+```{r}
+# top 10 terms in each topic
+top_terms <- chapter_topics %>% group_by(topic) %>%
+  top_n(10, beta) %>% ungroup() %>%
+  arrange(topic, -beta)
+top_terms
+```
+
+```{r}
+# visualize top terms from each topic
+top_terms %>% mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = F) + facet_wrap(~topic, scales = "free") +
+  coord_flip() + scale_x_reordered() + 
+  labs(caption = "Fig:The terms that are most common within each topic") + theme(plot.caption = element_text(hjust = 0.5, size = 10))
+```
+
+
+The topics are clearly associated with the four books. 
+
+
+
+**4.Per-document Classification**
+
+```{r}
+#per-document-per-topic probabilities: gamma
+chapters_gamma <- tidy(chapters_lda, matrix = "gamma")
+chapters_gamma
+```
+
+Astronomy for Amateurs_11 document has 0% probability of coming from topic 1(Buccaneers and Pirates of Our Coasts).
+
+```{r}
+#separate out chapter and title
+chapters_gamma <- chapters_gamma %>%
+  separate(document, c("title", "chapter"), sep= "_", convert = TRUE)
+chapters_gamma
+```
+
+
+```{r}
+# reorder titles and plot
+chapters_gamma %>% mutate(title = reorder(title, gamma*topic)) %>%
+  ggplot(aes(factor(topic),gamma)) + geom_boxplot() + facet_wrap(~title) +
+  labs(caption = "Fig: The gamma probabilities for each chapter within each book") + theme(plot.caption = element_text(hjust = 0.5, size = 12))
+```
+
+It appears  all of the chapters are uniquely identified as a single topic.
+
+```{r}
+#topic most associated with a chapter 
+chapter_classifications <- chapters_gamma %>%
+  group_by(title, chapter) %>% top_n(1, gamma) %>%
+  ungroup()
+chapter_classifications
+```
+
+```{r}
+# consensus topics
+book_topics <- chapter_classifications %>% count(title, topic) %>%
+  group_by(title) %>% top_n(1,n) %>% ungroup() %>%
+  transmute(consensus = title, topic)
+book_topics%>% arrange((topic))
+```
+
+```{r}
+#misidentified topics
+chapter_classifications %>% inner_join(book_topics, by = "topic") %>%
+  filter(title != consensus)
+```
+
+Indeed, no chapters were mis-classified. 
+
+
+
+**5.By Word Assignments: Augment**
+
+```{r}
+# see which words are assigned to which topic with augment function
+assignments <- augment(chapters_lda, data = chapters_dtm)
+assignments
+```
+
+
+```{r}
+# combine assignments with true book titles to find incorrect classification
+assignments <- assignments %>% 
+  separate(document, c("title", "chapter"), sep = "_", convert = TRUE)%>%
+  inner_join(book_topics, by = c(".topic" = "topic"))
+assignments
+```
+
+
+```{r}
+#visualize a confusion matrix
+assignments %>%
+count(title, consensus, wt = count) %>%
+group_by(title) %>%
+mutate(percent = n / sum(n)) %>%
+ggplot(aes(consensus, title, fill = percent)) +
+geom_tile() + 
+scale_fill_gradient2(high = "blue", label = percent_format()) +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 90, hjust = 1),
+panel.grid = element_blank()) +
+labs(x = "book words were assigned to",
+y = "book words came from",
+fill = "% of assignments") + 
+labs(caption = "Fig: Confusion matrix showing where LDA assigned the words from each book") +
+theme(plot.caption = element_text( size = 10),legend.key.size = unit(0.5, "cm")) 
+ 
+```
+ 
+Almost all words were correctly assigned to each topic.
+ 
+```{r}
+# most commonly mistaken words
+wrong_words <- assignments %>% filter(title!= consensus)
+wrong_words
+```
+
+```{r}
+wrong_words %>% count(title, consensus, term , wt = count) %>% 
+  ungroup() %>% arrange(-n)
+```
+
+The word "moon" and "stars" appear  in "Buccaneers and Pirates of Our Coasts" but they are wrongly classified into "Astronomy for Amateurs" becuase they are more common in the later. 
+
+```{r}
+# wrongly classified word, eg. "moon"
+word_counts %>% filter(word == "moon")
+```
+
+
+Although the words are presumably different for each topic since books are selected from different genre, LDA algorithm performed really well on identifying topics to the document and words to the topic. Really great for unsupervised clustering!
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1335 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Topic Modeling using LDA algorithm on books from  Gutenberg">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/topic-modeling/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/images/icon_hufac689ed154f22ff77b5bea0395abf25_7664_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hufac689ed154f22ff77b5bea0395abf25_7664_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="/post/topic-modeling/">
+
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@minr_z">
+  <meta property="twitter:creator" content="@minr_z">
+  
+  <meta property="og:site_name" content="Min Tamang">
+  <meta property="og:url" content="/post/topic-modeling/">
+  <meta property="og:title" content="Topic Modeling | Min Tamang">
+  <meta property="og:description" content="Topic Modeling using LDA algorithm on books from  Gutenberg"><meta property="og:image" content="/post/topic-modeling/featured.png">
+  <meta property="twitter:image" content="/post/topic-modeling/featured.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-05-09T21:13:14-05:00">
+    
+    <meta property="article:modified_time" content="2020-05-09T21:13:14-05:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/topic-modeling/"
+  },
+  "headline": "Topic Modeling",
+  
+  "image": [
+    "/post/topic-modeling/featured.png"
+  ],
+  
+  "datePublished": "2020-05-09T21:13:14-05:00",
+  "dateModified": "2020-05-09T21:13:14-05:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "minr"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Min Tamang",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/images/icon_hufac689ed154f22ff77b5bea0395abf25_7664_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "Topic Modeling using LDA algorithm on books from  Gutenberg"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>Topic Modeling | Min Tamang</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Min Tamang</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Min Tamang</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#hero"><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/library"><span>Library</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/resume"><span>Resume</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link js-theme-selector" data-toggle="dropdown" aria-haspopup="true">
+          <i class="fas fa-palette" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Topic Modeling</h1>
+
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  
+  <span><a href="/author/minr/">minr</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    May 9, 2020
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    11 min read
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/nlp/">NLP</a></span>
+  
+
+</div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 753px;">
+  <div style="position: relative">
+    <img src="/post/topic-modeling/featured_hu430a263bac48ddb661ed33d3988a9563_471093_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<p>For this project, I selected four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups.</p>
+<p><strong>Step-by-step explanations are as follows:</strong></p>
+<pre class="r"><code>library(pacman)
+p_load(topicmodels,gutenbergr,tidyverse,tidytext,stringr,scales)</code></pre>
+<p><strong>1.Book Titles</strong></p>
+<pre class="r"><code># four books for topic models
+titles &lt;- c(&quot;Buccaneers and Pirates of Our Coasts&quot;, &quot;Beethoven&quot;, &quot;Astronomy for Amateurs&quot;,&quot;The Psychology of Revolution&quot;)
+titles</code></pre>
+<pre><code>## [1] &quot;Buccaneers and Pirates of Our Coasts&quot;
+## [2] &quot;Beethoven&quot;                           
+## [3] &quot;Astronomy for Amateurs&quot;              
+## [4] &quot;The Psychology of Revolution&quot;</code></pre>
+<pre class="r"><code># retrieve books from gutenbergr
+books &lt;- gutenberg_download(c(448,15141,25267,17188), meta_fields = &quot;title&quot;)</code></pre>
+<pre><code>## Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest</code></pre>
+<pre><code>## Using mirror http://aleph.gutenberg.org</code></pre>
+<p><strong>2.Pre-Processing</strong></p>
+<pre class="r"><code># divide into documents, each representing one chapter
+by_chapter &lt;- books %&gt;%
+  group_by(title) %&gt;%
+  mutate(chapter = cumsum(str_detect(text, regex(&quot;^chapter &quot;, ignore_case = TRUE)))) %&gt;%
+  ungroup() %&gt;%
+  filter(chapter &gt; 0) %&gt;%
+  unite(document, title, chapter)
+
+# split into words
+by_chapter_word &lt;- by_chapter %&gt;%
+  unnest_tokens(word, text)
+
+# find document-word counts
+word_counts &lt;- by_chapter_word %&gt;%
+  anti_join(stop_words) %&gt;%
+  count(document, word, sort = TRUE) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>word_counts</code></pre>
+<pre><code>## # A tibble: 67,284 x 3
+##    document                                                       word         n
+##    &lt;chr&gt;                                                          &lt;chr&gt;    &lt;int&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s indeb… beethov…    87
+##  2 Astronomy for Amateurs_11                                      distance    77
+##  3 Astronomy for Amateurs_4                                       sun         66
+##  4 Astronomy for Amateurs_9                                       moon        64
+##  5 Astronomy for Amateurs_3                                       stars       63
+##  6 Astronomy for Amateurs_11                                      sun         58
+##  7 Astronomy for Amateurs_8                                       earth       56
+##  8 Astronomy for Amateurs_10                                      sun         54
+##  9 Astronomy for Amateurs_2                                       stars       53
+## 10 The Psychology of Revolution_53                                revolut…    52
+## # … with 67,274 more rows</code></pre>
+<p><strong>3.LDA on Chapters</strong></p>
+<pre class="r"><code># convert tidy data to document term matrix
+chapters_dtm &lt;- word_counts %&gt;% cast_dtm(document, word, n)
+chapters_dtm</code></pre>
+<pre><code>## &lt;&lt;DocumentTermMatrix (documents: 117, terms: 16265)&gt;&gt;
+## Non-/sparse entries: 67284/1835721
+## Sparsity           : 96%
+## Maximal term length: 41
+## Weighting          : term frequency (tf)</code></pre>
+<pre class="r"><code># create topic model with LDA function for four books, k = 4
+chapters_lda &lt;- LDA(chapters_dtm, k = 4, control = list(seed = 1999))
+chapters_lda</code></pre>
+<pre><code>## A LDA_VEM topic model with 4 topics.</code></pre>
+<pre class="r"><code>#per-topic-per-word probabilities : beta
+chapter_topics &lt;- tidy(chapters_lda, matrix = &quot;beta&quot;)
+chapter_topics</code></pre>
+<pre><code>## # A tibble: 65,060 x 3
+##    topic term           beta
+##    &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;
+##  1     1 beethoven 6.55e-135
+##  2     2 beethoven 4.39e- 18
+##  3     3 beethoven 1.34e-132
+##  4     4 beethoven 2.09e-  2
+##  5     1 distance  7.99e-  4
+##  6     2 distance  9.49e-  5
+##  7     3 distance  7.75e-  3
+##  8     4 distance  7.62e-  5
+##  9     1 sun       8.19e-  5
+## 10     2 sun       3.16e-  5
+## # … with 65,050 more rows</code></pre>
+<p>For example, the term “beethoven” has zero probability of being generated from topics 1, 3, or 4, but it makes up 2% of topic 2.</p>
+<pre class="r"><code># top 10 terms in each topic
+top_terms &lt;- chapter_topics %&gt;% group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;% ungroup() %&gt;%
+  arrange(topic, -beta)
+top_terms</code></pre>
+<pre><code>## # A tibble: 40 x 3
+##    topic term          beta
+##    &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt;
+##  1     1 pirate     0.0117 
+##  2     1 pirates    0.0108 
+##  3     1 town       0.00865
+##  4     1 vessel     0.00851
+##  5     1 ship       0.00733
+##  6     1 buccaneers 0.00622
+##  7     1 time       0.00606
+##  8     1 captain    0.00602
+##  9     1 spanish    0.00585
+## 10     1 people     0.00483
+## # … with 30 more rows</code></pre>
+<pre class="r"><code># visualize top terms from each topic
+top_terms %&gt;% mutate(term = reorder_within(term, beta, topic)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = F) + facet_wrap(~topic, scales = &quot;free&quot;) +
+  coord_flip() + scale_x_reordered() + 
+  labs(caption = &quot;Fig:The terms that are most common within each topic&quot;) + theme(plot.caption = element_text(hjust = 0.5, size = 10))</code></pre>
+<p><img src="/post/topic-modeling/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The topics are clearly associated with the four books.</p>
+<p><strong>4.Per-document Classification</strong></p>
+<pre class="r"><code>#per-document-per-topic probabilities: gamma
+chapters_gamma &lt;- tidy(chapters_lda, matrix = &quot;gamma&quot;)
+chapters_gamma</code></pre>
+<pre><code>## # A tibble: 468 x 3
+##    document                                                      topic     gamma
+##    &lt;chr&gt;                                                         &lt;int&gt;     &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s inde…     1   4.05e-6
+##  2 Astronomy for Amateurs_11                                         1   7.54e-6
+##  3 Astronomy for Amateurs_4                                          1   9.32e-6
+##  4 Astronomy for Amateurs_9                                          1   1.05e-5
+##  5 Astronomy for Amateurs_3                                          1   8.14e-6
+##  6 Astronomy for Amateurs_8                                          1   8.58e-6
+##  7 Astronomy for Amateurs_10                                         1   8.42e-6
+##  8 Astronomy for Amateurs_2                                          1   9.93e-6
+##  9 The Psychology of Revolution_53                                   1   7.75e-6
+## 10 Buccaneers and Pirates of Our Coasts_33                           1  10.00e-1
+## # … with 458 more rows</code></pre>
+<p>Astronomy for Amateurs_11 document has 0% probability of coming from topic 1(Buccaneers and Pirates of Our Coasts).</p>
+<pre class="r"><code>#separate out chapter and title
+chapters_gamma &lt;- chapters_gamma %&gt;%
+  separate(document, c(&quot;title&quot;, &quot;chapter&quot;), sep= &quot;_&quot;, convert = TRUE)
+chapters_gamma</code></pre>
+<pre><code>## # A tibble: 468 x 4
+##    title                                                 chapter topic     gamma
+##    &lt;chr&gt;                                                   &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagne…      19     1   4.05e-6
+##  2 Astronomy for Amateurs                                     11     1   7.54e-6
+##  3 Astronomy for Amateurs                                      4     1   9.32e-6
+##  4 Astronomy for Amateurs                                      9     1   1.05e-5
+##  5 Astronomy for Amateurs                                      3     1   8.14e-6
+##  6 Astronomy for Amateurs                                      8     1   8.58e-6
+##  7 Astronomy for Amateurs                                     10     1   8.42e-6
+##  8 Astronomy for Amateurs                                      2     1   9.93e-6
+##  9 The Psychology of Revolution                               53     1   7.75e-6
+## 10 Buccaneers and Pirates of Our Coasts                       33     1  10.00e-1
+## # … with 458 more rows</code></pre>
+<pre class="r"><code># reorder titles and plot
+chapters_gamma %&gt;% mutate(title = reorder(title, gamma*topic)) %&gt;%
+  ggplot(aes(factor(topic),gamma)) + geom_boxplot() + facet_wrap(~title) +
+  labs(caption = &quot;Fig: The gamma probabilities for each chapter within each book&quot;) + theme(plot.caption = element_text(hjust = 0.5, size = 12))</code></pre>
+<p><img src="/post/topic-modeling/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>It appears all of the chapters are uniquely identified as a single topic.</p>
+<pre class="r"><code>#topic most associated with a chapter 
+chapter_classifications &lt;- chapters_gamma %&gt;%
+  group_by(title, chapter) %&gt;% top_n(1, gamma) %&gt;%
+  ungroup()
+chapter_classifications</code></pre>
+<pre><code>## # A tibble: 117 x 4
+##    title                                chapter topic gamma
+##    &lt;chr&gt;                                  &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+##  1 Buccaneers and Pirates of Our Coasts      33     1 1.000
+##  2 Buccaneers and Pirates of Our Coasts      11     1 1.000
+##  3 Buccaneers and Pirates of Our Coasts      31     1 1.000
+##  4 Buccaneers and Pirates of Our Coasts      32     1 0.981
+##  5 Buccaneers and Pirates of Our Coasts      30     1 1.000
+##  6 Buccaneers and Pirates of Our Coasts      20     1 1.000
+##  7 Buccaneers and Pirates of Our Coasts      21     1 1.000
+##  8 Buccaneers and Pirates of Our Coasts      23     1 1.000
+##  9 Buccaneers and Pirates of Our Coasts      15     1 1.000
+## 10 Buccaneers and Pirates of Our Coasts      16     1 1.000
+## # … with 107 more rows</code></pre>
+<pre class="r"><code># consensus topics
+book_topics &lt;- chapter_classifications %&gt;% count(title, topic) %&gt;%
+  group_by(title) %&gt;% top_n(1,n) %&gt;% ungroup() %&gt;%
+  transmute(consensus = title, topic)
+book_topics%&gt;% arrange((topic))</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   consensus                                                                topic
+##   &lt;chr&gt;                                                                    &lt;int&gt;
+## 1 Buccaneers and Pirates of Our Coasts                                         1
+## 2 The Psychology of Revolution                                                 2
+## 3 Astronomy for Amateurs                                                       3
+## 4 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s indebtedness to…     4</code></pre>
+<pre class="r"><code>#misidentified topics
+chapter_classifications %&gt;% inner_join(book_topics, by = &quot;topic&quot;) %&gt;%
+  filter(title != consensus)</code></pre>
+<pre><code>## # A tibble: 0 x 5
+## # … with 5 variables: title &lt;chr&gt;, chapter &lt;int&gt;, topic &lt;int&gt;, gamma &lt;dbl&gt;,
+## #   consensus &lt;chr&gt;</code></pre>
+<p>Indeed, no chapters were mis-classified.</p>
+<p><strong>5.By Word Assignments: Augment</strong></p>
+<pre class="r"><code># see which words are assigned to which topic with augment function
+assignments &lt;- augment(chapters_lda, data = chapters_dtm)
+assignments</code></pre>
+<pre><code>## # A tibble: 67,284 x 4
+##    document                                                 term    count .topic
+##    &lt;chr&gt;                                                    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    87      4
+##  2 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    45      4
+##  3 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    44      4
+##  4 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    43      4
+##  5 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    43      4
+##  6 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    39      4
+##  7 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    38      4
+##  8 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    28      4
+##  9 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    25      4
+## 10 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s… beetho…    24      4
+## # … with 67,274 more rows</code></pre>
+<pre class="r"><code># combine assignments with true book titles to find incorrect classification
+assignments &lt;- assignments %&gt;% 
+  separate(document, c(&quot;title&quot;, &quot;chapter&quot;), sep = &quot;_&quot;, convert = TRUE)%&gt;%
+  inner_join(book_topics, by = c(&quot;.topic&quot; = &quot;topic&quot;))
+assignments</code></pre>
+<pre><code>## # A tibble: 67,284 x 6
+##    title                   chapter term   count .topic consensus                
+##    &lt;chr&gt;                     &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                    
+##  1 &quot;Beethoven, a characte…      19 beeth…    87      4 &quot;Beethoven, a character …
+##  2 &quot;Beethoven, a characte…      13 beeth…    45      4 &quot;Beethoven, a character …
+##  3 &quot;Beethoven, a characte…       8 beeth…    44      4 &quot;Beethoven, a character …
+##  4 &quot;Beethoven, a characte…       1 beeth…    43      4 &quot;Beethoven, a character …
+##  5 &quot;Beethoven, a characte…       6 beeth…    43      4 &quot;Beethoven, a character …
+##  6 &quot;Beethoven, a characte…       2 beeth…    39      4 &quot;Beethoven, a character …
+##  7 &quot;Beethoven, a characte…      10 beeth…    38      4 &quot;Beethoven, a character …
+##  8 &quot;Beethoven, a characte…       5 beeth…    28      4 &quot;Beethoven, a character …
+##  9 &quot;Beethoven, a characte…      11 beeth…    25      4 &quot;Beethoven, a character …
+## 10 &quot;Beethoven, a characte…      14 beeth…    24      4 &quot;Beethoven, a character …
+## # … with 67,274 more rows</code></pre>
+<pre class="r"><code>#visualize a confusion matrix
+assignments %&gt;%
+count(title, consensus, wt = count) %&gt;%
+group_by(title) %&gt;%
+mutate(percent = n / sum(n)) %&gt;%
+ggplot(aes(consensus, title, fill = percent)) +
+geom_tile() + 
+scale_fill_gradient2(high = &quot;blue&quot;, label = percent_format()) +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 90, hjust = 1),
+panel.grid = element_blank()) +
+labs(x = &quot;book words were assigned to&quot;,
+y = &quot;book words came from&quot;,
+fill = &quot;% of assignments&quot;) + 
+labs(caption = &quot;Fig: Confusion matrix showing where LDA assigned the words from each book&quot;) +
+theme(plot.caption = element_text( size = 10),legend.key.size = unit(0.5, &quot;cm&quot;)) </code></pre>
+<p><img src="/post/topic-modeling/index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Almost all words were correctly assigned to each topic.</p>
+<pre class="r"><code># most commonly mistaken words
+wrong_words &lt;- assignments %&gt;% filter(title!= consensus)
+wrong_words</code></pre>
+<pre><code>## # A tibble: 45 x 6
+##    title                   chapter term   count .topic consensus                
+##    &lt;chr&gt;                     &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                    
+##  1 Buccaneers and Pirates…      32 moon       3      3 Astronomy for Amateurs   
+##  2 Buccaneers and Pirates…      32 stars      2      3 Astronomy for Amateurs   
+##  3 &quot;Beethoven, a characte…       4 revol…     1      2 The Psychology of Revolu…
+##  4 The Psychology of Revo…      45 capta…     1      1 Buccaneers and Pirates o…
+##  5 The Psychology of Revo…      45 town       2      1 Buccaneers and Pirates o…
+##  6 Buccaneers and Pirates…      32 heave…     1      3 Astronomy for Amateurs   
+##  7 The Psychology of Revo…      45 vessel     1      1 Buccaneers and Pirates o…
+##  8 &quot;Beethoven, a characte…       4 armies     2      2 The Psychology of Revolu…
+##  9 Buccaneers and Pirates…       1 1          1      4 &quot;Beethoven, a character …
+## 10 &quot;Beethoven, a characte…       4 bonap…     3      2 The Psychology of Revolu…
+## # … with 35 more rows</code></pre>
+<pre class="r"><code>wrong_words %&gt;% count(title, consensus, term , wt = count) %&gt;% 
+  ungroup() %&gt;% arrange(-n)</code></pre>
+<pre><code>## # A tibble: 45 x 4
+##    title                                    consensus               term       n
+##    &lt;chr&gt;                                    &lt;chr&gt;                   &lt;chr&gt;  &lt;dbl&gt;
+##  1 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… france     6
+##  2 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… bonap…     3
+##  3 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  moon       3
+##  4 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… armies     2
+##  5 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… louis      2
+##  6 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  stars      2
+##  7 The Psychology of Revolution             Buccaneers and Pirates… town       2
+##  8 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… equal…     1
+##  9 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… gover…     1
+## 10 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… illus…     1
+## # … with 35 more rows</code></pre>
+<p>The word “moon” and “stars” appear in “Buccaneers and Pirates of Our Coasts” but they are wrongly classified into “Astronomy for Amateurs” becuase they are more common in the later.</p>
+<pre class="r"><code># wrongly classified word, eg. &quot;moon&quot;
+word_counts %&gt;% filter(word == &quot;moon&quot;)</code></pre>
+<pre><code>## # A tibble: 12 x 3
+##    document                                word      n
+##    &lt;chr&gt;                                   &lt;chr&gt; &lt;int&gt;
+##  1 Astronomy for Amateurs_9                moon     64
+##  2 Astronomy for Amateurs_10               moon     49
+##  3 Astronomy for Amateurs_11               moon     35
+##  4 Astronomy for Amateurs_4                moon     10
+##  5 Astronomy for Amateurs_12               moon      9
+##  6 Astronomy for Amateurs_5                moon      8
+##  7 Astronomy for Amateurs_8                moon      4
+##  8 Astronomy for Amateurs_3                moon      3
+##  9 Astronomy for Amateurs_6                moon      3
+## 10 Buccaneers and Pirates of Our Coasts_32 moon      3
+## 11 Astronomy for Amateurs_1                moon      2
+## 12 Astronomy for Amateurs_7                moon      2</code></pre>
+<p>Although the words are presumably different for each topic since books are selected from different genre, LDA algorithm performed really well on identifying topics to the document and words to the topic. Really great for unsupervised clustering!</p>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/nlp/">NLP</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/topic-modeling/&amp;text=Topic%20Modeling" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/topic-modeling/&amp;t=Topic%20Modeling" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Topic%20Modeling&amp;body=/post/topic-modeling/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/topic-modeling/&amp;title=Topic%20Modeling" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Topic%20Modeling%20/post/topic-modeling/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/topic-modeling/&amp;title=Topic%20Modeling" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks",
+        'slides' : "Slides"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.37431be2d92d7fb0160054761ab79602.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="/privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="/terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    © Min Tamang 2020
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
