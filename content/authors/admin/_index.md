@@ -14,7 +14,7 @@ role: Quality Engineer
 social:
 - icon: envelope
   icon_pack: fas
-  link: [minr](minaj1s@gmail.com)
+  link: minaj1s@gmail.com
 - icon: twitter
   icon_pack: fab
   link: https://twitter.com/minr_z
