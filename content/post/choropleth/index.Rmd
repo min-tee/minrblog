@@ -1,6 +1,6 @@
 ---
-title: "Choropleth & Heat Map"
-summary: Choropleth and heatmap with various population data
+title: "Choropleth Map"
+summary: Choropleth maps with population data
 authors: [minr]
 date: 2019-11-18T21:13:14-05:00
 categories: ["Data Viz"]
@@ -95,7 +95,7 @@ state_choropleth(df_state_demographics,
 
 
 **World Map**
-```{r}
+```{r warning=FALSE, message=FALSE}
 data("df_pop_country")
 country_pop <- df_pop_country %>% arrange(desc(value))
 head(country_pop,10)
@@ -105,22 +105,5 @@ head(country_pop,10)
 country_choropleth(country_pop, 
                  title  = "World map based on population estimates", 
                  legend = "Population")
-```
-
-
-**Heatmaps** visual the values in a matrix by adding color relative to a variable(s), usually down columns.
-```{r}
-data(df_state_demographics)
-df_state_demographics <- df_state_demographics %>% arrange(total_population)
-
-X <- data.matrix(df_state_demographics[,2:8])
-
-row.names(X) <- df_state_demographics[,1]
-
-head(X)
-```
-
-```{r}
-heatmap(X, Rowv=NA, Colv=NA, col = brewer.pal(9, "Blues"), scale = "column")
 ```
 
