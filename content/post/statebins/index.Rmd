@@ -13,7 +13,7 @@ output:
     toc_depth: 1   
 ---
 
-**Statebins** are U.S. State Cartogram Heatmaps, alternative to Choropleth Maps for USA States.
+**Statebins** are U.S. State Cartogram Heatmaps, alternative to Choropleth.
 
 ```{r}
 # load packages
@@ -29,7 +29,7 @@ p_load(statebins,readxl,dplyr)
 data1 %>% sample_n(5)
 ```
 
-```{r}
+```{r warning=FALSE}
 # statebins
 statebins_continuous(state_data = data1, state_col = "State",
                      text_color = "white", value_col = "Year_2018",
@@ -40,7 +40,7 @@ statebins_continuous(state_data = data1, state_col = "State",
 
 
 **Statebins with 2018 Median Household Income by State Data**
-```{r}
+```{r warning=FALSE}
 data2 <- read_excel("GeoFRED_Median_Household_Income_by_State_Percent_Change.xls", skip = 1)
 data2 %>% sample_n(5)
 ```
@@ -55,7 +55,7 @@ Median Household Income by State")
 
 
 **Statebins with 2018 Resident Population by State (change, thousands of persons) Data**
-```{r}
+```{r warning=FALSE}
 data3 <- read_excel("GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls", skip=1)
 data3 %>% sample_n(5)
 ```
