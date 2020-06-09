@@ -5,7 +5,7 @@ header:
 layout: docs
 title: 
 ---
-This is a data science library for references,books,blogs and data sets.
+This is a data science library for reference, book, blog and dataset.
 
 **Reference**
 * [R for Data Science](https://r4ds.had.co.nz/)
