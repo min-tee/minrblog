@@ -33,9 +33,9 @@ This is a data science library for reference, book, blog and dataset.
 * [TensorFlow](https://www.tensorflow.org/tutorials)
 
 **Software**
-* [R Markdown](https://bookdown.org/yihui/rmarkdown/)
 * [Learn R](http://rprogramming.net/)
 * [R Studio](https://rstudio.com/)
+* [R Markdown](https://bookdown.org/yihui/rmarkdown/)
 * [Learn Programming](https://www.w3schools.com/)
 * [Learn Python](https://www.learnpython.org/)
 * [Tableau](https://www.tableau.com/)
