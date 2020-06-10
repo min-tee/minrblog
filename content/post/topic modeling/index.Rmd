@@ -33,7 +33,7 @@ titles <- c("Buccaneers and Pirates of Our Coasts", "Beethoven", "Astronomy for 
 titles
 ```
 
-```{r message=FALSE}
+```{r}
 # retrieve books from gutenbergr
 books <- gutenberg_download(c(448,15141,25267,17188), meta_fields = "title")
 ```
