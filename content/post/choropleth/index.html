@@ -1,6 +1,6 @@
 ---
-title: "Choropleth & Heat Map"
-summary: Choropleth and heatmap with various population data
+title: "Choropleth Map"
+summary: Choropleth maps with population data
 authors: [minr]
 date: 2019-11-18T21:13:14-05:00
 categories: ["Data Viz"]
@@ -114,28 +114,3 @@ head(country_pop,10)</code></pre>
 <pre><code>## Warning in self$bind(): The following regions were missing and are being set to
 ## NA: namibia, western sahara, taiwan, antarctica, kosovo</code></pre>
 <p><img src="/post/choropleth/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p><strong>Heatmaps</strong> visual the values in a matrix by adding color relative to a variable(s), usually down columns.</p>
-<pre class="r"><code>data(df_state_demographics)
-df_state_demographics &lt;- df_state_demographics %&gt;% arrange(total_population)
-
-X &lt;- data.matrix(df_state_demographics[,2:8])
-
-row.names(X) &lt;- df_state_demographics[,1]
-
-head(X)</code></pre>
-<pre><code>##                      total_population percent_white percent_black percent_asian
-## wyoming                        570134            85             1             1
-## district of columbia           619371            35            49             3
-## vermont                        625904            94             1             1
-## north dakota                   689781            88             1             1
-## alaska                         720316            63             3             5
-## south dakota                   825198            84             1             1
-##                      percent_hispanic per_capita_income median_rent
-## wyoming                             9             28902         647
-## district of columbia               10             45290        1154
-## vermont                             2             29167         754
-## north dakota                        2             29732         564
-## alaska                              6             32651         978
-## south dakota                        3             25740         517</code></pre>
-<pre class="r"><code>heatmap(X, Rowv=NA, Colv=NA, col = brewer.pal(9, &quot;Blues&quot;), scale = &quot;column&quot;)</code></pre>
-<p><img src="/post/choropleth/index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>

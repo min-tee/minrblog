@@ -5,319 +5,12 @@
     <link>/author/minr/</link>
       <atom:link href="/author/minr/index.xml" rel="self" type="application/rss+xml" />
     <description>minr</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Min Tamang 2020</copyright><lastBuildDate>Sat, 09 May 2020 21:13:14 -0500</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Min Tamang 2020</copyright><lastBuildDate>Mon, 09 Dec 2019 21:13:14 -0500</lastBuildDate>
     <image>
       <url>/images/icon_hufac689ed154f22ff77b5bea0395abf25_7664_512x512_fill_lanczos_center_2.png</url>
       <title>minr</title>
       <link>/author/minr/</link>
     </image>
-    
-    <item>
-      <title>Topic Modeling</title>
-      <link>/post/topic-modeling/</link>
-      <pubDate>Sat, 09 May 2020 21:13:14 -0500</pubDate>
-      <guid>/post/topic-modeling/</guid>
-      <description>
-
-
-&lt;p&gt;For this project, I selected four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Step-by-step explanations are as follows:&lt;/strong&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(pacman)
-p_load(topicmodels,gutenbergr,tidyverse,tidytext,stringr,scales)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;1.Book Titles&lt;/strong&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# four books for topic models
-titles &amp;lt;- c(&amp;quot;Buccaneers and Pirates of Our Coasts&amp;quot;, &amp;quot;Beethoven&amp;quot;, &amp;quot;Astronomy for Amateurs&amp;quot;,&amp;quot;The Psychology of Revolution&amp;quot;)
-titles&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Buccaneers and Pirates of Our Coasts&amp;quot;
-## [2] &amp;quot;Beethoven&amp;quot;                           
-## [3] &amp;quot;Astronomy for Amateurs&amp;quot;              
-## [4] &amp;quot;The Psychology of Revolution&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# retrieve books from gutenbergr
-books &amp;lt;- gutenberg_download(c(448,15141,25267,17188), meta_fields = &amp;quot;title&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Using mirror http://aleph.gutenberg.org&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;2.Pre-Processing&lt;/strong&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# divide into documents, each representing one chapter
-by_chapter &amp;lt;- books %&amp;gt;%
-  group_by(title) %&amp;gt;%
-  mutate(chapter = cumsum(str_detect(text, regex(&amp;quot;^chapter &amp;quot;, ignore_case = TRUE)))) %&amp;gt;%
-  ungroup() %&amp;gt;%
-  filter(chapter &amp;gt; 0) %&amp;gt;%
-  unite(document, title, chapter)
-
-# split into words
-by_chapter_word &amp;lt;- by_chapter %&amp;gt;%
-  unnest_tokens(word, text)
-
-# find document-word counts
-word_counts &amp;lt;- by_chapter_word %&amp;gt;%
-  anti_join(stop_words) %&amp;gt;%
-  count(document, word, sort = TRUE) %&amp;gt;%
-  ungroup()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Joining, by = &amp;quot;word&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;word_counts&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 67,284 x 3
-##    document                                                       word         n
-##    &amp;lt;chr&amp;gt;                                                          &amp;lt;chr&amp;gt;    &amp;lt;int&amp;gt;
-##  1 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s indeb… beethov…    87
-##  2 Astronomy for Amateurs_11                                      distance    77
-##  3 Astronomy for Amateurs_4                                       sun         66
-##  4 Astronomy for Amateurs_9                                       moon        64
-##  5 Astronomy for Amateurs_3                                       stars       63
-##  6 Astronomy for Amateurs_11                                      sun         58
-##  7 Astronomy for Amateurs_8                                       earth       56
-##  8 Astronomy for Amateurs_10                                      sun         54
-##  9 Astronomy for Amateurs_2                                       stars       53
-## 10 The Psychology of Revolution_53                                revolut…    52
-## # … with 67,274 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;3.LDA on Chapters&lt;/strong&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# convert tidy data to document term matrix
-chapters_dtm &amp;lt;- word_counts %&amp;gt;% cast_dtm(document, word, n)
-chapters_dtm&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## &amp;lt;&amp;lt;DocumentTermMatrix (documents: 117, terms: 16265)&amp;gt;&amp;gt;
-## Non-/sparse entries: 67284/1835721
-## Sparsity           : 96%
-## Maximal term length: 41
-## Weighting          : term frequency (tf)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# create topic model with LDA function for four books, k = 4
-chapters_lda &amp;lt;- LDA(chapters_dtm, k = 4, control = list(seed = 1999))
-chapters_lda&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## A LDA_VEM topic model with 4 topics.&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#per-topic-per-word probabilities : beta
-chapter_topics &amp;lt;- tidy(chapters_lda, matrix = &amp;quot;beta&amp;quot;)
-chapter_topics&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 65,060 x 3
-##    topic term           beta
-##    &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;         &amp;lt;dbl&amp;gt;
-##  1     1 beethoven 6.55e-135
-##  2     2 beethoven 4.39e- 18
-##  3     3 beethoven 1.34e-132
-##  4     4 beethoven 2.09e-  2
-##  5     1 distance  7.99e-  4
-##  6     2 distance  9.49e-  5
-##  7     3 distance  7.75e-  3
-##  8     4 distance  7.62e-  5
-##  9     1 sun       8.19e-  5
-## 10     2 sun       3.16e-  5
-## # … with 65,050 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;For example, the term “beethoven” has zero probability of being generated from topics 1, 3, or 4, but it makes up 2% of topic 2.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# top 10 terms in each topic
-top_terms &amp;lt;- chapter_topics %&amp;gt;% group_by(topic) %&amp;gt;%
-  top_n(10, beta) %&amp;gt;% ungroup() %&amp;gt;%
-  arrange(topic, -beta)
-top_terms&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 40 x 3
-##    topic term          beta
-##    &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;        &amp;lt;dbl&amp;gt;
-##  1     1 pirate     0.0117 
-##  2     1 pirates    0.0108 
-##  3     1 town       0.00865
-##  4     1 vessel     0.00851
-##  5     1 ship       0.00733
-##  6     1 buccaneers 0.00622
-##  7     1 time       0.00606
-##  8     1 captain    0.00602
-##  9     1 spanish    0.00585
-## 10     1 people     0.00483
-## # … with 30 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# visualize top terms from each topic
-top_terms %&amp;gt;% mutate(term = reorder_within(term, beta, topic)) %&amp;gt;%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = F) + facet_wrap(~topic, scales = &amp;quot;free&amp;quot;) +
-  coord_flip() + scale_x_reordered() + 
-  labs(caption = &amp;quot;Fig:The terms that are most common within each topic&amp;quot;) + theme(plot.caption = element_text(hjust = 0.5, size = 10))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/topic-modeling/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;The topics are clearly associated with the four books.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;4.Per-document Classification&lt;/strong&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#per-document-per-topic probabilities: gamma
-chapters_gamma &amp;lt;- tidy(chapters_lda, matrix = &amp;quot;gamma&amp;quot;)
-chapters_gamma&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 468 x 3
-##    document                                                      topic     gamma
-##    &amp;lt;chr&amp;gt;                                                         &amp;lt;int&amp;gt;     &amp;lt;dbl&amp;gt;
-##  1 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s inde…     1   4.05e-6
-##  2 Astronomy for Amateurs_11                                         1   7.54e-6
-##  3 Astronomy for Amateurs_4                                          1   9.32e-6
-##  4 Astronomy for Amateurs_9                                          1   1.05e-5
-##  5 Astronomy for Amateurs_3                                          1   8.14e-6
-##  6 Astronomy for Amateurs_8                                          1   8.58e-6
-##  7 Astronomy for Amateurs_10                                         1   8.42e-6
-##  8 Astronomy for Amateurs_2                                          1   9.93e-6
-##  9 The Psychology of Revolution_53                                   1   7.75e-6
-## 10 Buccaneers and Pirates of Our Coasts_33                           1  10.00e-1
-## # … with 458 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Astronomy for Amateurs_11 document has 0% probability of coming from topic 1(Buccaneers and Pirates of Our Coasts).&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#separate out chapter and title
-chapters_gamma &amp;lt;- chapters_gamma %&amp;gt;%
-  separate(document, c(&amp;quot;title&amp;quot;, &amp;quot;chapter&amp;quot;), sep= &amp;quot;_&amp;quot;, convert = TRUE)
-chapters_gamma&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 468 x 4
-##    title                                                 chapter topic     gamma
-##    &amp;lt;chr&amp;gt;                                                   &amp;lt;int&amp;gt; &amp;lt;int&amp;gt;     &amp;lt;dbl&amp;gt;
-##  1 &amp;quot;Beethoven, a character study\r\nTogether with Wagne…      19     1   4.05e-6
-##  2 Astronomy for Amateurs                                     11     1   7.54e-6
-##  3 Astronomy for Amateurs                                      4     1   9.32e-6
-##  4 Astronomy for Amateurs                                      9     1   1.05e-5
-##  5 Astronomy for Amateurs                                      3     1   8.14e-6
-##  6 Astronomy for Amateurs                                      8     1   8.58e-6
-##  7 Astronomy for Amateurs                                     10     1   8.42e-6
-##  8 Astronomy for Amateurs                                      2     1   9.93e-6
-##  9 The Psychology of Revolution                               53     1   7.75e-6
-## 10 Buccaneers and Pirates of Our Coasts                       33     1  10.00e-1
-## # … with 458 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# reorder titles and plot
-chapters_gamma %&amp;gt;% mutate(title = reorder(title, gamma*topic)) %&amp;gt;%
-  ggplot(aes(factor(topic),gamma)) + geom_boxplot() + facet_wrap(~title) +
-  labs(caption = &amp;quot;Fig: The gamma probabilities for each chapter within each book&amp;quot;) + theme(plot.caption = element_text(hjust = 0.5, size = 12))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/topic-modeling/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;It appears all of the chapters are uniquely identified as a single topic.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#topic most associated with a chapter 
-chapter_classifications &amp;lt;- chapters_gamma %&amp;gt;%
-  group_by(title, chapter) %&amp;gt;% top_n(1, gamma) %&amp;gt;%
-  ungroup()
-chapter_classifications&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 117 x 4
-##    title                                chapter topic gamma
-##    &amp;lt;chr&amp;gt;                                  &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;dbl&amp;gt;
-##  1 Buccaneers and Pirates of Our Coasts      33     1 1.000
-##  2 Buccaneers and Pirates of Our Coasts      11     1 1.000
-##  3 Buccaneers and Pirates of Our Coasts      31     1 1.000
-##  4 Buccaneers and Pirates of Our Coasts      32     1 0.981
-##  5 Buccaneers and Pirates of Our Coasts      30     1 1.000
-##  6 Buccaneers and Pirates of Our Coasts      20     1 1.000
-##  7 Buccaneers and Pirates of Our Coasts      21     1 1.000
-##  8 Buccaneers and Pirates of Our Coasts      23     1 1.000
-##  9 Buccaneers and Pirates of Our Coasts      15     1 1.000
-## 10 Buccaneers and Pirates of Our Coasts      16     1 1.000
-## # … with 107 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# consensus topics
-book_topics &amp;lt;- chapter_classifications %&amp;gt;% count(title, topic) %&amp;gt;%
-  group_by(title) %&amp;gt;% top_n(1,n) %&amp;gt;% ungroup() %&amp;gt;%
-  transmute(consensus = title, topic)
-book_topics%&amp;gt;% arrange((topic))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 4 x 2
-##   consensus                                                                topic
-##   &amp;lt;chr&amp;gt;                                                                    &amp;lt;int&amp;gt;
-## 1 Buccaneers and Pirates of Our Coasts                                         1
-## 2 The Psychology of Revolution                                                 2
-## 3 Astronomy for Amateurs                                                       3
-## 4 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s indebtedness to…     4&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#misidentified topics
-chapter_classifications %&amp;gt;% inner_join(book_topics, by = &amp;quot;topic&amp;quot;) %&amp;gt;%
-  filter(title != consensus)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 0 x 5
-## # … with 5 variables: title &amp;lt;chr&amp;gt;, chapter &amp;lt;int&amp;gt;, topic &amp;lt;int&amp;gt;, gamma &amp;lt;dbl&amp;gt;,
-## #   consensus &amp;lt;chr&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Indeed, no chapters were mis-classified.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;5.By Word Assignments: Augment&lt;/strong&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# see which words are assigned to which topic with augment function
-assignments &amp;lt;- augment(chapters_lda, data = chapters_dtm)
-assignments&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 67,284 x 4
-##    document                                                 term    count .topic
-##    &amp;lt;chr&amp;gt;                                                    &amp;lt;chr&amp;gt;   &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;
-##  1 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    87      4
-##  2 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    45      4
-##  3 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    44      4
-##  4 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    43      4
-##  5 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    43      4
-##  6 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    39      4
-##  7 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    38      4
-##  8 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    28      4
-##  9 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    25      4
-## 10 &amp;quot;Beethoven, a character study\r\nTogether with Wagner&amp;#39;s… beetho…    24      4
-## # … with 67,274 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# combine assignments with true book titles to find incorrect classification
-assignments &amp;lt;- assignments %&amp;gt;% 
-  separate(document, c(&amp;quot;title&amp;quot;, &amp;quot;chapter&amp;quot;), sep = &amp;quot;_&amp;quot;, convert = TRUE)%&amp;gt;%
-  inner_join(book_topics, by = c(&amp;quot;.topic&amp;quot; = &amp;quot;topic&amp;quot;))
-assignments&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 67,284 x 6
-##    title                   chapter term   count .topic consensus                
-##    &amp;lt;chr&amp;gt;                     &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;  &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;                    
-##  1 &amp;quot;Beethoven, a characte…      19 beeth…    87      4 &amp;quot;Beethoven, a character …
-##  2 &amp;quot;Beethoven, a characte…      13 beeth…    45      4 &amp;quot;Beethoven, a character …
-##  3 &amp;quot;Beethoven, a characte…       8 beeth…    44      4 &amp;quot;Beethoven, a character …
-##  4 &amp;quot;Beethoven, a characte…       1 beeth…    43      4 &amp;quot;Beethoven, a character …
-##  5 &amp;quot;Beethoven, a characte…       6 beeth…    43      4 &amp;quot;Beethoven, a character …
-##  6 &amp;quot;Beethoven, a characte…       2 beeth…    39      4 &amp;quot;Beethoven, a character …
-##  7 &amp;quot;Beethoven, a characte…      10 beeth…    38      4 &amp;quot;Beethoven, a character …
-##  8 &amp;quot;Beethoven, a characte…       5 beeth…    28      4 &amp;quot;Beethoven, a character …
-##  9 &amp;quot;Beethoven, a characte…      11 beeth…    25      4 &amp;quot;Beethoven, a character …
-## 10 &amp;quot;Beethoven, a characte…      14 beeth…    24      4 &amp;quot;Beethoven, a character …
-## # … with 67,274 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#visualize a confusion matrix
-assignments %&amp;gt;%
-count(title, consensus, wt = count) %&amp;gt;%
-group_by(title) %&amp;gt;%
-mutate(percent = n / sum(n)) %&amp;gt;%
-ggplot(aes(consensus, title, fill = percent)) +
-geom_tile() + 
-scale_fill_gradient2(high = &amp;quot;blue&amp;quot;, label = percent_format()) +
-theme_minimal() +
-theme(axis.text.x = element_text(angle = 90, hjust = 1),
-panel.grid = element_blank()) +
-labs(x = &amp;quot;book words were assigned to&amp;quot;,
-y = &amp;quot;book words came from&amp;quot;,
-fill = &amp;quot;% of assignments&amp;quot;) + 
-labs(caption = &amp;quot;Fig: Confusion matrix showing where LDA assigned the words from each book&amp;quot;) +
-theme(plot.caption = element_text( size = 10),legend.key.size = unit(0.5, &amp;quot;cm&amp;quot;)) &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/topic-modeling/index_files/figure-html/unnamed-chunk-18-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Almost all words were correctly assigned to each topic.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# most commonly mistaken words
-wrong_words &amp;lt;- assignments %&amp;gt;% filter(title!= consensus)
-wrong_words&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 45 x 6
-##    title                   chapter term   count .topic consensus                
-##    &amp;lt;chr&amp;gt;                     &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;  &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;                    
-##  1 Buccaneers and Pirates…      32 moon       3      3 Astronomy for Amateurs   
-##  2 Buccaneers and Pirates…      32 stars      2      3 Astronomy for Amateurs   
-##  3 &amp;quot;Beethoven, a characte…       4 revol…     1      2 The Psychology of Revolu…
-##  4 The Psychology of Revo…      45 capta…     1      1 Buccaneers and Pirates o…
-##  5 The Psychology of Revo…      45 town       2      1 Buccaneers and Pirates o…
-##  6 Buccaneers and Pirates…      32 heave…     1      3 Astronomy for Amateurs   
-##  7 The Psychology of Revo…      45 vessel     1      1 Buccaneers and Pirates o…
-##  8 &amp;quot;Beethoven, a characte…       4 armies     2      2 The Psychology of Revolu…
-##  9 Buccaneers and Pirates…       1 1          1      4 &amp;quot;Beethoven, a character …
-## 10 &amp;quot;Beethoven, a characte…       4 bonap…     3      2 The Psychology of Revolu…
-## # … with 35 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;wrong_words %&amp;gt;% count(title, consensus, term , wt = count) %&amp;gt;% 
-  ungroup() %&amp;gt;% arrange(-n)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 45 x 4
-##    title                                    consensus               term       n
-##    &amp;lt;chr&amp;gt;                                    &amp;lt;chr&amp;gt;                   &amp;lt;chr&amp;gt;  &amp;lt;dbl&amp;gt;
-##  1 &amp;quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… france     6
-##  2 &amp;quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… bonap…     3
-##  3 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  moon       3
-##  4 &amp;quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… armies     2
-##  5 &amp;quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… louis      2
-##  6 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  stars      2
-##  7 The Psychology of Revolution             Buccaneers and Pirates… town       2
-##  8 &amp;quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… equal…     1
-##  9 &amp;quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… gover…     1
-## 10 &amp;quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… illus…     1
-## # … with 35 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The word “moon” and “stars” appear in “Buccaneers and Pirates of Our Coasts” but they are wrongly classified into “Astronomy for Amateurs” becuase they are more common in the later.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# wrongly classified word, eg. &amp;quot;moon&amp;quot;
-word_counts %&amp;gt;% filter(word == &amp;quot;moon&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 12 x 3
-##    document                                word      n
-##    &amp;lt;chr&amp;gt;                                   &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
-##  1 Astronomy for Amateurs_9                moon     64
-##  2 Astronomy for Amateurs_10               moon     49
-##  3 Astronomy for Amateurs_11               moon     35
-##  4 Astronomy for Amateurs_4                moon     10
-##  5 Astronomy for Amateurs_12               moon      9
-##  6 Astronomy for Amateurs_5                moon      8
-##  7 Astronomy for Amateurs_8                moon      4
-##  8 Astronomy for Amateurs_3                moon      3
-##  9 Astronomy for Amateurs_6                moon      3
-## 10 Buccaneers and Pirates of Our Coasts_32 moon      3
-## 11 Astronomy for Amateurs_1                moon      2
-## 12 Astronomy for Amateurs_7                moon      2&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Although the words are presumably different for each topic since books are selected from different genre, LDA algorithm performed really well on identifying topics to the document and words to the topic. Really great for unsupervised clustering!&lt;/p&gt;
-</description>
-    </item>
     
     <item>
       <title>Statebins</title>
@@ -327,7 +20,7 @@ word_counts %&amp;gt;% filter(word == &amp;quot;moon&amp;quot;)&lt;/code&gt;&lt;
       <description>
 
 
-&lt;p&gt;&lt;strong&gt;Statebins&lt;/strong&gt; are U.S. State Cartogram Heatmaps, alternative to Choropleth Maps for USA States.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Statebins&lt;/strong&gt; are U.S. State Cartogram Heatmaps, alternative to Choropleth.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# load packages
 library(pacman)
 p_load(statebins,readxl,dplyr)&lt;/code&gt;&lt;/pre&gt;
@@ -336,31 +29,30 @@ p_load(statebins,readxl,dplyr)&lt;/code&gt;&lt;/pre&gt;
  data1 &amp;lt;- read_excel(&amp;quot;GeoFRED_Bachelor&amp;#39;s_Degree_or_Higher_by_State_Percent.xls&amp;quot;, skip = 1)
 data1 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID` State                Code  Year_2018
-##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 GCT1502HI   Hawaii               15         33.5
-## 2 GCT1502CA   California           06         34.2
-## 3 GCT1502LA   Louisiana            22         24.3
-## 4 GCT1502OH   Ohio                 39         29  
-## 5 GCT1502DC   District of Columbia 11         60.4&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID` State         Code  Year_2018
+##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 GCT1502WA   Washington    53         36.7
+## 2 GCT1502WV   West Virginia 54         21.3
+## 3 GCT1502VA   Virginia      51         39.3
+## 4 GCT1502AZ   Arizona       04         29.7
+## 5 GCT1502HI   Hawaii        15         33.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# statebins
 statebins_continuous(state_data = data1, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Blues&amp;quot;, font_size = 3,
                      legend_title=&amp;quot;2018 Bachelor&amp;#39;s Degree or Higher by State (percent)&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Warning: `show_guide` has been deprecated. Please use `show.legend` instead.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/statebins/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Statebins with 2018 Median Household Income by State Data&lt;/strong&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data2 &amp;lt;- read_excel(&amp;quot;GeoFRED_Median_Household_Income_by_State_Percent_Change.xls&amp;quot;, skip = 1)
 data2 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID`     State       Code  Year_2018
-##   &amp;lt;chr&amp;gt;           &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 MEHOINUSUTA646N Utah        49        10.4 
-## 2 MEHOINUSAKA646N Alaska      02       -11.9 
-## 3 MEHOINUSMSA646N Mississippi 28        -1.16
-## 4 MEHOINUSNMA646N New Mexico  35         5.88
-## 5 MEHOINUSVAA646N Virginia    51         8.95&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID`     State                Code  Year_2018
+##   &amp;lt;chr&amp;gt;           &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 MEHOINUSDCA646N District of Columbia 11         5.50
+## 2 MEHOINUSVTA646N Vermont              50        10.0 
+## 3 MEHOINUSPAA646N Pennsylvania         42         5.29
+## 4 MEHOINUSNEA646N Nebraska             31        13.4 
+## 5 MEHOINUSINA646N Indiana              18         1.91&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;statebins_continuous(state_data = data2, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Greens&amp;quot;, font_size = 3,
@@ -372,13 +64,13 @@ Median Household Income by State&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data3 &amp;lt;- read_excel(&amp;quot;GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls&amp;quot;, skip=1)
 data3 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID` State        Code  Year_2018
-##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;        &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 UTPOP       Utah         49       58.0  
-## 2 RIPOP       Rhode Island 44        0.829
-## 3 MSPOP       Mississippi  28       -3.13 
-## 4 INPOP       Indiana      18       31.8  
-## 5 MTPOP       Montana      30        9.22&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID` State                Code  Year_2018
+##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 TNPOP       Tennessee            47        61.2 
+## 2 DCDIST5POP  District of Columbia 11         6.76
+## 3 NEPOP       Nebraska             31        11.7 
+## 4 AKPOP       Alaska               02        -2.35
+## 5 TXPOP       Texas                48       379.&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;statebins_continuous(state_data = data3, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Reds&amp;quot;, font_size = 3, 
@@ -389,7 +81,7 @@ data3 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
-      <title>Choropleth &amp; Heat Map</title>
+      <title>Choropleth Map</title>
       <link>/post/choropleth/</link>
       <pubDate>Mon, 18 Nov 2019 21:13:14 -0500</pubDate>
       <guid>/post/choropleth/</guid>
@@ -495,31 +187,6 @@ head(country_pop,10)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## Warning in self$bind(): The following regions were missing and are being set to
 ## NA: namibia, western sahara, taiwan, antarctica, kosovo&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/choropleth/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Heatmaps&lt;/strong&gt; visual the values in a matrix by adding color relative to a variable(s), usually down columns.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(df_state_demographics)
-df_state_demographics &amp;lt;- df_state_demographics %&amp;gt;% arrange(total_population)
-
-X &amp;lt;- data.matrix(df_state_demographics[,2:8])
-
-row.names(X) &amp;lt;- df_state_demographics[,1]
-
-head(X)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##                      total_population percent_white percent_black percent_asian
-## wyoming                        570134            85             1             1
-## district of columbia           619371            35            49             3
-## vermont                        625904            94             1             1
-## north dakota                   689781            88             1             1
-## alaska                         720316            63             3             5
-## south dakota                   825198            84             1             1
-##                      percent_hispanic per_capita_income median_rent
-## wyoming                             9             28902         647
-## district of columbia               10             45290        1154
-## vermont                             2             29167         754
-## north dakota                        2             29732         564
-## alaska                              6             32651         978
-## south dakota                        3             25740         517&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;heatmap(X, Rowv=NA, Colv=NA, col = brewer.pal(9, &amp;quot;Blues&amp;quot;), scale = &amp;quot;column&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/choropleth/index_files/figure-html/unnamed-chunk-14-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     

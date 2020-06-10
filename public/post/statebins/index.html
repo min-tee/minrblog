@@ -428,16 +428,9 @@
         
         
         
-          
-          
-          
-            
-          
-          
-        
 
         <li class="nav-item">
-          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          <a class="nav-link " href="/posts"><span>Posts</span></a>
         </li>
 
         
@@ -457,16 +450,9 @@
         
         
         
-          
-          
-          
-            
-          
-          
-        
 
         <li class="nav-item">
-          <a class="nav-link " href="/#projects"><span>Projects</span></a>
+          <a class="nav-link " href="/projects"><span>Projects</span></a>
         </li>
 
         
@@ -530,16 +516,9 @@
         
         
         
-          
-          
-          
-            
-          
-          
-        
 
         <li class="nav-item">
-          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          <a class="nav-link " href="/contact"><span>Contact</span></a>
         </li>
 
         
@@ -700,7 +679,7 @@
       
 
 
-<p><strong>Statebins</strong> are U.S. State Cartogram Heatmaps, alternative to Choropleth Maps for USA States.</p>
+<p><strong>Statebins</strong> are U.S. State Cartogram Heatmaps, alternative to Choropleth.</p>
 <pre class="r"><code># load packages
 library(pacman)
 p_load(statebins,readxl,dplyr)</code></pre>
@@ -709,31 +688,30 @@ p_load(statebins,readxl,dplyr)</code></pre>
  data1 &lt;- read_excel(&quot;GeoFRED_Bachelor&#39;s_Degree_or_Higher_by_State_Percent.xls&quot;, skip = 1)
 data1 %&gt;% sample_n(5)</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##   `Series ID` State                Code  Year_2018
-##   &lt;chr&gt;       &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt;
-## 1 GCT1502HI   Hawaii               15         33.5
-## 2 GCT1502CA   California           06         34.2
-## 3 GCT1502LA   Louisiana            22         24.3
-## 4 GCT1502OH   Ohio                 39         29  
-## 5 GCT1502DC   District of Columbia 11         60.4</code></pre>
+##   `Series ID` State         Code  Year_2018
+##   &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;     &lt;dbl&gt;
+## 1 GCT1502WA   Washington    53         36.7
+## 2 GCT1502WV   West Virginia 54         21.3
+## 3 GCT1502VA   Virginia      51         39.3
+## 4 GCT1502AZ   Arizona       04         29.7
+## 5 GCT1502HI   Hawaii        15         33.5</code></pre>
 <pre class="r"><code># statebins
 statebins_continuous(state_data = data1, state_col = &quot;State&quot;,
                      text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
                      brewer_pal=&quot;Blues&quot;, font_size = 3,
                      legend_title=&quot;2018 Bachelor&#39;s Degree or Higher by State (percent)&quot;)</code></pre>
-<pre><code>## Warning: `show_guide` has been deprecated. Please use `show.legend` instead.</code></pre>
 <p><img src="/post/statebins/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p><strong>Statebins with 2018 Median Household Income by State Data</strong></p>
 <pre class="r"><code>data2 &lt;- read_excel(&quot;GeoFRED_Median_Household_Income_by_State_Percent_Change.xls&quot;, skip = 1)
 data2 %&gt;% sample_n(5)</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##   `Series ID`     State       Code  Year_2018
-##   &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt;
-## 1 MEHOINUSUTA646N Utah        49        10.4 
-## 2 MEHOINUSAKA646N Alaska      02       -11.9 
-## 3 MEHOINUSMSA646N Mississippi 28        -1.16
-## 4 MEHOINUSNMA646N New Mexico  35         5.88
-## 5 MEHOINUSVAA646N Virginia    51         8.95</code></pre>
+##   `Series ID`     State                Code  Year_2018
+##   &lt;chr&gt;           &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt;
+## 1 MEHOINUSDCA646N District of Columbia 11         5.50
+## 2 MEHOINUSVTA646N Vermont              50        10.0 
+## 3 MEHOINUSPAA646N Pennsylvania         42         5.29
+## 4 MEHOINUSNEA646N Nebraska             31        13.4 
+## 5 MEHOINUSINA646N Indiana              18         1.91</code></pre>
 <pre class="r"><code>statebins_continuous(state_data = data2, state_col = &quot;State&quot;,
                      text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
                      brewer_pal=&quot;Greens&quot;, font_size = 3,
@@ -745,13 +723,13 @@ Median Household Income by State&quot;)</code></pre>
 <pre class="r"><code>data3 &lt;- read_excel(&quot;GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls&quot;, skip=1)
 data3 %&gt;% sample_n(5)</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##   `Series ID` State        Code  Year_2018
-##   &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;     &lt;dbl&gt;
-## 1 UTPOP       Utah         49       58.0  
-## 2 RIPOP       Rhode Island 44        0.829
-## 3 MSPOP       Mississippi  28       -3.13 
-## 4 INPOP       Indiana      18       31.8  
-## 5 MTPOP       Montana      30        9.22</code></pre>
+##   `Series ID` State                Code  Year_2018
+##   &lt;chr&gt;       &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt;
+## 1 TNPOP       Tennessee            47        61.2 
+## 2 DCDIST5POP  District of Columbia 11         6.76
+## 3 NEPOP       Nebraska             31        11.7 
+## 4 AKPOP       Alaska               02        -2.35
+## 5 TXPOP       Texas                48       379.</code></pre>
 <pre class="r"><code>statebins_continuous(state_data = data3, state_col = &quot;State&quot;,
                      text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
                      brewer_pal=&quot;Reds&quot;, font_size = 3, 
@@ -901,7 +879,7 @@ data3 %&gt;% sample_n(5)</code></pre>
     <h3>Related</h3>
     <ul>
       
-      <li><a href="/post/choropleth/">Choropleth &amp; Heat Map</a></li>
+      <li><a href="/post/choropleth/">Choropleth Map</a></li>
       
     </ul>
   </div>

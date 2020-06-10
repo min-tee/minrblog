@@ -20,7 +20,7 @@
       <description>
 
 
-&lt;p&gt;&lt;strong&gt;Statebins&lt;/strong&gt; are U.S. State Cartogram Heatmaps, alternative to Choropleth Maps for USA States.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Statebins&lt;/strong&gt; are U.S. State Cartogram Heatmaps, alternative to Choropleth.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# load packages
 library(pacman)
 p_load(statebins,readxl,dplyr)&lt;/code&gt;&lt;/pre&gt;
@@ -29,31 +29,30 @@ p_load(statebins,readxl,dplyr)&lt;/code&gt;&lt;/pre&gt;
  data1 &amp;lt;- read_excel(&amp;quot;GeoFRED_Bachelor&amp;#39;s_Degree_or_Higher_by_State_Percent.xls&amp;quot;, skip = 1)
 data1 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID` State                Code  Year_2018
-##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 GCT1502HI   Hawaii               15         33.5
-## 2 GCT1502CA   California           06         34.2
-## 3 GCT1502LA   Louisiana            22         24.3
-## 4 GCT1502OH   Ohio                 39         29  
-## 5 GCT1502DC   District of Columbia 11         60.4&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID` State         Code  Year_2018
+##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 GCT1502WA   Washington    53         36.7
+## 2 GCT1502WV   West Virginia 54         21.3
+## 3 GCT1502VA   Virginia      51         39.3
+## 4 GCT1502AZ   Arizona       04         29.7
+## 5 GCT1502HI   Hawaii        15         33.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# statebins
 statebins_continuous(state_data = data1, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Blues&amp;quot;, font_size = 3,
                      legend_title=&amp;quot;2018 Bachelor&amp;#39;s Degree or Higher by State (percent)&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Warning: `show_guide` has been deprecated. Please use `show.legend` instead.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/statebins/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Statebins with 2018 Median Household Income by State Data&lt;/strong&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data2 &amp;lt;- read_excel(&amp;quot;GeoFRED_Median_Household_Income_by_State_Percent_Change.xls&amp;quot;, skip = 1)
 data2 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID`     State       Code  Year_2018
-##   &amp;lt;chr&amp;gt;           &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 MEHOINUSUTA646N Utah        49        10.4 
-## 2 MEHOINUSAKA646N Alaska      02       -11.9 
-## 3 MEHOINUSMSA646N Mississippi 28        -1.16
-## 4 MEHOINUSNMA646N New Mexico  35         5.88
-## 5 MEHOINUSVAA646N Virginia    51         8.95&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID`     State                Code  Year_2018
+##   &amp;lt;chr&amp;gt;           &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 MEHOINUSDCA646N District of Columbia 11         5.50
+## 2 MEHOINUSVTA646N Vermont              50        10.0 
+## 3 MEHOINUSPAA646N Pennsylvania         42         5.29
+## 4 MEHOINUSNEA646N Nebraska             31        13.4 
+## 5 MEHOINUSINA646N Indiana              18         1.91&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;statebins_continuous(state_data = data2, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Greens&amp;quot;, font_size = 3,
@@ -65,13 +64,13 @@ Median Household Income by State&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data3 &amp;lt;- read_excel(&amp;quot;GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls&amp;quot;, skip=1)
 data3 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID` State        Code  Year_2018
-##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;        &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 UTPOP       Utah         49       58.0  
-## 2 RIPOP       Rhode Island 44        0.829
-## 3 MSPOP       Mississippi  28       -3.13 
-## 4 INPOP       Indiana      18       31.8  
-## 5 MTPOP       Montana      30        9.22&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID` State                Code  Year_2018
+##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 TNPOP       Tennessee            47        61.2 
+## 2 DCDIST5POP  District of Columbia 11         6.76
+## 3 NEPOP       Nebraska             31        11.7 
+## 4 AKPOP       Alaska               02        -2.35
+## 5 TXPOP       Texas                48       379.&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;statebins_continuous(state_data = data3, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Reds&amp;quot;, font_size = 3, 
@@ -82,7 +81,7 @@ data3 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
-      <title>Choropleth &amp; Heat Map</title>
+      <title>Choropleth Map</title>
       <link>/post/choropleth/</link>
       <pubDate>Mon, 18 Nov 2019 21:13:14 -0500</pubDate>
       <guid>/post/choropleth/</guid>
@@ -188,31 +187,6 @@ head(country_pop,10)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## Warning in self$bind(): The following regions were missing and are being set to
 ## NA: namibia, western sahara, taiwan, antarctica, kosovo&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/choropleth/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Heatmaps&lt;/strong&gt; visual the values in a matrix by adding color relative to a variable(s), usually down columns.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(df_state_demographics)
-df_state_demographics &amp;lt;- df_state_demographics %&amp;gt;% arrange(total_population)
-
-X &amp;lt;- data.matrix(df_state_demographics[,2:8])
-
-row.names(X) &amp;lt;- df_state_demographics[,1]
-
-head(X)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##                      total_population percent_white percent_black percent_asian
-## wyoming                        570134            85             1             1
-## district of columbia           619371            35            49             3
-## vermont                        625904            94             1             1
-## north dakota                   689781            88             1             1
-## alaska                         720316            63             3             5
-## south dakota                   825198            84             1             1
-##                      percent_hispanic per_capita_income median_rent
-## wyoming                             9             28902         647
-## district of columbia               10             45290        1154
-## vermont                             2             29167         754
-## north dakota                        2             29732         564
-## alaska                              6             32651         978
-## south dakota                        3             25740         517&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;heatmap(X, Rowv=NA, Colv=NA, col = brewer.pal(9, &amp;quot;Blues&amp;quot;), scale = &amp;quot;column&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/choropleth/index_files/figure-html/unnamed-chunk-14-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     

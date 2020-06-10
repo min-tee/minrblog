@@ -5,7 +5,7 @@
     <link>/post/</link>
       <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Min Tamang 2020</copyright><lastBuildDate>Sat, 09 May 2020 21:13:14 -0500</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Min Tamang 2020</copyright><lastBuildDate>Tue, 09 Jun 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/images/icon_hufac689ed154f22ff77b5bea0395abf25_7664_512x512_fill_lanczos_center_2.png</url>
       <title>Posts</title>
@@ -13,15 +13,463 @@
     </image>
     
     <item>
-      <title>Topic Modeling</title>
-      <link>/post/topic-modeling/</link>
-      <pubDate>Sat, 09 May 2020 21:13:14 -0500</pubDate>
-      <guid>/post/topic-modeling/</guid>
+      <title>TF-IDF &amp; Sentiment Analysis </title>
+      <link>/post/2020-06-09-sentiment-analysis.en/sentiment-analysis/</link>
+      <pubDate>Tue, 09 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>/post/2020-06-09-sentiment-analysis.en/sentiment-analysis/</guid>
       <description>
 
 
-&lt;p&gt;For this project, I selected four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Step-by-step explanations are as follows:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The TF-IDF is computed by multiplying two terms:TF and IDF. TF is the normalized term frequency and IDF is the inverse document frequency.
+Therefore, the formula for TF-IDF is TFxIDF&lt;/p&gt;
+&lt;p&gt;where,
+&lt;span class=&#34;math display&#34;&gt;\[\text{TF} = (\frac{\text{number of times term appears in a document}}{\text{Total number of terms in the document}})\]&lt;/span&gt;
+and
+&lt;span class=&#34;math display&#34;&gt;\[\text{IDF} = \ln(\frac{n_{\text{ documents }}}{n_{\text{document containing term}}})\]&lt;/span&gt;
+TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score.&lt;/p&gt;
+&lt;div id=&#34;tf-idf-on-gutenberg-books&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;TF-IDF on Gutenberg books&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(pacman)
+p_load(gutenbergr,tidyr,tidyverse,tidytext,forcats,
+       genius)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#books on mathematics from project glutenberg
+math_books &amp;lt;- gutenberg_download(c(16449,25664,17001,16713), meta_fields = &amp;quot;title&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Using mirror http://aleph.gutenberg.org&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#frequencies of words in each book
+math_words &amp;lt;- math_books %&amp;gt;% 
+  unnest_tokens(word, text) %&amp;gt;% count(title, word, sort = TRUE)
+math_words&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 24,655 x 3
+##    title                                                 word      n
+##    &amp;lt;chr&amp;gt;                                                 &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1 Amusements in Mathematics                             the   12480
+##  2 Amusements in Mathematics                             of     4908
+##  3 Amusements in Mathematics                             and    3921
+##  4 Amusements in Mathematics                             a      3833
+##  5 Amusements in Mathematics                             in     3672
+##  6 Amusements in Mathematics                             to     3598
+##  7 The Number Concept: Its Origin and Development        the    3177
+##  8 An Elementary Course in Synthetic Projective Geometry the    2750
+##  9 The Earliest Arithmetics in English                   e      2579
+## 10 Amusements in Mathematics                             is     2542
+## # … with 24,645 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#tf-idf
+tfidf_mathbooks &amp;lt;- math_words %&amp;gt;%
+  bind_tf_idf(word, title, n) %&amp;gt;%
+  mutate(word = fct_reorder(word, tf_idf)) %&amp;gt;%
+  mutate(title = factor(title, levels = c( &amp;quot;The Number Concept: Its Origin and Development&amp;quot;,&amp;quot;The Earliest Arithmetics in English&amp;quot;, &amp;quot;An Elementary Course in Synthetic Projective Geometry&amp;quot;,&amp;quot;Amusements in Mathematics&amp;quot;)))
+tfidf_mathbooks&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 24,655 x 6
+##    title                                         word      n     tf   idf tf_idf
+##    &amp;lt;fct&amp;gt;                                         &amp;lt;fct&amp;gt; &amp;lt;int&amp;gt;  &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;
+##  1 Amusements in Mathematics                     the   12480 0.0753 0     0     
+##  2 Amusements in Mathematics                     of     4908 0.0296 0     0     
+##  3 Amusements in Mathematics                     and    3921 0.0237 0     0     
+##  4 Amusements in Mathematics                     a      3833 0.0231 0     0     
+##  5 Amusements in Mathematics                     in     3672 0.0222 0     0     
+##  6 Amusements in Mathematics                     to     3598 0.0217 0     0     
+##  7 The Number Concept: Its Origin and Developme… the    3177 0.0578 0     0     
+##  8 An Elementary Course in Synthetic Projective… the    2750 0.0788 0     0     
+##  9 The Earliest Arithmetics in English           e      2579 0.0527 0.288 0.0151
+## 10 Amusements in Mathematics                     is     2542 0.0153 0     0     
+## # … with 24,645 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#bargraphs
+tfidf_mathbooks %&amp;gt;% 
+  group_by(title) %&amp;gt;% 
+  top_n(15, tf_idf) %&amp;gt;% 
+  ungroup() %&amp;gt;%
+  mutate(word = reorder(word, tf_idf)) %&amp;gt;%
+  ggplot(aes(word, tf_idf, fill = title)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = &amp;quot;tf-idf&amp;quot;) +
+  facet_wrap(~title, ncol = 2, scales = &amp;quot;free&amp;quot;) +
+  coord_flip() + ggtitle(&amp;quot;Bargraphs of top 15 words&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09-sentiment-analysis.en/2020-06-09-sentiment-analysis.en_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Amusements in Mathematics - This book appears to be related to solving puzzle and game.&lt;/p&gt;
+&lt;p&gt;An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.&lt;/p&gt;
+&lt;p&gt;The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form.&lt;/p&gt;
+&lt;p&gt;The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.&lt;/p&gt;
+&lt;p&gt;*&lt;strong&gt;Same analysis using bigrams.&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# bigrams for the math books from previous problem
+math_bigrams &amp;lt;-  math_books %&amp;gt;%
+unnest_tokens(bigram, text, token = &amp;quot;ngrams&amp;quot;, n = 2)
+math_bigrams&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 304,593 x 3
+##    gutenberg_id title                                          bigram           
+##           &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;                                          &amp;lt;chr&amp;gt;            
+##  1        16449 The Number Concept: Its Origin and Development transcriber&amp;#39;s no…
+##  2        16449 The Number Concept: Its Origin and Development note the         
+##  3        16449 The Number Concept: Its Origin and Development the following    
+##  4        16449 The Number Concept: Its Origin and Development following errors 
+##  5        16449 The Number Concept: Its Origin and Development errors found     
+##  6        16449 The Number Concept: Its Origin and Development found in         
+##  7        16449 The Number Concept: Its Origin and Development in the           
+##  8        16449 The Number Concept: Its Origin and Development the original     
+##  9        16449 The Number Concept: Its Origin and Development original have    
+## 10        16449 The Number Concept: Its Origin and Development have been        
+## # … with 304,583 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# count bigrams
+math_bigrams %&amp;gt;% count(bigram, sort = TRUE)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 126,537 x 2
+##    bigram       n
+##    &amp;lt;chr&amp;gt;    &amp;lt;int&amp;gt;
+##  1 of the    2866
+##  2 in the    1850
+##  3 o o       1044
+##  4 to the     847
+##  5 it is      758
+##  6 and the    756
+##  7 on the     677
+##  8 the same   638
+##  9 that the   627
+## 10 to be      554
+## # … with 126,527 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# separate and filter stop words
+mathbigrams_separated &amp;lt;- math_bigrams %&amp;gt;%
+separate(bigram, c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;), sep = &amp;quot; &amp;quot;)
+
+mathbigrams_filtered &amp;lt;- mathbigrams_separated %&amp;gt;%
+  filter(!word1 %in% stop_words$word) %&amp;gt;%
+  filter(!word2 %in% stop_words$word)
+
+# new bigram counts
+bigram_counts &amp;lt;- mathbigrams_filtered %&amp;gt;% 
+  count(word1, word2, sort = TRUE)
+bigram_counts&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 38,184 x 3
+##    word1 word2     n
+##    &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1 1     2       217
+##  2 2     3       176
+##  3 3     4       167
+##  4 4     5       123
+##  5 2     1       114
+##  6 5     6       113
+##  7 ou    er      111
+##  8 1     7       103
+##  9 2     2       101
+## 10 2     8       101
+## # … with 38,174 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#combine filtered words to form bigrams 
+mathbigrams_united &amp;lt;- mathbigrams_filtered %&amp;gt;%
+  unite(bigram, word1, word2, sep = &amp;quot; &amp;quot;)
+mathbigrams_united&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 56,991 x 3
+##    gutenberg_id title                                          bigram           
+##           &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;                                          &amp;lt;chr&amp;gt;            
+##  1        16449 The Number Concept: Its Origin and Development transcriber&amp;#39;s no…
+##  2        16449 The Number Concept: Its Origin and Development errors found     
+##  3        16449 The Number Concept: Its Origin and Development 14th paragraph   
+##  4        16449 The Number Concept: Its Origin and Development paragraph drop   
+##  5        16449 The Number Concept: Its Origin and Development drop double      
+##  6        16449 The Number Concept: Its Origin and Development double quote     
+##  7        16449 The Number Concept: Its Origin and Development chapter iv       
+##  8        16449 The Number Concept: Its Origin and Development iv 1st           
+##  9        16449 The Number Concept: Its Origin and Development 1st paragraph    
+## 10        16449 The Number Concept: Its Origin and Development chapter iv       
+## # … with 56,981 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;bigram_tf_idf &amp;lt;- mathbigrams_united %&amp;gt;%
+  count(title, bigram) %&amp;gt;%
+  bind_tf_idf(bigram, title, n) %&amp;gt;%
+  arrange(desc(tf_idf))
+bigram_tf_idf&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 38,958 x 6
+##    title                                  bigram         n      tf   idf  tf_idf
+##    &amp;lt;chr&amp;gt;                                  &amp;lt;chr&amp;gt;      &amp;lt;int&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;
+##  1 The Earliest Arithmetics in English    ou er        111 0.00929  1.39 0.0129 
+##  2 The Earliest Arithmetics in English    fig ur        86 0.00720  1.39 0.00998
+##  3 An Elementary Course in Synthetic Pro… _a_ _b_       31 0.00576  1.39 0.00799
+##  4 The Earliest Arithmetics in English    ne er         58 0.00485  1.39 0.00673
+##  5 An Elementary Course in Synthetic Pro… _b_ _c_       26 0.00483  1.39 0.00670
+##  6 An Elementary Course in Synthetic Pro… line join…    22 0.00409  1.39 0.00567
+##  7 The Number Concept: Its Origin and De… _op cit       70 0.00397  1.39 0.00550
+##  8 An Elementary Course in Synthetic Pro… letter ga…    21 0.00390  1.39 0.00541
+##  9 The Earliest Arithmetics in English    aft er        46 0.00385  1.39 0.00534
+## 10 The Earliest Arithmetics in English    eu er         46 0.00385  1.39 0.00534
+## # … with 38,948 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#bargraphs
+bigram_tf_idf %&amp;gt;% 
+  group_by(title) %&amp;gt;% 
+  top_n(15, tf_idf) %&amp;gt;% 
+  ungroup() %&amp;gt;%
+  mutate(bigram=reorder(bigram, tf_idf)) %&amp;gt;%
+  ggplot(aes(bigram, tf_idf, fill = title)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = &amp;quot;tf-idf&amp;quot;) +
+  facet_wrap(~title, ncol = 2, scales = &amp;quot;free&amp;quot;) +
+  coord_flip() + ggtitle(&amp;quot;Bargraphs of top 15 bigrams&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09-sentiment-analysis.en/2020-06-09-sentiment-analysis.en_files/figure-html/unnamed-chunk-11-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;sentiment-analysis-on-the-songs-from-genius&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Sentiment analysis on the songs from Genius&lt;/h3&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Aerosmith - I don’t want to miss a thing&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#get song lyrics
+aero_smith_i_don &amp;lt;- genius_lyrics(artist = &amp;quot;Aerosmith&amp;quot;, song = &amp;quot; I don&amp;#39;t want to miss a thing&amp;quot;)
+aero_smith_i_don&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 59 x 3
+##    track_title                line lyric                                        
+##    &amp;lt;chr&amp;gt;                     &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;                                        
+##  1 I Don’t Want to Miss a T…     1 I could stay awake just to hear you breathin&amp;#39;
+##  2 I Don’t Want to Miss a T…     2 Watch you smile while you are sleeping       
+##  3 I Don’t Want to Miss a T…     3 While you&amp;#39;re far away and dreaming           
+##  4 I Don’t Want to Miss a T…     4 I could spend my life in this sweet surrender
+##  5 I Don’t Want to Miss a T…     5 I could stay lost in this moment forever     
+##  6 I Don’t Want to Miss a T…     6 Where every moment spent with you is a momen…
+##  7 I Don’t Want to Miss a T…     7 Don&amp;#39;t want to close my eyes                  
+##  8 I Don’t Want to Miss a T…     8 I don&amp;#39;t want to fall asleep                  
+##  9 I Don’t Want to Miss a T…     9 &amp;#39;Cause I&amp;#39;d miss you, baby                    
+## 10 I Don’t Want to Miss a T…    10 And I don&amp;#39;t wanna miss a thing               
+## # … with 49 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#tidy up lyrics
+i_dont_tidy &amp;lt;- aero_smith_i_don  %&amp;gt;% select(lyric, track_title) %&amp;gt;% unnest_tokens(word, lyric)
+i_dont_tidy&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 390 x 2
+##    track_title                  word    
+##    &amp;lt;chr&amp;gt;                        &amp;lt;chr&amp;gt;   
+##  1 I Don’t Want to Miss a Thing i       
+##  2 I Don’t Want to Miss a Thing could   
+##  3 I Don’t Want to Miss a Thing stay    
+##  4 I Don’t Want to Miss a Thing awake   
+##  5 I Don’t Want to Miss a Thing just    
+##  6 I Don’t Want to Miss a Thing to      
+##  7 I Don’t Want to Miss a Thing hear    
+##  8 I Don’t Want to Miss a Thing you     
+##  9 I Don’t Want to Miss a Thing breathin
+## 10 I Don’t Want to Miss a Thing watch   
+## # … with 380 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# join with sentiment lexicon
+i_dont_sentiments&amp;lt;- i_dont_tidy%&amp;gt;%
+inner_join(get_sentiments(&amp;quot;bing&amp;quot;), by = c(word = &amp;quot;word&amp;quot;))
+i_dont_sentiments&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 35 x 3
+##    track_title                  word      sentiment
+##    &amp;lt;chr&amp;gt;                        &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;    
+##  1 I Don’t Want to Miss a Thing smile     positive 
+##  2 I Don’t Want to Miss a Thing sweet     positive 
+##  3 I Don’t Want to Miss a Thing surrender negative 
+##  4 I Don’t Want to Miss a Thing lost      negative 
+##  5 I Don’t Want to Miss a Thing treasure  positive 
+##  6 I Don’t Want to Miss a Thing fall      negative 
+##  7 I Don’t Want to Miss a Thing miss      negative 
+##  8 I Don’t Want to Miss a Thing miss      negative 
+##  9 I Don’t Want to Miss a Thing miss      negative 
+## 10 I Don’t Want to Miss a Thing miss      negative 
+## # … with 25 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#bargraph word-sentiment
+i_dont_sentiments %&amp;gt;%
+  count(sentiment, word) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(n = ifelse(sentiment == &amp;quot;negative&amp;quot;, -n, n)) %&amp;gt;%
+  mutate(word = reorder(word, n)) %&amp;gt;%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  ylab(&amp;quot;Contribution to sentiment&amp;quot;) +
+  coord_flip()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09-sentiment-analysis.en/2020-06-09-sentiment-analysis.en_files/figure-html/unnamed-chunk-15-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;ol start=&#34;2&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;The Weeknd - Earned It&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;the_weeknd_earned_it &amp;lt;- genius_lyrics(artist = &amp;quot;The Weeknd&amp;quot;, song = &amp;quot;Earned It&amp;quot;)
+the_weeknd_earned_it&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 51 x 3
+##    track_title                     line lyric                                   
+##    &amp;lt;chr&amp;gt;                          &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;                                   
+##  1 Earned It (Fifty Shades of Gr…     1 I&amp;#39;ma care for you                       
+##  2 Earned It (Fifty Shades of Gr…     2 I&amp;#39;ma care for you, you, you, you        
+##  3 Earned It (Fifty Shades of Gr…     3 You make it look like it&amp;#39;s magic (Oh ye…
+##  4 Earned It (Fifty Shades of Gr…     4 &amp;#39;Cause I see nobody, nobody but you, yo…
+##  5 Earned It (Fifty Shades of Gr…     5 I&amp;#39;m never confused                      
+##  6 Earned It (Fifty Shades of Gr…     6 Hey, hey                                
+##  7 Earned It (Fifty Shades of Gr…     7 I&amp;#39;m so used to bein&amp;#39; used               
+##  8 Earned It (Fifty Shades of Gr…     8 So I love when you call unexpected      
+##  9 Earned It (Fifty Shades of Gr…     9 &amp;#39;Cause I hate when the moment&amp;#39;s expected
+## 10 Earned It (Fifty Shades of Gr…    10 So I&amp;#39;ma care for you, you, you          
+## # … with 41 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;earned_it_tidy &amp;lt;- the_weeknd_earned_it  %&amp;gt;% select(lyric, track_title) %&amp;gt;% unnest_tokens(word, lyric)
+earned_it_tidy&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 325 x 2
+##    track_title                      word 
+##    &amp;lt;chr&amp;gt;                            &amp;lt;chr&amp;gt;
+##  1 Earned It (Fifty Shades of Grey) i&amp;#39;ma 
+##  2 Earned It (Fifty Shades of Grey) care 
+##  3 Earned It (Fifty Shades of Grey) for  
+##  4 Earned It (Fifty Shades of Grey) you  
+##  5 Earned It (Fifty Shades of Grey) i&amp;#39;ma 
+##  6 Earned It (Fifty Shades of Grey) care 
+##  7 Earned It (Fifty Shades of Grey) for  
+##  8 Earned It (Fifty Shades of Grey) you  
+##  9 Earned It (Fifty Shades of Grey) you  
+## 10 Earned It (Fifty Shades of Grey) you  
+## # … with 315 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;earned_it_sentiments&amp;lt;- earned_it_tidy%&amp;gt;%
+inner_join(get_sentiments(&amp;quot;bing&amp;quot;), by = c(word = &amp;quot;word&amp;quot;))
+earned_it_sentiments&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 36 x 3
+##    track_title                      word       sentiment
+##    &amp;lt;chr&amp;gt;                            &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;    
+##  1 Earned It (Fifty Shades of Grey) like       positive 
+##  2 Earned It (Fifty Shades of Grey) magic      positive 
+##  3 Earned It (Fifty Shades of Grey) confused   negative 
+##  4 Earned It (Fifty Shades of Grey) love       positive 
+##  5 Earned It (Fifty Shades of Grey) unexpected negative 
+##  6 Earned It (Fifty Shades of Grey) hate       negative 
+##  7 Earned It (Fifty Shades of Grey) perfect    positive 
+##  8 Earned It (Fifty Shades of Grey) worth      positive 
+##  9 Earned It (Fifty Shades of Grey) work       positive 
+## 10 Earned It (Fifty Shades of Grey) love       positive 
+## # … with 26 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;earned_it_sentiments %&amp;gt;%
+  count(sentiment, word) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(n = ifelse(sentiment == &amp;quot;negative&amp;quot;, -n, n)) %&amp;gt;%
+  mutate(word = reorder(word, n)) %&amp;gt;%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  ylab(&amp;quot;Contribution to sentiment&amp;quot;) +
+  coord_flip()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09-sentiment-analysis.en/2020-06-09-sentiment-analysis.en_files/figure-html/unnamed-chunk-19-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;ol start=&#34;3&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Pharrell Williams - Happy&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pharrell_will_happy &amp;lt;- genius_lyrics(artist = &amp;quot;Pharrell Williams&amp;quot;, song = &amp;quot;Happy&amp;quot;)
+pharrell_will_happy&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 67 x 3
+##    track_title  line lyric                                             
+##    &amp;lt;chr&amp;gt;       &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;                                             
+##  1 Happy           1 &amp;lt;NA&amp;gt;                                              
+##  2 Happy           2 It might seem crazy what I&amp;#39;m &amp;#39;bout to say         
+##  3 Happy           3 Sunshine she&amp;#39;s here, you can take a break         
+##  4 Happy           4 I&amp;#39;m a hot air balloon that could go to space      
+##  5 Happy           5 With the air, like I don&amp;#39;t care, baby, by the way 
+##  6 Happy           6 (Because I&amp;#39;m happy)                               
+##  7 Happy           7 Clap along if you feel like a room without a roof 
+##  8 Happy           8 (Because I&amp;#39;m happy)                               
+##  9 Happy           9 Clap along if you feel like happiness is the truth
+## 10 Happy          10 (Because I&amp;#39;m happy)                               
+## # … with 57 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;happy_tidy &amp;lt;- pharrell_will_happy  %&amp;gt;% select(lyric, track_title) %&amp;gt;% unnest_tokens(word, lyric)
+happy_tidy&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 473 x 2
+##    track_title word 
+##    &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;
+##  1 Happy       &amp;lt;NA&amp;gt; 
+##  2 Happy       it   
+##  3 Happy       might
+##  4 Happy       seem 
+##  5 Happy       crazy
+##  6 Happy       what 
+##  7 Happy       i&amp;#39;m  
+##  8 Happy       bout 
+##  9 Happy       to   
+## 10 Happy       say  
+## # … with 463 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;happy_sentiments&amp;lt;- happy_tidy%&amp;gt;%
+inner_join(get_sentiments(&amp;quot;bing&amp;quot;), by = c(word = &amp;quot;word&amp;quot;))
+happy_sentiments&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 63 x 3
+##    track_title word      sentiment
+##    &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;    
+##  1 Happy       crazy     negative 
+##  2 Happy       break     negative 
+##  3 Happy       hot       positive 
+##  4 Happy       like      positive 
+##  5 Happy       happy     positive 
+##  6 Happy       like      positive 
+##  7 Happy       happy     positive 
+##  8 Happy       like      positive 
+##  9 Happy       happiness positive 
+## 10 Happy       happy     positive 
+## # … with 53 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;happy_sentiments %&amp;gt;%
+  count(sentiment, word) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(n = ifelse(sentiment == &amp;quot;negative&amp;quot;, -n, n)) %&amp;gt;%
+  mutate(word = reorder(word, n)) %&amp;gt;%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  ylab(&amp;quot;Contribution to sentiment&amp;quot;) +
+  coord_flip()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09-sentiment-analysis.en/2020-06-09-sentiment-analysis.en_files/figure-html/unnamed-chunk-23-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;ol start=&#34;4&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Summertime Sadness – Lana Del Rey&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt; Summertime_Sadness &amp;lt;- genius_lyrics(artist = &amp;quot;Lana Del Rey&amp;quot;, song = &amp;quot;Summertime Sadness&amp;quot;)
+Summertime_Sadness&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 54 x 3
+##    track_title         line lyric                                          
+##    &amp;lt;chr&amp;gt;              &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;                                          
+##  1 Summertime Sadness     1 Kiss me hard before you go                     
+##  2 Summertime Sadness     2 Summertime sadness                             
+##  3 Summertime Sadness     3 I just wanted you to know                      
+##  4 Summertime Sadness     4 That, baby, you&amp;#39;re the best                    
+##  5 Summertime Sadness     5 I got my red dress on tonight                  
+##  6 Summertime Sadness     6 Dancin&amp;#39; in the dark in the pale moonlight      
+##  7 Summertime Sadness     7 Done my hair up real big, beauty queen style   
+##  8 Summertime Sadness     8 High heels off, I&amp;#39;m feelin&amp;#39; alive              
+##  9 Summertime Sadness     9 Oh, my God, I feel it in the air               
+## 10 Summertime Sadness    10 Telephone wires above are sizzlin&amp;#39; like a snare
+## # … with 44 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Summertime_Sadness_tidy &amp;lt;- Summertime_Sadness %&amp;gt;% select(lyric, track_title) %&amp;gt;% unnest_tokens(word, lyric)
+Summertime_Sadness_tidy&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 312 x 2
+##    track_title        word      
+##    &amp;lt;chr&amp;gt;              &amp;lt;chr&amp;gt;     
+##  1 Summertime Sadness kiss      
+##  2 Summertime Sadness me        
+##  3 Summertime Sadness hard      
+##  4 Summertime Sadness before    
+##  5 Summertime Sadness you       
+##  6 Summertime Sadness go        
+##  7 Summertime Sadness summertime
+##  8 Summertime Sadness sadness   
+##  9 Summertime Sadness i         
+## 10 Summertime Sadness just      
+## # … with 302 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Summertime_Sadness_sentiments&amp;lt;- Summertime_Sadness_tidy%&amp;gt;%
+inner_join(get_sentiments(&amp;quot;bing&amp;quot;), by = c(word = &amp;quot;word&amp;quot;))
+Summertime_Sadness_sentiments&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 39 x 3
+##    track_title        word    sentiment
+##    &amp;lt;chr&amp;gt;              &amp;lt;chr&amp;gt;   &amp;lt;chr&amp;gt;    
+##  1 Summertime Sadness hard    negative 
+##  2 Summertime Sadness sadness negative 
+##  3 Summertime Sadness best    positive 
+##  4 Summertime Sadness dark    negative 
+##  5 Summertime Sadness pale    negative 
+##  6 Summertime Sadness beauty  positive 
+##  7 Summertime Sadness like    positive 
+##  8 Summertime Sadness snare   negative 
+##  9 Summertime Sadness hard    negative 
+## 10 Summertime Sadness sadness negative 
+## # … with 29 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Summertime_Sadness_sentiments %&amp;gt;%
+  count(sentiment, word) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(n = ifelse(sentiment == &amp;quot;negative&amp;quot;, -n, n)) %&amp;gt;%
+  mutate(word = reorder(word, n)) %&amp;gt;%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  ylab(&amp;quot;Contribution to sentiment&amp;quot;) +
+  coord_flip()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-09-sentiment-analysis.en/2020-06-09-sentiment-analysis.en_files/figure-html/unnamed-chunk-27-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Topic Modeling</title>
+      <link>/post/r-markdown/</link>
+      <pubDate>Tue, 09 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>/post/r-markdown/</guid>
+      <description>
+
+
+&lt;p&gt;For this project, I am selecting four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Topic modeling&lt;/strong&gt; is an unsupervised machine learning technique for text data. It scans a set of documents(book chapters in this case), detecting word and phrase patterns within them, and clustering word groups and similar expressions that best characterize a set of documents.&lt;strong&gt;Latent Dirichlet Allocation (LDA)&lt;/strong&gt; is an example of topic modeling algorithm used to cluster text in a document to a particular topic. It is guided by two principles - every document is a mixture of topics and every topic is a mixture of words.&lt;/p&gt;
+&lt;p&gt;Step-by-step explanations are as follows:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(pacman)
 p_load(topicmodels,gutenbergr,tidyverse,tidytext,stringr,scales)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;1.Book Titles&lt;/strong&gt;&lt;/p&gt;
@@ -34,8 +482,6 @@ titles&lt;/code&gt;&lt;/pre&gt;
 ## [4] &amp;quot;The Psychology of Revolution&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# retrieve books from gutenbergr
 books &amp;lt;- gutenberg_download(c(448,15141,25267,17188), meta_fields = &amp;quot;title&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Using mirror http://aleph.gutenberg.org&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;2.Pre-Processing&lt;/strong&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# divide into documents, each representing one chapter
 by_chapter &amp;lt;- books %&amp;gt;%
@@ -327,7 +773,7 @@ word_counts %&amp;gt;% filter(word == &amp;quot;moon&amp;quot;)&lt;/code&gt;&lt;
       <description>
 
 
-&lt;p&gt;&lt;strong&gt;Statebins&lt;/strong&gt; are U.S. State Cartogram Heatmaps, alternative to Choropleth Maps for USA States.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Statebins&lt;/strong&gt; are U.S. State Cartogram Heatmaps, alternative to Choropleth.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# load packages
 library(pacman)
 p_load(statebins,readxl,dplyr)&lt;/code&gt;&lt;/pre&gt;
@@ -336,31 +782,30 @@ p_load(statebins,readxl,dplyr)&lt;/code&gt;&lt;/pre&gt;
  data1 &amp;lt;- read_excel(&amp;quot;GeoFRED_Bachelor&amp;#39;s_Degree_or_Higher_by_State_Percent.xls&amp;quot;, skip = 1)
 data1 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID` State                Code  Year_2018
-##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 GCT1502HI   Hawaii               15         33.5
-## 2 GCT1502CA   California           06         34.2
-## 3 GCT1502LA   Louisiana            22         24.3
-## 4 GCT1502OH   Ohio                 39         29  
-## 5 GCT1502DC   District of Columbia 11         60.4&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID` State         Code  Year_2018
+##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 GCT1502WA   Washington    53         36.7
+## 2 GCT1502WV   West Virginia 54         21.3
+## 3 GCT1502VA   Virginia      51         39.3
+## 4 GCT1502AZ   Arizona       04         29.7
+## 5 GCT1502HI   Hawaii        15         33.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# statebins
 statebins_continuous(state_data = data1, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Blues&amp;quot;, font_size = 3,
                      legend_title=&amp;quot;2018 Bachelor&amp;#39;s Degree or Higher by State (percent)&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Warning: `show_guide` has been deprecated. Please use `show.legend` instead.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/statebins/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Statebins with 2018 Median Household Income by State Data&lt;/strong&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data2 &amp;lt;- read_excel(&amp;quot;GeoFRED_Median_Household_Income_by_State_Percent_Change.xls&amp;quot;, skip = 1)
 data2 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID`     State       Code  Year_2018
-##   &amp;lt;chr&amp;gt;           &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 MEHOINUSUTA646N Utah        49        10.4 
-## 2 MEHOINUSAKA646N Alaska      02       -11.9 
-## 3 MEHOINUSMSA646N Mississippi 28        -1.16
-## 4 MEHOINUSNMA646N New Mexico  35         5.88
-## 5 MEHOINUSVAA646N Virginia    51         8.95&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID`     State                Code  Year_2018
+##   &amp;lt;chr&amp;gt;           &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 MEHOINUSDCA646N District of Columbia 11         5.50
+## 2 MEHOINUSVTA646N Vermont              50        10.0 
+## 3 MEHOINUSPAA646N Pennsylvania         42         5.29
+## 4 MEHOINUSNEA646N Nebraska             31        13.4 
+## 5 MEHOINUSINA646N Indiana              18         1.91&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;statebins_continuous(state_data = data2, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Greens&amp;quot;, font_size = 3,
@@ -372,13 +817,13 @@ Median Household Income by State&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data3 &amp;lt;- read_excel(&amp;quot;GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls&amp;quot;, skip=1)
 data3 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 4
-##   `Series ID` State        Code  Year_2018
-##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;        &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
-## 1 UTPOP       Utah         49       58.0  
-## 2 RIPOP       Rhode Island 44        0.829
-## 3 MSPOP       Mississippi  28       -3.13 
-## 4 INPOP       Indiana      18       31.8  
-## 5 MTPOP       Montana      30        9.22&lt;/code&gt;&lt;/pre&gt;
+##   `Series ID` State                Code  Year_2018
+##   &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;                &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;
+## 1 TNPOP       Tennessee            47        61.2 
+## 2 DCDIST5POP  District of Columbia 11         6.76
+## 3 NEPOP       Nebraska             31        11.7 
+## 4 AKPOP       Alaska               02        -2.35
+## 5 TXPOP       Texas                48       379.&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;statebins_continuous(state_data = data3, state_col = &amp;quot;State&amp;quot;,
                      text_color = &amp;quot;white&amp;quot;, value_col = &amp;quot;Year_2018&amp;quot;,
                      brewer_pal=&amp;quot;Reds&amp;quot;, font_size = 3, 
@@ -389,7 +834,7 @@ data3 %&amp;gt;% sample_n(5)&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
-      <title>Choropleth &amp; Heat Map</title>
+      <title>Choropleth Map</title>
       <link>/post/choropleth/</link>
       <pubDate>Mon, 18 Nov 2019 21:13:14 -0500</pubDate>
       <guid>/post/choropleth/</guid>
@@ -495,31 +940,6 @@ head(country_pop,10)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## Warning in self$bind(): The following regions were missing and are being set to
 ## NA: namibia, western sahara, taiwan, antarctica, kosovo&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/choropleth/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Heatmaps&lt;/strong&gt; visual the values in a matrix by adding color relative to a variable(s), usually down columns.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(df_state_demographics)
-df_state_demographics &amp;lt;- df_state_demographics %&amp;gt;% arrange(total_population)
-
-X &amp;lt;- data.matrix(df_state_demographics[,2:8])
-
-row.names(X) &amp;lt;- df_state_demographics[,1]
-
-head(X)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##                      total_population percent_white percent_black percent_asian
-## wyoming                        570134            85             1             1
-## district of columbia           619371            35            49             3
-## vermont                        625904            94             1             1
-## north dakota                   689781            88             1             1
-## alaska                         720316            63             3             5
-## south dakota                   825198            84             1             1
-##                      percent_hispanic per_capita_income median_rent
-## wyoming                             9             28902         647
-## district of columbia               10             45290        1154
-## vermont                             2             29167         754
-## north dakota                        2             29732         564
-## alaska                              6             32651         978
-## south dakota                        3             25740         517&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;heatmap(X, Rowv=NA, Colv=NA, col = brewer.pal(9, &amp;quot;Blues&amp;quot;), scale = &amp;quot;column&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/choropleth/index_files/figure-html/unnamed-chunk-14-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     

@@ -27,7 +27,7 @@
   
     
   
-  <meta name="description" content="Choropleth and heatmap with various population data">
+  <meta name="description" content="Choropleth maps with population data">
 
   
   <link rel="alternate" hreflang="en-us" href="/post/choropleth/">
@@ -236,8 +236,8 @@
   
   <meta property="og:site_name" content="Min Tamang">
   <meta property="og:url" content="/post/choropleth/">
-  <meta property="og:title" content="Choropleth &amp; Heat Map | Min Tamang">
-  <meta property="og:description" content="Choropleth and heatmap with various population data"><meta property="og:image" content="/post/choropleth/featured.png">
+  <meta property="og:title" content="Choropleth Map | Min Tamang">
+  <meta property="og:description" content="Choropleth maps with population data"><meta property="og:image" content="/post/choropleth/featured.png">
   <meta property="twitter:image" content="/post/choropleth/featured.png"><meta property="og:locale" content="en-us">
   
     
@@ -269,7 +269,7 @@
     "@type": "WebPage",
     "@id": "/post/choropleth/"
   },
-  "headline": "Choropleth \u0026 Heat Map",
+  "headline": "Choropleth Map",
   
   "image": [
     "/post/choropleth/featured.png"
@@ -291,7 +291,7 @@
       "url": "/images/icon_hufac689ed154f22ff77b5bea0395abf25_7664_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Choropleth and heatmap with various population data"
+  "description": "Choropleth maps with population data"
 }
 </script>
 
@@ -309,7 +309,7 @@
 
 
 
-  <title>Choropleth &amp; Heat Map | Min Tamang</title>
+  <title>Choropleth Map | Min Tamang</title>
 
 </head>
 
@@ -428,16 +428,9 @@
         
         
         
-          
-          
-          
-            
-          
-          
-        
 
         <li class="nav-item">
-          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          <a class="nav-link " href="/posts"><span>Posts</span></a>
         </li>
 
         
@@ -457,16 +450,9 @@
         
         
         
-          
-          
-          
-            
-          
-          
-        
 
         <li class="nav-item">
-          <a class="nav-link " href="/#projects"><span>Projects</span></a>
+          <a class="nav-link " href="/projects"><span>Projects</span></a>
         </li>
 
         
@@ -530,16 +516,9 @@
         
         
         
-          
-          
-          
-            
-          
-          
-        
 
         <li class="nav-item">
-          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          <a class="nav-link " href="/contact"><span>Contact</span></a>
         </li>
 
         
@@ -615,7 +594,7 @@
 
 
 <div class="article-container pt-3">
-  <h1>Choropleth &amp; Heat Map</h1>
+  <h1>Choropleth Map</h1>
 
   
 
@@ -652,7 +631,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    3 min read
+    2 min read
   </span>
   
 
@@ -801,31 +780,6 @@ head(country_pop,10)</code></pre>
 <pre><code>## Warning in self$bind(): The following regions were missing and are being set to
 ## NA: namibia, western sahara, taiwan, antarctica, kosovo</code></pre>
 <p><img src="/post/choropleth/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p><strong>Heatmaps</strong> visual the values in a matrix by adding color relative to a variable(s), usually down columns.</p>
-<pre class="r"><code>data(df_state_demographics)
-df_state_demographics &lt;- df_state_demographics %&gt;% arrange(total_population)
-
-X &lt;- data.matrix(df_state_demographics[,2:8])
-
-row.names(X) &lt;- df_state_demographics[,1]
-
-head(X)</code></pre>
-<pre><code>##                      total_population percent_white percent_black percent_asian
-## wyoming                        570134            85             1             1
-## district of columbia           619371            35            49             3
-## vermont                        625904            94             1             1
-## north dakota                   689781            88             1             1
-## alaska                         720316            63             3             5
-## south dakota                   825198            84             1             1
-##                      percent_hispanic per_capita_income median_rent
-## wyoming                             9             28902         647
-## district of columbia               10             45290        1154
-## vermont                             2             29167         754
-## north dakota                        2             29732         564
-## alaska                              6             32651         978
-## south dakota                        3             25740         517</code></pre>
-<pre class="r"><code>heatmap(X, Rowv=NA, Colv=NA, col = brewer.pal(9, &quot;Blues&quot;), scale = &quot;column&quot;)</code></pre>
-<p><img src="/post/choropleth/index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 
     </div>
 
@@ -855,7 +809,7 @@ head(X)</code></pre>
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/choropleth/&amp;text=Choropleth%20&amp;amp;%20Heat%20Map" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/post/choropleth/&amp;text=Choropleth%20Map" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -868,7 +822,7 @@ head(X)</code></pre>
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/choropleth/&amp;t=Choropleth%20&amp;amp;%20Heat%20Map" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/post/choropleth/&amp;t=Choropleth%20Map" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -881,7 +835,7 @@ head(X)</code></pre>
       
       
       <li>
-        <a href="mailto:?subject=Choropleth%20&amp;amp;%20Heat%20Map&amp;body=/post/choropleth/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Choropleth%20Map&amp;body=/post/choropleth/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -894,7 +848,7 @@ head(X)</code></pre>
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/choropleth/&amp;title=Choropleth%20&amp;amp;%20Heat%20Map" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/post/choropleth/&amp;title=Choropleth%20Map" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -907,7 +861,7 @@ head(X)</code></pre>
       
       
       <li>
-        <a href="whatsapp://send?text=Choropleth%20&amp;amp;%20Heat%20Map%20/post/choropleth/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Choropleth%20Map%20/post/choropleth/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -920,7 +874,7 @@ head(X)</code></pre>
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/choropleth/&amp;title=Choropleth%20&amp;amp;%20Heat%20Map" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/post/choropleth/&amp;title=Choropleth%20Map" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
