@@ -1,18 +1,23 @@
 ---
-title: "Topic Modeling"
-summary: Topic Modeling using LDA algorithm on books from  Gutenberg
-authors: [minr]
-date: 2020-05-09T21:13:14-05:00
-categories: ["NLP"]
-tags: ["NLP"]
-
-output:
-  blogdown::html_page:
-    toc: true
-    number_sections: true
-    toc_depth: 1
-
+title: Topic Modeling
+author: Minr
+date: '2020-06-09'
+slug: r-markdown
+categories: []
+tags:
+  - R
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-06-09T20:17:40-07:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
 ---
+
 
 For this project, I am selecting four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups. 
 
@@ -225,8 +230,6 @@ word_counts %>% filter(word == "moon")
 
 
 Although the words are presumably different for each topic since books are selected from different genre, LDA algorithm performed really well on identifying topics to the document and words to the topic. Really great for unsupervised clustering!
-
-
 
 
 
