@@ -95,7 +95,7 @@ state_choropleth(df_state_demographics,
 
 
 **World Map**
-```{r warning=FALSE, message=FALSE}
+```{r}
 data("df_pop_country")
 country_pop <- df_pop_country %>% arrange(desc(value))
 head(country_pop,10)
