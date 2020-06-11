@@ -29,7 +29,7 @@ superuser: true
 
 My name is Min R Tamang. I am a quality engineer at Kite Hill. Professionally my responsibilities included developing and deploying statistical process control to documentation and data analysis.
 
-I hold a Master's degree in Statistics with concentration in Data Science from Cal State Bay. I also earned Bachelor's degree in Biological Science and Associate degree in Natural Science from Southeast Missouri State University and Quincy College respectively. Additionally, I completed Bachelor's degree from Tribhuvan University, Kathmandu. 
+I hold a Master's degree in Statistics with concentration in Data Science from Cal State East Bay. I also earned Bachelor's degree in Biological Science and Associate degree in Natural Science from Southeast Missouri State University and Quincy College respectively. Additionally, I completed Bachelor's degree from Tribhuvan University, Kathmandu. 
 
 I was born in Nepal. Currently I live in Bay Area, California. 
 

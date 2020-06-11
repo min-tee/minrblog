@@ -19,6 +19,7 @@ This is a data science library for reference, book, blog and dataset.
 * [MIT Computer Science & Data Science](https://ocw.mit.edu/index.htm)
 * [Forecasting: Principles and Practice](https://otexts.com/fpp3/)
 * [UC Business Analytics R Programming Guide](http://uc-r.github.io/linear_regression)
+* [ML with R](https://bradleyboehmke.github.io/HOML/)
 * [ML Glossary](https://ml-cheatsheet.readthedocs.io/en/latest/index.html)
 * [ISLR](http://faculty.marshall.usc.edu/gareth-james/ISL/)
 * [Tidymodels](https://tidymodels.tidymodels.org/)
