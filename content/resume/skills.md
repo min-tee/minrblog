@@ -23,7 +23,7 @@ subtitle = ""
 [[feature]]
   icon = "tools"
   icon_pack = "fas"
-  name = "R, SQL, GitHub, Tableau, Power BI, Basic Python"
+  name = "R, SQL, GitHub, Tableau, Power BI"
   description = ""  
   
 [[feature]]
