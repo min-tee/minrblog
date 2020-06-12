@@ -1,23 +1,22 @@
 ---
-title: How I Taught Tidymodels, Virtually
-author: Alison Hill
-date: '2020-06-02'
+title: 'TF-IDF & Sentiment Analysis '
+author: Minr
+date: '2020-06-09'
+slug: sentiment-analysis
 categories: []
 tags:
-  - rmarkdown
+  - NLP
 subtitle: ''
-summary: 'Some reflections on my third time teaching tidymodels for machine learning, and doing it virtually.'
+summary: ''
 authors: []
+lastmod: '2020-06-09T22:46:01-07:00'
 featured: no
-disable_jquery: no
 image:
-  caption: '[Photo by Bruno Martins on Unsplash](https://unsplash.com/photos/z7QQyvnQDWc)'
+  caption: ''
   focal_point: ''
   preview_only: no
-projects: [tidyml]
+projects: []
 ---
-
-
 
 TF is the normalized term frequency and IDF is the inverse document frequency. The TF-IDF is computed by multiplying two terms:TF and IDF
 Therefore, the formula for TF-IDF is TFxIDF.
