@@ -41,17 +41,7 @@ url_pdf: ""
 url_slides: ""
 url_video: ""
 ---
-We will cover:
 
-- The **blogdown** R package
-- Hugo themes
-- Adding content to personalize your site
-- Posting 
-- Don't want to blog? / just want to knit?
-- Customizing themes
-- Troubleshooting common problems
-- Deployment options and recommendations
-- Domain options available through RStudio/rbind
 
 If you are planning on attending this workshop, please click on the HTML link above for how to prepare before the workshop.
 
