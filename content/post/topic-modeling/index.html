@@ -20,8 +20,10 @@ projects: []
 
 
 
+<p>Suppose you tore four books and now you want to atleast try to attach them together but you haven’t read them before.</p>
 <p>For this project, I am selecting four books from Project Gutenberg library from sub-categories: Crime, Music, Astronomy and Revolution. The purpose of the project is to perform topic modeling using LDA algorithm to see whether it can correctly distinguish the four groups.</p>
-<p><strong>Topic modeling</strong> is an unsupervised machine learning technique for text data. It scans a set of documents(book chapters in this case), detecting word and phrase patterns within them, and clustering word groups and similar expressions that best characterize a set of documents.<strong>Latent Dirichlet Allocation (LDA)</strong> is an example of topic modeling algorithm used to cluster text in a document to a particular topic. It is guided by two principles - every document is a mixture of topics and every topic is a mixture of words.</p>
+<p><strong>Topic modeling</strong> is an unsupervised machine learning technique for text data. It scans a set of documents(book chapters in this case), detecting word and phrase patterns within them, and clustering word groups and similar expressions that best characterize a set of documents.</p>
+<p><strong>Latent Dirichlet Allocation (LDA)</strong> is an example of topic modeling algorithm used to cluster text in a document to a particular topic. It is guided by two principles - every document is a mixture of topics and every topic is a mixture of words.</p>
 <p>Step-by-step explanations are as follows:</p>
 <pre class="r"><code>library(pacman)
 p_load(topicmodels,gutenbergr,tidyverse,tidytext,stringr,scales)</code></pre>
