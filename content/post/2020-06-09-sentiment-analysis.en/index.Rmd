@@ -1,0 +1,296 @@
+---
+title: 'TF-IDF & Sentiment Analysis '
+author: Minr
+date: '2020-06-09'
+slug: sentiment-analysis
+categories: []
+tags:
+  - NLP
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-06-09T22:46:01-07:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+TF is the normalized term frequency and IDF is the inverse document frequency. The TF-IDF is computed by multiplying two terms:TF and IDF
+Therefore, the formula for TF-IDF is TFxIDF.
+
+where,
+
+$$\text{TF} = (\frac{\text{number of times term appears in a document}}{\text{Total number of terms in the document}})$$
+
+and
+
+$$\text{IDF} = \ln(\frac{n_{\text{ documents }}}{n_{\text{document containing term}}})$$
+TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score. 
+
+### TF-IDF on Gutenberg books
+
+```{r}
+library(pacman)
+p_load(gutenbergr,tidyr,tidyverse,tidytext,forcats,
+       genius)
+```
+
+```{r}
+#books on mathematics from project glutenberg
+math_books <- gutenberg_download(c(16449,25664,17001,16713), meta_fields = "title")
+```
+
+
+```{r}
+#frequencies of words in each book
+math_words <- math_books %>% 
+  unnest_tokens(word, text) %>% count(title, word, sort = TRUE)
+math_words
+```
+
+
+```{r}
+#tf-idf
+tfidf_mathbooks <- math_words %>%
+  bind_tf_idf(word, title, n) %>%
+  mutate(word = fct_reorder(word, tf_idf)) %>%
+  mutate(title = factor(title, levels = c( "The Number Concept: Its Origin and Development","The Earliest Arithmetics in English", "An Elementary Course in Synthetic Projective Geometry","Amusements in Mathematics")))
+tfidf_mathbooks
+```
+
+
+
+```{r}
+#bargraphs
+tfidf_mathbooks %>% 
+  group_by(title) %>% 
+  top_n(15, tf_idf) %>% 
+  ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(word, tf_idf, fill = title)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title, ncol = 2, scales = "free") +
+  coord_flip() + ggtitle("Bargraphs of top 15 words")
+```
+
+
+Amusements in Mathematics - This book appears to be related to solving puzzle and game.
+
+An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.
+
+The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form. 
+
+The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.
+
+
+
+***Same analysis using bigrams.**
+
+
+```{r}
+# bigrams for the math books from previous problem
+math_bigrams <-  math_books %>%
+unnest_tokens(bigram, text, token = "ngrams", n = 2)
+math_bigrams
+```
+
+```{r}
+# count bigrams
+math_bigrams %>% count(bigram, sort = TRUE)
+```
+
+
+```{r}
+# separate and filter stop words
+mathbigrams_separated <- math_bigrams %>%
+separate(bigram, c("word1", "word2"), sep = " ")
+
+mathbigrams_filtered <- mathbigrams_separated %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+
+# new bigram counts
+bigram_counts <- mathbigrams_filtered %>% 
+  count(word1, word2, sort = TRUE)
+bigram_counts
+
+```
+
+
+```{r}
+#combine filtered words to form bigrams 
+mathbigrams_united <- mathbigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+mathbigrams_united
+```
+
+```{r}
+bigram_tf_idf <- mathbigrams_united %>%
+  count(title, bigram) %>%
+  bind_tf_idf(bigram, title, n) %>%
+  arrange(desc(tf_idf))
+bigram_tf_idf
+```
+
+
+```{r}
+#bargraphs
+bigram_tf_idf %>% 
+  group_by(title) %>% 
+  top_n(15, tf_idf) %>% 
+  ungroup() %>%
+  mutate(bigram=reorder(bigram, tf_idf)) %>%
+  ggplot(aes(bigram, tf_idf, fill = title)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~title, ncol = 2, scales = "free") +
+  coord_flip() + ggtitle("Bargraphs of top 15 bigrams")
+```
+
+
+
+### Sentiment analysis on the songs from Genius
+
+1. Aerosmith - I don't want to miss a thing
+
+```{r}
+#get song lyrics
+aero_smith_i_don <- genius_lyrics(artist = "Aerosmith", song = " I don't want to miss a thing")
+aero_smith_i_don
+```
+
+
+```{r}
+#tidy up lyrics
+i_dont_tidy <- aero_smith_i_don  %>% select(lyric, track_title) %>% unnest_tokens(word, lyric)
+i_dont_tidy
+```
+
+```{r}
+# join with sentiment lexicon
+i_dont_sentiments<- i_dont_tidy%>%
+inner_join(get_sentiments("bing"), by = c(word = "word"))
+i_dont_sentiments
+```
+
+```{r}
+#bargraph word-sentiment
+i_dont_sentiments %>%
+  count(sentiment, word) %>%
+  ungroup() %>%
+  mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = "identity") +
+  ylab("Contribution to sentiment") +
+  coord_flip()
+
+```
+
+
+2. The Weeknd - Earned It
+
+```{r}
+the_weeknd_earned_it <- genius_lyrics(artist = "The Weeknd", song = "Earned It")
+the_weeknd_earned_it
+```
+
+
+```{r}
+earned_it_tidy <- the_weeknd_earned_it  %>% select(lyric, track_title) %>% unnest_tokens(word, lyric)
+earned_it_tidy
+```
+
+```{r}
+earned_it_sentiments<- earned_it_tidy%>%
+inner_join(get_sentiments("bing"), by = c(word = "word"))
+earned_it_sentiments
+```
+
+```{r}
+earned_it_sentiments %>%
+  count(sentiment, word) %>%
+  ungroup() %>%
+  mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = "identity") +
+  ylab("Contribution to sentiment") +
+  coord_flip()
+
+```
+
+
+3. Pharrell Williams - Happy
+
+```{r}
+pharrell_will_happy <- genius_lyrics(artist = "Pharrell Williams", song = "Happy")
+pharrell_will_happy
+```
+
+
+```{r}
+happy_tidy <- pharrell_will_happy  %>% select(lyric, track_title) %>% unnest_tokens(word, lyric)
+happy_tidy
+```
+
+```{r}
+happy_sentiments<- happy_tidy%>%
+inner_join(get_sentiments("bing"), by = c(word = "word"))
+happy_sentiments
+```
+
+```{r}
+happy_sentiments %>%
+  count(sentiment, word) %>%
+  ungroup() %>%
+  mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = "identity") +
+  ylab("Contribution to sentiment") +
+  coord_flip()
+
+```
+
+
+
+4.  Summertime Sadness – Lana Del Rey
+
+```{r}
+ Summertime_Sadness <- genius_lyrics(artist = "Lana Del Rey", song = "Summertime Sadness")
+Summertime_Sadness
+```
+
+
+```{r}
+Summertime_Sadness_tidy <- Summertime_Sadness %>% select(lyric, track_title) %>% unnest_tokens(word, lyric)
+Summertime_Sadness_tidy
+```
+
+```{r}
+Summertime_Sadness_sentiments<- Summertime_Sadness_tidy%>%
+inner_join(get_sentiments("bing"), by = c(word = "word"))
+Summertime_Sadness_sentiments
+```
+
+```{r}
+Summertime_Sadness_sentiments %>%
+  count(sentiment, word) %>%
+  ungroup() %>%
+  mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = "identity") +
+  ylab("Contribution to sentiment") +
+  coord_flip()
+
+```
+
+
+
+
