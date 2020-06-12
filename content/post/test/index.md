@@ -7,51 +7,6 @@ title:
 ---
 This is a data science library for reference, book, blog and dataset.
 
-**Reference**
-* [R for Data Science](https://r4ds.had.co.nz/)
-* [ModernDive](https://moderndive.com/)
-* [Mastering Shiny](https://mastering-shiny.org/)
-* [Spatial Data Science with R](https://rspatial.org/),[R-Spatial](https://www.r-spatial.org/)
-* [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3),
-[Color Combination](https://www.canva.com/learn/100-color-combinations/)
-* [Neo4J](https://neo4j.com/)
-* [Time Series - Quantmod](https://www.quantmod.com/),[Alfred](https://github.com/onnokleen/alfred/),[fredr](https://github.com/sboysel/fredr)
-* [MIT Computer Science & Data Science](https://ocw.mit.edu/index.htm)
-* [Forecasting: Principles and Practice](https://otexts.com/fpp3/)
-* [UC Business Analytics R Programming Guide](http://uc-r.github.io/linear_regression)
-* [ML with R](https://bradleyboehmke.github.io/HOML/)
-* [ML Glossary](https://ml-cheatsheet.readthedocs.io/en/latest/index.html)
-* [ISLR](http://faculty.marshall.usc.edu/gareth-james/ISL/)
-* [Tidymodels](https://tidymodels.tidymodels.org/)
-* [Data Mining](https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R)
-* [Google CoLab](https://colab.research.google.com/notebooks/welcome.ipynb)
-* [Text Mining with R](https://www.tidytextmining.com/)
-* [LDA](http://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)
-* [Topic Modeling](https://cran.r-project.org/web/packages/topicmodels/vignettes/topicmodels.pdf)
-* [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/ed3book.pdf)
-* [Deep Learning](https://www.deeplearningbook.org/)
-* [Deep Learning with R](https://github.com/jjallaire/deep-learning-with-r-notebooks)
-* [TensorFlow](https://www.tensorflow.org/tutorials)
-
-**Software**
-* [Learn R](http://rprogramming.net/)
-* [R Studio](https://rstudio.com/)
-* [R Markdown](https://bookdown.org/yihui/rmarkdown/)
-* [Learn Programming](https://www.w3schools.com/)
-* [Learn Python](https://www.learnpython.org/)
-* [Tableau](https://www.tableau.com/)
-* [Leaflet for R](https://rstudio.github.io/leaflet/)
-* [HTML Widget for R](http://www.htmlwidgets.org/index.html)
-* [Dygraphs](http://dygraphs.com/)
-
-**Podcast**
-* [Data Skeptic](https://dataskeptic.com/)
-* [Linear Digressions](http://lineardigressions.com/)
-* [Towards Data Science](https://towardsdatascience.com/podcast/home)
-* [The Data Exchange](https://podcasts.apple.com/us/podcast/the-data-exchange-with-ben-lorica/id1487704458)
-* [Data Stories](https://datastori.es/)
-
-
 **Blog**
 * [Julia Silge](https://juliasilge.com/)
 * [R Graph Gallery](https://www.r-graph-gallery.com/)
