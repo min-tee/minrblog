@@ -22,7 +22,7 @@ projects: []
 
 **Latent Dirichlet Allocation (LDA)** is an example of topic modeling algorithm used to cluster text in a document to a particular topic. It is guided by two principles - every document is a mixture of topics and every topic is a mixture of words. 
 
-Suppose we have four books from Project Gutenberg library  sub-categories: Crime, Music, Astronomy and Revolution. We tore the books into pages and shuffled withour reading them.
+Suppose we have four books from Project Gutenberg library  sub-categories: Crime, Music, Astronomy and Revolution. We tore the books into pages and shuffled without reading them.
 
 Let's use topic modeling using LDA algorithm to see whether it can correctly distinguish the four books. 
 
