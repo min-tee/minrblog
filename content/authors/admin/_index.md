@@ -1,8 +1,7 @@
 ---
 authors:
 - admin
-bio: My interests include exploratory data analysis, machine learning and natural language processing
-  matter.
+bio: 
 
     
 email: "minaj1s@gmail.com"
@@ -10,11 +9,8 @@ email: "minaj1s@gmail.com"
 organizations:
 - name: Kite Hill Inc.
   url: ""
-role: Quality Engineer
+role: Quality Engineer & Data Science Enthusiast
 social:
-- icon: envelope
-  icon_pack: fas
-  link: minaj1s@gmail.com
 - icon: twitter
   icon_pack: fab
   link: https://twitter.com/minr_z
@@ -25,6 +21,7 @@ social:
   icon_pack: fab
   link: https://github.com/knitdata
 superuser: true
+title: Min Tamang
 ---
 
 My name is Min R Tamang. I am a quality engineer at Kite Hill. Professionally my responsibilities included developing and deploying statistical process control to documentation and data analysis.
