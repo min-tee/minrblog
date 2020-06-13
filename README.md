@@ -1,1 +1,1 @@
-This is for my data science blog [knitdata](https://knitdata.org/).
+For my blog [knitdata](https://knitdata.org/).
