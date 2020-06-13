@@ -20,15 +20,11 @@ projects: []
 
 
 
-<p>TF is the normalized term frequency and IDF is the inverse document frequency. The TF-IDF is computed by multiplying two terms:TF and IDF
-Therefore, the formula for TF-IDF is TFxIDF.</p>
-<p>where,</p>
-<p><span class="math display">\[\text{TF} = (\frac{\text{number of times term appears in a document}}{\text{Total number of terms in the document}})\]</span></p>
-<p>and</p>
-<p><span class="math display">\[\text{IDF} = \ln(\frac{n_{\text{ documents }}}{n_{\text{document containing term}}})\]</span></p>
-<p>TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score.</p>
 <div id="tf-idf-on-gutenberg-books" class="section level3">
 <h3>TF-IDF on Gutenberg books</h3>
+<p>TF is the normalized term frequency and IDF is the inverse document frequency. The TF-IDF is computed by multiplying two terms:TF and IDF
+Therefore, the formula for TF-IDF is TFxIDF.</p>
+<p>TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score.</p>
 <pre class="r"><code>library(pacman)
 p_load(gutenbergr,tidyr,tidyverse,tidytext,forcats,
        genius)</code></pre>
