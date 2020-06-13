@@ -25,13 +25,12 @@ projects: []
 <p>TF is the normalized term frequency and IDF is the inverse document frequency. The TF-IDF is computed by multiplying two terms:TF and IDF
 Therefore, the formula for TF-IDF is TFxIDF.</p>
 <p>TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score.</p>
+<p>Let’s illustrate TF-IDF on various mathematics books from Gutenberg.</p>
 <pre class="r"><code>library(pacman)
 p_load(gutenbergr,tidyr,tidyverse,tidytext,forcats,
        genius)</code></pre>
-<pre class="r"><code>#books on mathematics from project glutenberg
+<pre class="r"><code>#books on mathematics from project gutenberg
 math_books &lt;- gutenberg_download(c(16449,25664,17001,16713), meta_fields = &quot;title&quot;)</code></pre>
-<pre><code>## Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest</code></pre>
-<pre><code>## Using mirror http://aleph.gutenberg.org</code></pre>
 <pre class="r"><code>#frequencies of words in each book
 math_words &lt;- math_books %&gt;% 
   unnest_tokens(word, text) %&gt;% count(title, word, sort = TRUE)
@@ -82,11 +81,14 @@ tfidf_mathbooks %&gt;%
   facet_wrap(~title, ncol = 2, scales = &quot;free&quot;) +
   coord_flip() + ggtitle(&quot;Bargraphs of top 15 words&quot;)</code></pre>
 <p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>Amusements in Mathematics - This book appears to be related to solving puzzle and game.</p>
-<p>An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.</p>
-<p>The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form.</p>
-<p>The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.</p>
-<p>*<strong>Same analysis using bigrams.</strong></p>
+<p>Based on bargraph, we can make following inferences:</p>
+<ul>
+<li><p>Amusements in Mathematics - This book appears to be related to solving puzzle and game.</p></li>
+<li><p>An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.</p></li>
+<li><p>The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form.</p></li>
+<li><p>The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.</p></li>
+</ul>
+<p><strong>Same analysis using bigrams</strong></p>
 <pre class="r"><code># bigrams for the math books from previous problem
 math_bigrams &lt;-  math_books %&gt;%
 unnest_tokens(bigram, text, token = &quot;ngrams&quot;, n = 2)
@@ -199,6 +201,7 @@ bigram_tf_idf %&gt;%
 </div>
 <div id="sentiment-analysis-on-the-songs-from-genius" class="section level3">
 <h3>Sentiment analysis on the songs from Genius</h3>
+<p>Let’s pick some hit songs and perform sentiment analysis with bing lexicon.The bing lexicon categorizes words in a binary fashion into positive and negative categories.</p>
 <ol style="list-style-type: decimal">
 <li>Aerosmith - I don’t want to miss a thing</li>
 </ol>

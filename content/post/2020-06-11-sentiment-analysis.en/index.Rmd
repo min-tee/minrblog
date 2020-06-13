@@ -25,15 +25,15 @@ Therefore, the formula for TF-IDF is TFxIDF.
 
 TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score. 
 
-
+Let's illustrate TF-IDF on various mathematics books from Gutenberg.
 ```{r}
 library(pacman)
 p_load(gutenbergr,tidyr,tidyverse,tidytext,forcats,
        genius)
 ```
 
-```{r}
-#books on mathematics from project glutenberg
+```{r message=FALSE,warning=FALSE}
+#books on mathematics from project gutenberg
 math_books <- gutenberg_download(c(16449,25664,17001,16713), meta_fields = "title")
 ```
 
@@ -71,18 +71,19 @@ tfidf_mathbooks %>%
   coord_flip() + ggtitle("Bargraphs of top 15 words")
 ```
 
+Based on bargraph, we can make following inferences:
 
-Amusements in Mathematics - This book appears to be related to solving puzzle and game.
+* Amusements in Mathematics - This book appears to be related to solving puzzle and game.
 
-An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.
+* An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.
 
-The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form. 
+* The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form. 
 
-The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.
+* The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.
 
 
 
-***Same analysis using bigrams.**
+**Same analysis using bigrams**
 
 
 ```{r}
@@ -148,6 +149,8 @@ bigram_tf_idf %>%
 
 
 ### Sentiment analysis on the songs from Genius
+
+Let's pick some hit songs and perform sentiment analysis with bing lexicon.The bing lexicon categorizes words in a binary fashion into positive and negative categories.
 
 1. Aerosmith - I don't want to miss a thing
 
