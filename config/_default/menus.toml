@@ -27,7 +27,7 @@
 [[main]]
   name = "Library"
   url = "library"
-  weight = 40
+  weight = 55
 
 [[main]]
   name = "Contact"

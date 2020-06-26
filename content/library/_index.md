@@ -1,9 +1,20 @@
 ---
-header: 
-  caption: "Data Science Library"
-  image: ""
-layout: docs
-title: 
+title: Library
+summary: 
+abstract: ""
+date: ""
+image:
+  caption: '[Photo by Giammarco Boscaro
+on Unsplash](https://unsplash.com/photos/zeH-ljawHtg)'
+  focal_point: Smart
+categories:
+- reference
+tags:
+- R
+- book
+- Python
+- SQL
+- Dataset
 ---
 This is a data science library for reference, book, blog and dataset.
 
