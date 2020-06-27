@@ -1,5 +1,5 @@
 ---
-title: 'TF-IDF & Sentiment Analysis '
+title: 'Sentiment Analysis with songs '
 author: Minr
 date: '2020-06-11'
 slug: sentiment-analysis
@@ -20,188 +20,12 @@ projects: []
 
 
 
-<div id="tf-idf-on-gutenberg-books" class="section level3">
-<h3>TF-IDF on Gutenberg books</h3>
-<p>TF is the normalized term frequency and IDF is the inverse document frequency. The TF-IDF is computed by multiplying two terms:TF and IDF
-Therefore, the formula for TF-IDF is TFxIDF.</p>
-<p>TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score.</p>
-<p>Let’s illustrate TF-IDF on various mathematics books from Gutenberg.</p>
+<p><strong>Sentiment analysis</strong> is the interpretation and classification of emotions (positive, negative and neutral) within text data using natural language processing(NLP) techniques.</p>
+<p>In this session, we are going to use songs from R package genius with bing lexicon. The bing lexicon categorizes words in a binary fashion into positive and negative categories with weighted sentiment scores.</p>
+<p>First, load libraries</p>
 <pre class="r"><code>library(pacman)
-p_load(gutenbergr,tidyr,tidyverse,tidytext,forcats,
-       genius)</code></pre>
-<pre class="r"><code>#books on mathematics from project gutenberg
-math_books &lt;- gutenberg_download(c(16449,25664,17001,16713), meta_fields = &quot;title&quot;)</code></pre>
-<pre class="r"><code>#frequencies of words in each book
-math_words &lt;- math_books %&gt;% 
-  unnest_tokens(word, text) %&gt;% count(title, word, sort = TRUE)
-math_words</code></pre>
-<pre><code>## # A tibble: 24,655 x 3
-##    title                                                 word      n
-##    &lt;chr&gt;                                                 &lt;chr&gt; &lt;int&gt;
-##  1 Amusements in Mathematics                             the   12480
-##  2 Amusements in Mathematics                             of     4908
-##  3 Amusements in Mathematics                             and    3921
-##  4 Amusements in Mathematics                             a      3833
-##  5 Amusements in Mathematics                             in     3672
-##  6 Amusements in Mathematics                             to     3598
-##  7 The Number Concept: Its Origin and Development        the    3177
-##  8 An Elementary Course in Synthetic Projective Geometry the    2750
-##  9 The Earliest Arithmetics in English                   e      2579
-## 10 Amusements in Mathematics                             is     2542
-## # … with 24,645 more rows</code></pre>
-<pre class="r"><code>#tf-idf
-tfidf_mathbooks &lt;- math_words %&gt;%
-  bind_tf_idf(word, title, n) %&gt;%
-  mutate(word = fct_reorder(word, tf_idf)) %&gt;%
-  mutate(title = factor(title, levels = c( &quot;The Number Concept: Its Origin and Development&quot;,&quot;The Earliest Arithmetics in English&quot;, &quot;An Elementary Course in Synthetic Projective Geometry&quot;,&quot;Amusements in Mathematics&quot;)))
-tfidf_mathbooks</code></pre>
-<pre><code>## # A tibble: 24,655 x 6
-##    title                                         word      n     tf   idf tf_idf
-##    &lt;fct&gt;                                         &lt;fct&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-##  1 Amusements in Mathematics                     the   12480 0.0753 0     0     
-##  2 Amusements in Mathematics                     of     4908 0.0296 0     0     
-##  3 Amusements in Mathematics                     and    3921 0.0237 0     0     
-##  4 Amusements in Mathematics                     a      3833 0.0231 0     0     
-##  5 Amusements in Mathematics                     in     3672 0.0222 0     0     
-##  6 Amusements in Mathematics                     to     3598 0.0217 0     0     
-##  7 The Number Concept: Its Origin and Developme… the    3177 0.0578 0     0     
-##  8 An Elementary Course in Synthetic Projective… the    2750 0.0788 0     0     
-##  9 The Earliest Arithmetics in English           e      2579 0.0527 0.288 0.0151
-## 10 Amusements in Mathematics                     is     2542 0.0153 0     0     
-## # … with 24,645 more rows</code></pre>
-<pre class="r"><code>#bargraphs
-tfidf_mathbooks %&gt;% 
-  group_by(title) %&gt;% 
-  top_n(15, tf_idf) %&gt;% 
-  ungroup() %&gt;%
-  mutate(word = reorder(word, tf_idf)) %&gt;%
-  ggplot(aes(word, tf_idf, fill = title)) +
-  geom_col(show.legend = FALSE) +
-  labs(x = NULL, y = &quot;tf-idf&quot;) +
-  facet_wrap(~title, ncol = 2, scales = &quot;free&quot;) +
-  coord_flip() + ggtitle(&quot;Bargraphs of top 15 words&quot;)</code></pre>
-<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>Based on bargraph, we can make following inferences:</p>
-<ul>
-<li><p>Amusements in Mathematics - This book appears to be related to solving puzzle and game.</p></li>
-<li><p>An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.</p></li>
-<li><p>The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form.</p></li>
-<li><p>The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.</p></li>
-</ul>
-<p><strong>Same analysis using bigrams</strong></p>
-<pre class="r"><code># bigrams for the math books from previous problem
-math_bigrams &lt;-  math_books %&gt;%
-unnest_tokens(bigram, text, token = &quot;ngrams&quot;, n = 2)
-math_bigrams</code></pre>
-<pre><code>## # A tibble: 304,593 x 3
-##    gutenberg_id title                                          bigram           
-##           &lt;int&gt; &lt;chr&gt;                                          &lt;chr&gt;            
-##  1        16449 The Number Concept: Its Origin and Development transcriber&#39;s no…
-##  2        16449 The Number Concept: Its Origin and Development note the         
-##  3        16449 The Number Concept: Its Origin and Development the following    
-##  4        16449 The Number Concept: Its Origin and Development following errors 
-##  5        16449 The Number Concept: Its Origin and Development errors found     
-##  6        16449 The Number Concept: Its Origin and Development found in         
-##  7        16449 The Number Concept: Its Origin and Development in the           
-##  8        16449 The Number Concept: Its Origin and Development the original     
-##  9        16449 The Number Concept: Its Origin and Development original have    
-## 10        16449 The Number Concept: Its Origin and Development have been        
-## # … with 304,583 more rows</code></pre>
-<pre class="r"><code># count bigrams
-math_bigrams %&gt;% count(bigram, sort = TRUE)</code></pre>
-<pre><code>## # A tibble: 126,537 x 2
-##    bigram       n
-##    &lt;chr&gt;    &lt;int&gt;
-##  1 of the    2866
-##  2 in the    1850
-##  3 o o       1044
-##  4 to the     847
-##  5 it is      758
-##  6 and the    756
-##  7 on the     677
-##  8 the same   638
-##  9 that the   627
-## 10 to be      554
-## # … with 126,527 more rows</code></pre>
-<pre class="r"><code># separate and filter stop words
-mathbigrams_separated &lt;- math_bigrams %&gt;%
-separate(bigram, c(&quot;word1&quot;, &quot;word2&quot;), sep = &quot; &quot;)
-
-mathbigrams_filtered &lt;- mathbigrams_separated %&gt;%
-  filter(!word1 %in% stop_words$word) %&gt;%
-  filter(!word2 %in% stop_words$word)
-
-# new bigram counts
-bigram_counts &lt;- mathbigrams_filtered %&gt;% 
-  count(word1, word2, sort = TRUE)
-bigram_counts</code></pre>
-<pre><code>## # A tibble: 38,184 x 3
-##    word1 word2     n
-##    &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
-##  1 1     2       217
-##  2 2     3       176
-##  3 3     4       167
-##  4 4     5       123
-##  5 2     1       114
-##  6 5     6       113
-##  7 ou    er      111
-##  8 1     7       103
-##  9 2     2       101
-## 10 2     8       101
-## # … with 38,174 more rows</code></pre>
-<pre class="r"><code>#combine filtered words to form bigrams 
-mathbigrams_united &lt;- mathbigrams_filtered %&gt;%
-  unite(bigram, word1, word2, sep = &quot; &quot;)
-mathbigrams_united</code></pre>
-<pre><code>## # A tibble: 56,991 x 3
-##    gutenberg_id title                                          bigram           
-##           &lt;int&gt; &lt;chr&gt;                                          &lt;chr&gt;            
-##  1        16449 The Number Concept: Its Origin and Development transcriber&#39;s no…
-##  2        16449 The Number Concept: Its Origin and Development errors found     
-##  3        16449 The Number Concept: Its Origin and Development 14th paragraph   
-##  4        16449 The Number Concept: Its Origin and Development paragraph drop   
-##  5        16449 The Number Concept: Its Origin and Development drop double      
-##  6        16449 The Number Concept: Its Origin and Development double quote     
-##  7        16449 The Number Concept: Its Origin and Development chapter iv       
-##  8        16449 The Number Concept: Its Origin and Development iv 1st           
-##  9        16449 The Number Concept: Its Origin and Development 1st paragraph    
-## 10        16449 The Number Concept: Its Origin and Development chapter iv       
-## # … with 56,981 more rows</code></pre>
-<pre class="r"><code>bigram_tf_idf &lt;- mathbigrams_united %&gt;%
-  count(title, bigram) %&gt;%
-  bind_tf_idf(bigram, title, n) %&gt;%
-  arrange(desc(tf_idf))
-bigram_tf_idf</code></pre>
-<pre><code>## # A tibble: 38,958 x 6
-##    title                                  bigram         n      tf   idf  tf_idf
-##    &lt;chr&gt;                                  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
-##  1 The Earliest Arithmetics in English    ou er        111 0.00929  1.39 0.0129 
-##  2 The Earliest Arithmetics in English    fig ur        86 0.00720  1.39 0.00998
-##  3 An Elementary Course in Synthetic Pro… _a_ _b_       31 0.00576  1.39 0.00799
-##  4 The Earliest Arithmetics in English    ne er         58 0.00485  1.39 0.00673
-##  5 An Elementary Course in Synthetic Pro… _b_ _c_       26 0.00483  1.39 0.00670
-##  6 An Elementary Course in Synthetic Pro… line join…    22 0.00409  1.39 0.00567
-##  7 The Number Concept: Its Origin and De… _op cit       70 0.00397  1.39 0.00550
-##  8 An Elementary Course in Synthetic Pro… letter ga…    21 0.00390  1.39 0.00541
-##  9 The Earliest Arithmetics in English    aft er        46 0.00385  1.39 0.00534
-## 10 The Earliest Arithmetics in English    eu er         46 0.00385  1.39 0.00534
-## # … with 38,948 more rows</code></pre>
-<pre class="r"><code>#bargraphs
-bigram_tf_idf %&gt;% 
-  group_by(title) %&gt;% 
-  top_n(15, tf_idf) %&gt;% 
-  ungroup() %&gt;%
-  mutate(bigram=reorder(bigram, tf_idf)) %&gt;%
-  ggplot(aes(bigram, tf_idf, fill = title)) +
-  geom_col(show.legend = FALSE) +
-  labs(x = NULL, y = &quot;tf-idf&quot;) +
-  facet_wrap(~title, ncol = 2, scales = &quot;free&quot;) +
-  coord_flip() + ggtitle(&quot;Bargraphs of top 15 bigrams&quot;)</code></pre>
-<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-</div>
-<div id="sentiment-analysis-on-the-songs-from-genius" class="section level3">
-<h3>Sentiment analysis on the songs from Genius</h3>
-<p>Let’s pick some hit songs and perform sentiment analysis with bing lexicon.The bing lexicon categorizes words in a binary fashion into positive and negative categories.</p>
+p_load(tidyr,tidyverse,tidytext,forcats, genius)</code></pre>
+<p>then download songs using genius functions and perform sentiment analysis. Steps are described below.</p>
 <ol style="list-style-type: decimal">
 <li>Aerosmith - I don’t want to miss a thing</li>
 </ol>
@@ -267,58 +91,58 @@ i_dont_sentiments %&gt;%
   geom_bar(stat = &quot;identity&quot;) +
   ylab(&quot;Contribution to sentiment&quot;) +
   coord_flip()</code></pre>
-<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <ol start="2" style="list-style-type: decimal">
 <li>The Weeknd - Earned It</li>
 </ol>
 <pre class="r"><code>the_weeknd_earned_it &lt;- genius_lyrics(artist = &quot;The Weeknd&quot;, song = &quot;Earned It&quot;)
 the_weeknd_earned_it</code></pre>
 <pre><code>## # A tibble: 51 x 3
-##    track_title                     line lyric                                   
-##    &lt;chr&gt;                          &lt;int&gt; &lt;chr&gt;                                   
-##  1 Earned It (Fifty Shades of Gr…     1 I&#39;ma care for you                       
-##  2 Earned It (Fifty Shades of Gr…     2 I&#39;ma care for you, you, you, you        
-##  3 Earned It (Fifty Shades of Gr…     3 You make it look like it&#39;s magic (Oh ye…
-##  4 Earned It (Fifty Shades of Gr…     4 &#39;Cause I see nobody, nobody but you, yo…
-##  5 Earned It (Fifty Shades of Gr…     5 I&#39;m never confused                      
-##  6 Earned It (Fifty Shades of Gr…     6 Hey, hey                                
-##  7 Earned It (Fifty Shades of Gr…     7 I&#39;m so used to bein&#39; used               
-##  8 Earned It (Fifty Shades of Gr…     8 So I love when you call unexpected      
-##  9 Earned It (Fifty Shades of Gr…     9 &#39;Cause I hate when the moment&#39;s expected
-## 10 Earned It (Fifty Shades of Gr…    10 So I&#39;ma care for you, you, you          
+##    track_title  line lyric                                        
+##    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;                                        
+##  1 Earned It       1 I&#39;ma care for you                            
+##  2 Earned It       2 I&#39;ma care for you, you, you, you             
+##  3 Earned It       3 You make it look like it&#39;s magic (Oh yeah)   
+##  4 Earned It       4 &#39;Cause I see nobody, nobody but you, you, you
+##  5 Earned It       5 I&#39;m never confused                           
+##  6 Earned It       6 Hey, hey                                     
+##  7 Earned It       7 I&#39;m so used to bein&#39; used                    
+##  8 Earned It       8 So I love when you call unexpected           
+##  9 Earned It       9 &#39;Cause I hate when the moment&#39;s expected     
+## 10 Earned It      10 So I&#39;ma care for you, you, you               
 ## # … with 41 more rows</code></pre>
 <pre class="r"><code>earned_it_tidy &lt;- the_weeknd_earned_it  %&gt;% select(lyric, track_title) %&gt;% unnest_tokens(word, lyric)
 earned_it_tidy</code></pre>
 <pre><code>## # A tibble: 325 x 2
-##    track_title                      word 
-##    &lt;chr&gt;                            &lt;chr&gt;
-##  1 Earned It (Fifty Shades of Grey) i&#39;ma 
-##  2 Earned It (Fifty Shades of Grey) care 
-##  3 Earned It (Fifty Shades of Grey) for  
-##  4 Earned It (Fifty Shades of Grey) you  
-##  5 Earned It (Fifty Shades of Grey) i&#39;ma 
-##  6 Earned It (Fifty Shades of Grey) care 
-##  7 Earned It (Fifty Shades of Grey) for  
-##  8 Earned It (Fifty Shades of Grey) you  
-##  9 Earned It (Fifty Shades of Grey) you  
-## 10 Earned It (Fifty Shades of Grey) you  
+##    track_title word 
+##    &lt;chr&gt;       &lt;chr&gt;
+##  1 Earned It   i&#39;ma 
+##  2 Earned It   care 
+##  3 Earned It   for  
+##  4 Earned It   you  
+##  5 Earned It   i&#39;ma 
+##  6 Earned It   care 
+##  7 Earned It   for  
+##  8 Earned It   you  
+##  9 Earned It   you  
+## 10 Earned It   you  
 ## # … with 315 more rows</code></pre>
 <pre class="r"><code>earned_it_sentiments&lt;- earned_it_tidy%&gt;%
 inner_join(get_sentiments(&quot;bing&quot;), by = c(word = &quot;word&quot;))
 earned_it_sentiments</code></pre>
 <pre><code>## # A tibble: 36 x 3
-##    track_title                      word       sentiment
-##    &lt;chr&gt;                            &lt;chr&gt;      &lt;chr&gt;    
-##  1 Earned It (Fifty Shades of Grey) like       positive 
-##  2 Earned It (Fifty Shades of Grey) magic      positive 
-##  3 Earned It (Fifty Shades of Grey) confused   negative 
-##  4 Earned It (Fifty Shades of Grey) love       positive 
-##  5 Earned It (Fifty Shades of Grey) unexpected negative 
-##  6 Earned It (Fifty Shades of Grey) hate       negative 
-##  7 Earned It (Fifty Shades of Grey) perfect    positive 
-##  8 Earned It (Fifty Shades of Grey) worth      positive 
-##  9 Earned It (Fifty Shades of Grey) work       positive 
-## 10 Earned It (Fifty Shades of Grey) love       positive 
+##    track_title word       sentiment
+##    &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;    
+##  1 Earned It   like       positive 
+##  2 Earned It   magic      positive 
+##  3 Earned It   confused   negative 
+##  4 Earned It   love       positive 
+##  5 Earned It   unexpected negative 
+##  6 Earned It   hate       negative 
+##  7 Earned It   perfect    positive 
+##  8 Earned It   worth      positive 
+##  9 Earned It   work       positive 
+## 10 Earned It   love       positive 
 ## # … with 26 more rows</code></pre>
 <pre class="r"><code>earned_it_sentiments %&gt;%
   count(sentiment, word) %&gt;%
@@ -329,7 +153,7 @@ earned_it_sentiments</code></pre>
   geom_bar(stat = &quot;identity&quot;) +
   ylab(&quot;Contribution to sentiment&quot;) +
   coord_flip()</code></pre>
-<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Pharrell Williams - Happy</li>
 </ol>
@@ -391,7 +215,7 @@ happy_sentiments</code></pre>
   geom_bar(stat = &quot;identity&quot;) +
   ylab(&quot;Contribution to sentiment&quot;) +
   coord_flip()</code></pre>
-<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <ol start="4" style="list-style-type: decimal">
 <li>Summertime Sadness – Lana Del Rey</li>
 </ol>
@@ -453,5 +277,5 @@ Summertime_Sadness_sentiments</code></pre>
   geom_bar(stat = &quot;identity&quot;) +
   ylab(&quot;Contribution to sentiment&quot;) +
   coord_flip()</code></pre>
-<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
-</div>
+<p><img src="/post/2020-06-11-sentiment-analysis.en/index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>This is a glimpse of sentiment analysis and it’s use. With few steps, one can analyse texts with positive and negative emotions in a manner genera public can interpret. Imagine significance of sentiment analysis in social media monitoring, brand monitoring, market research and customer service?</p>

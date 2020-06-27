@@ -17,7 +17,7 @@ subtitle = ""
 [[feature]]
   icon = "chart-bar"
   icon_pack = "fas"
-  name = "Exploratory Data Analysis, Machine Learning, Natural Language Processing, Time Series Analysis"
+  name = "Machine Learning Techniques, Data Mining Strategies, Statistical Methodology, Algorithms, Data Visualization"
   description = ""
   
 [[feature]]
@@ -29,7 +29,7 @@ subtitle = ""
 [[feature]]
   icon = "heart"
   icon_pack = "fas"
-  name = "Data Mining, Audible, Data Science Podcast"
+  name = "Programming, Audible, Data Science Podcast"
   description = ""
 
 +++

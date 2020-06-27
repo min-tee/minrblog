@@ -1,6 +1,6 @@
 ---
 title: "Choropleth Map"
-summary: Choropleth maps with population data
+summary: with population data
 authors: [minr]
 date: 2019-11-18T21:13:14-05:00
 categories: ["Data Viz"]
@@ -14,6 +14,7 @@ output:
 ---
 
 **Choropleth** maps add color to states or countries relative to a variable.
+
 ```{r}
 library(pacman)
 p_load(tidyverse, choroplethr, choroplethrMaps,RColorBrewer)

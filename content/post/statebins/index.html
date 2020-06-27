@@ -1,6 +1,6 @@
 ---
 title: "Statebins"
-summary: Statebins using data from GeoFRED
+summary: using data GeoFRED data sets.
 authors: [minr]
 date: 2019-12-09T21:13:14-05:00
 categories: ["Data Viz"]
@@ -24,13 +24,13 @@ p_load(statebins,readxl,dplyr)</code></pre>
  data1 &lt;- read_excel(&quot;GeoFRED_Bachelor&#39;s_Degree_or_Higher_by_State_Percent.xls&quot;, skip = 1)
 data1 %&gt;% sample_n(5)</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##   `Series ID` State         Code  Year_2018
-##   &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;     &lt;dbl&gt;
-## 1 GCT1502WA   Washington    53         36.7
-## 2 GCT1502WV   West Virginia 54         21.3
-## 3 GCT1502VA   Virginia      51         39.3
-## 4 GCT1502AZ   Arizona       04         29.7
-## 5 GCT1502HI   Hawaii        15         33.5</code></pre>
+##   `Series ID` State          Code  Year_2018
+##   &lt;chr&gt;       &lt;chr&gt;          &lt;chr&gt;     &lt;dbl&gt;
+## 1 GCT1502SD   South Dakota   46         29.2
+## 2 GCT1502NC   North Carolina 37         31.9
+## 3 GCT1502AL   Alabama        01         25.5
+## 4 GCT1502OK   Oklahoma       40         25.6
+## 5 GCT1502VT   Vermont        50         38.7</code></pre>
 <pre class="r"><code># statebins
 statebins_continuous(state_data = data1, state_col = &quot;State&quot;,
                      text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
@@ -41,13 +41,13 @@ statebins_continuous(state_data = data1, state_col = &quot;State&quot;,
 <pre class="r"><code>data2 &lt;- read_excel(&quot;GeoFRED_Median_Household_Income_by_State_Percent_Change.xls&quot;, skip = 1)
 data2 %&gt;% sample_n(5)</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##   `Series ID`     State                Code  Year_2018
-##   &lt;chr&gt;           &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt;
-## 1 MEHOINUSDCA646N District of Columbia 11         5.50
-## 2 MEHOINUSVTA646N Vermont              50        10.0 
-## 3 MEHOINUSPAA646N Pennsylvania         42         5.29
-## 4 MEHOINUSNEA646N Nebraska             31        13.4 
-## 5 MEHOINUSINA646N Indiana              18         1.91</code></pre>
+##   `Series ID`     State          Code  Year_2018
+##   &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;     &lt;dbl&gt;
+## 1 MEHOINUSNCA646N North Carolina 37         7.71
+## 2 MEHOINUSILA646N Illinois       17         6.33
+## 3 MEHOINUSLAA646N Louisiana      22        14.7 
+## 4 MEHOINUSMIA646N Michigan       26         7.17
+## 5 MEHOINUSALA646N Alabama        01        -1.83</code></pre>
 <pre class="r"><code>statebins_continuous(state_data = data2, state_col = &quot;State&quot;,
                      text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
                      brewer_pal=&quot;Greens&quot;, font_size = 3,
@@ -59,13 +59,13 @@ Median Household Income by State&quot;)</code></pre>
 <pre class="r"><code>data3 &lt;- read_excel(&quot;GeoFRED_Resident_Population_by_State_Change_Thousands_of_Persons.xls&quot;, skip=1)
 data3 %&gt;% sample_n(5)</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##   `Series ID` State                Code  Year_2018
-##   &lt;chr&gt;       &lt;chr&gt;                &lt;chr&gt;     &lt;dbl&gt;
-## 1 TNPOP       Tennessee            47        61.2 
-## 2 DCDIST5POP  District of Columbia 11         6.76
-## 3 NEPOP       Nebraska             31        11.7 
-## 4 AKPOP       Alaska               02        -2.35
-## 5 TXPOP       Texas                48       379.</code></pre>
+##   `Series ID` State       Code  Year_2018
+##   &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt;
+## 1 LAPOP       Louisiana   22       -10.8 
+## 2 AZPOP       Arizona     04       123.  
+## 3 TNPOP       Tennessee   47        61.2 
+## 4 MSPOP       Mississippi 28        -3.13
+## 5 MTPOP       Montana     30         9.22</code></pre>
 <pre class="r"><code>statebins_continuous(state_data = data3, state_col = &quot;State&quot;,
                      text_color = &quot;white&quot;, value_col = &quot;Year_2018&quot;,
                      brewer_pal=&quot;Reds&quot;, font_size = 3, 

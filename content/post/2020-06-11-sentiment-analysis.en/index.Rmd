@@ -1,5 +1,5 @@
 ---
-title: 'TF-IDF & Sentiment Analysis '
+title: 'Sentiment Analysis with songs '
 author: Minr
 date: '2020-06-11'
 slug: sentiment-analysis
@@ -18,139 +18,18 @@ image:
 projects: []
 ---
 
-### TF-IDF on Gutenberg books
 
-TF is the normalized term frequency and IDF is the inverse document frequency. The TF-IDF is computed by multiplying two terms:TF and IDF
-Therefore, the formula for TF-IDF is TFxIDF.
+**Sentiment analysis** is the interpretation and classification of emotions (positive, negative and neutral) within text data using natural language processing(NLP) techniques. 
 
-TF-IDF can be used for ranking important documents(page ranking). For example when we google a term COVID-19, the results are displayed in order of relevance. TF-IDF gives searched word(COVID-19) a higher score. 
+In this session, we are going to use songs from R package genius with bing lexicon. The bing lexicon categorizes words in a binary fashion into positive and negative categories with weighted sentiment scores.
 
-Let's illustrate TF-IDF on various mathematics books from Gutenberg.
+First, load libraries
 ```{r}
 library(pacman)
-p_load(gutenbergr,tidyr,tidyverse,tidytext,forcats,
-       genius)
+p_load(tidyr,tidyverse,tidytext,forcats, genius)
 ```
 
-```{r message=FALSE,warning=FALSE}
-#books on mathematics from project gutenberg
-math_books <- gutenberg_download(c(16449,25664,17001,16713), meta_fields = "title")
-```
-
-
-```{r}
-#frequencies of words in each book
-math_words <- math_books %>% 
-  unnest_tokens(word, text) %>% count(title, word, sort = TRUE)
-math_words
-```
-
-
-```{r}
-#tf-idf
-tfidf_mathbooks <- math_words %>%
-  bind_tf_idf(word, title, n) %>%
-  mutate(word = fct_reorder(word, tf_idf)) %>%
-  mutate(title = factor(title, levels = c( "The Number Concept: Its Origin and Development","The Earliest Arithmetics in English", "An Elementary Course in Synthetic Projective Geometry","Amusements in Mathematics")))
-tfidf_mathbooks
-```
-
-
-
-```{r}
-#bargraphs
-tfidf_mathbooks %>% 
-  group_by(title) %>% 
-  top_n(15, tf_idf) %>% 
-  ungroup() %>%
-  mutate(word = reorder(word, tf_idf)) %>%
-  ggplot(aes(word, tf_idf, fill = title)) +
-  geom_col(show.legend = FALSE) +
-  labs(x = NULL, y = "tf-idf") +
-  facet_wrap(~title, ncol = 2, scales = "free") +
-  coord_flip() + ggtitle("Bargraphs of top 15 words")
-```
-
-Based on bargraph, we can make following inferences:
-
-* Amusements in Mathematics - This book appears to be related to solving puzzle and game.
-
-* An Elementary Course in Synthetic Projective Geometry- It appears to be related to book about measuring angle and point, probably involve a lot of theories.
-
-* The Earliest Arithmetics in English - The terms are interesting. The words in various langauge in original form. 
-
-* The Number Concept: Its Origin and Development - It appears to be related how counting and numbering originated. It is probably indicating use of fingers by tribes for counting.
-
-
-
-**Same analysis using bigrams**
-
-
-```{r}
-# bigrams for the math books from previous problem
-math_bigrams <-  math_books %>%
-unnest_tokens(bigram, text, token = "ngrams", n = 2)
-math_bigrams
-```
-
-```{r}
-# count bigrams
-math_bigrams %>% count(bigram, sort = TRUE)
-```
-
-
-```{r}
-# separate and filter stop words
-mathbigrams_separated <- math_bigrams %>%
-separate(bigram, c("word1", "word2"), sep = " ")
-
-mathbigrams_filtered <- mathbigrams_separated %>%
-  filter(!word1 %in% stop_words$word) %>%
-  filter(!word2 %in% stop_words$word)
-
-# new bigram counts
-bigram_counts <- mathbigrams_filtered %>% 
-  count(word1, word2, sort = TRUE)
-bigram_counts
-
-```
-
-
-```{r}
-#combine filtered words to form bigrams 
-mathbigrams_united <- mathbigrams_filtered %>%
-  unite(bigram, word1, word2, sep = " ")
-mathbigrams_united
-```
-
-```{r}
-bigram_tf_idf <- mathbigrams_united %>%
-  count(title, bigram) %>%
-  bind_tf_idf(bigram, title, n) %>%
-  arrange(desc(tf_idf))
-bigram_tf_idf
-```
-
-
-```{r}
-#bargraphs
-bigram_tf_idf %>% 
-  group_by(title) %>% 
-  top_n(15, tf_idf) %>% 
-  ungroup() %>%
-  mutate(bigram=reorder(bigram, tf_idf)) %>%
-  ggplot(aes(bigram, tf_idf, fill = title)) +
-  geom_col(show.legend = FALSE) +
-  labs(x = NULL, y = "tf-idf") +
-  facet_wrap(~title, ncol = 2, scales = "free") +
-  coord_flip() + ggtitle("Bargraphs of top 15 bigrams")
-```
-
-
-
-### Sentiment analysis on the songs from Genius
-
-Let's pick some hit songs and perform sentiment analysis with bing lexicon.The bing lexicon categorizes words in a binary fashion into positive and negative categories.
+then download songs using genius functions and perform sentiment analysis. Steps are described below.
 
 1. Aerosmith - I don't want to miss a thing
 
@@ -289,5 +168,6 @@ Summertime_Sadness_sentiments %>%
 ```
 
 
+This is a glimpse of sentiment analysis and it's use. With few steps, one can analyse texts with positive and negative emotions in a manner genera public can interpret. Imagine significance of sentiment analysis in social media monitoring, brand monitoring, market research and customer service?
 
 
