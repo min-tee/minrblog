@@ -168,6 +168,6 @@ Summertime_Sadness_sentiments %>%
 ```
 
 
-This is a glimpse of sentiment analysis and it's use. With few steps, one can analyse texts with positive and negative emotions in a manner genera public can interpret. Imagine significance of sentiment analysis in social media monitoring, brand monitoring, market research and customer service?
+This is a glimpse of sentiment analysis and it's use. With few steps, one can analyse texts with positive and negative emotions in a manner general public can interpret. Imagine significance of sentiment analysis in social media monitoring, brand monitoring, market research and customer service.
 
 
