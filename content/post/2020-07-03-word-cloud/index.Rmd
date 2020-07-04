@@ -30,7 +30,7 @@ The data set contains a text of 50 job descriptions(data scientist, data analyst
 ```{r}
 pacman::p_load(tm,wordcloud,wordcloud2, RColorBrewer)
 ```
-Note: p_load() of pacman package loads other packages in R without needing to download them. tm is for text mining - corpus, text cleaning and document term matrix. wordcloud is to generate word cloud and RColorBrewer is for color palettes.
+Note: p_load() function of pacman package loads other packages in R without needing to download them. tm is for text mining - corpus, text cleaning and document term matrix. wordcloud is to generate word cloud and RColorBrewer is for color palettes.
 
 
 ### 3. Load text data
@@ -50,7 +50,7 @@ Secondly, we remove words that don't add context i.e. stop words including some 
 ```{r message=FALSE, warning=FALSE}
 data_clean <- tm_map(data_corpus,removePunctuation)
 data_clean <- tm_map(data_clean,removeWords, c(stopwords("en"), "you",
-"data","will","science", "etc", "andor", "including"))
+"data","will","science", "etc", "andor", "including", "experience"))
 data_clean <- tm_map(data_clean, stripWhitespace)
 data_clean <- tm_map(data_clean, tolower)
 ```
@@ -78,8 +78,8 @@ barplot(w,
 ### 6. Generate world cloud
 ```{r}
 set.seed(1999) # for reproducibility
-wordcloud(words = df$word,freq = df$frequency, min.freq = 17,
-max.words = 80, random.order = F, rot.per = 0.35, scale = c(4, .5), colors = palette())
+wordcloud(words = df$word,freq = df$frequency, min.freq = 20,
+max.words = 80, random.order = F, rot.per = 0.25, scale = c(3, .3), colors = palette())
 ```
 
 wordcloud2 package is a great alternative to create interactive word cloud. 
@@ -88,10 +88,10 @@ set.seed(2000)
 w <- data.frame(names(v), v)
 colnames(w) <- c('word', 'freq')
 wordcloud2(w,
-           size = 0.70,
+           size = 0.30,
            shape = 'star',
-           rotateRatio = 0.45,
-           minSize = 2)
+           rotateRatio = 0.5,
+           minSize = 1)
 ```
 
 
