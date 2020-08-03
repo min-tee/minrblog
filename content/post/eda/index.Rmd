@@ -107,7 +107,7 @@ Let's explore steps weekly and then monthly.
 ggplot(fitbit_data, mapping = aes(x= reorder(Day,Steps, FUN = mean ),y = Steps)) + geom_boxplot() 
 ```
 
-Mondays are impressive. 
+I am impressed with my performance on Mondays - pretty consistent and second best average steps.
 
 ```{r}
 # monthly
@@ -157,7 +157,7 @@ pie + coord_polar("y")
 
 ```
 
-Minutes Awakes are high. It was contributed largely by my reluctance to leave bed when alarm goes off in the morning.  
+Minutes Awakes are high. It is contributed largely by my reluctance to leave bed when alarm goes off in the morning.  
 
 Next, we compute the statistics with all variables numerically and graphically.
 ```{r warning=FALSE}

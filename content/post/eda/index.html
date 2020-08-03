@@ -106,7 +106,7 @@ ggplot(fitbit_data, aes(x = Date, y = Steps)) + geom_violin(fill = &#39;green&#3
 <p>Let’s explore steps weekly and then monthly.</p>
 <pre class="r"><code>ggplot(fitbit_data, mapping = aes(x= reorder(Day,Steps, FUN = mean ),y = Steps)) + geom_boxplot() </code></pre>
 <p><img src="/post/eda/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<p>Mondays are impressive.</p>
+<p>I am impressed with my performance on Mondays - pretty consistent and second best average steps.</p>
 <pre class="r"><code># monthly
 ggplot(fitbit_data, mapping = aes(x= reorder(Month,Steps, FUN = median ),y = Steps)) + geom_boxplot() </code></pre>
 <p><img src="/post/eda/index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
@@ -142,6 +142,7 @@ pie &lt;- ggplot(p5, aes(x = &quot;&quot;, y=mean, fill = factor(variable)))+ ge
   labs(fill= &quot;Sleep Stages&quot;, x = NULL, y = NULL)
 pie + coord_polar(&quot;y&quot;)</code></pre>
 <p><img src="/post/eda/index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Minutes Awakes are high. It is contributed largely by my reluctance to leave bed when alarm goes off in the morning.</p>
 <p>Next, we compute the statistics with all variables numerically and graphically.</p>
 <pre class="r"><code>fitbit_data1 %&gt;% describe() %&gt;% select(variable, mean,sd, p00,p50, p100)</code></pre>
 <pre><code>## # A tibble: 15 x 6
