@@ -14,7 +14,7 @@ featured: no
 image:
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: true
 projects: []
 ---
 
@@ -61,15 +61,15 @@ word_counts &lt;- by_chapter_word %&gt;%
 ##    document                                                       word         n
 ##    &lt;chr&gt;                                                          &lt;chr&gt;    &lt;int&gt;
 ##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s indeb… beethov…    87
-##  2 Astronomy for Amateurs_11                                      distance    77
-##  3 Astronomy for Amateurs_4                                       sun         66
-##  4 Astronomy for Amateurs_9                                       moon        64
-##  5 Astronomy for Amateurs_3                                       stars       63
-##  6 Astronomy for Amateurs_11                                      sun         58
-##  7 Astronomy for Amateurs_8                                       earth       56
-##  8 Astronomy for Amateurs_10                                      sun         54
-##  9 Astronomy for Amateurs_2                                       stars       53
-## 10 The Psychology of Revolution_53                                revolut…    52
+##  2 &quot;Astronomy for Amateurs_11&quot;                                    distance    77
+##  3 &quot;Astronomy for Amateurs_4&quot;                                     sun         66
+##  4 &quot;Astronomy for Amateurs_9&quot;                                     moon        64
+##  5 &quot;Astronomy for Amateurs_3&quot;                                     stars       63
+##  6 &quot;Astronomy for Amateurs_11&quot;                                    sun         58
+##  7 &quot;Astronomy for Amateurs_8&quot;                                     earth       56
+##  8 &quot;Astronomy for Amateurs_10&quot;                                    sun         54
+##  9 &quot;Astronomy for Amateurs_2&quot;                                     stars       53
+## 10 &quot;The Psychology of Revolution_53&quot;                              revolut…    52
 ## # … with 67,274 more rows</code></pre>
 <p><strong>3.LDA on Chapters</strong></p>
 <pre class="r"><code># convert tidy data to document term matrix
@@ -137,15 +137,15 @@ chapters_gamma</code></pre>
 ##    document                                                      topic     gamma
 ##    &lt;chr&gt;                                                         &lt;int&gt;     &lt;dbl&gt;
 ##  1 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s inde…     1   4.05e-6
-##  2 Astronomy for Amateurs_11                                         1   7.54e-6
-##  3 Astronomy for Amateurs_4                                          1   9.32e-6
-##  4 Astronomy for Amateurs_9                                          1   1.05e-5
-##  5 Astronomy for Amateurs_3                                          1   8.14e-6
-##  6 Astronomy for Amateurs_8                                          1   8.58e-6
-##  7 Astronomy for Amateurs_10                                         1   8.42e-6
-##  8 Astronomy for Amateurs_2                                          1   9.93e-6
-##  9 The Psychology of Revolution_53                                   1   7.75e-6
-## 10 Buccaneers and Pirates of Our Coasts_33                           1  10.00e-1
+##  2 &quot;Astronomy for Amateurs_11&quot;                                       1   7.54e-6
+##  3 &quot;Astronomy for Amateurs_4&quot;                                        1   9.32e-6
+##  4 &quot;Astronomy for Amateurs_9&quot;                                        1   1.05e-5
+##  5 &quot;Astronomy for Amateurs_3&quot;                                        1   8.14e-6
+##  6 &quot;Astronomy for Amateurs_8&quot;                                        1   8.58e-6
+##  7 &quot;Astronomy for Amateurs_10&quot;                                       1   8.42e-6
+##  8 &quot;Astronomy for Amateurs_2&quot;                                        1   9.93e-6
+##  9 &quot;The Psychology of Revolution_53&quot;                                 1   7.75e-6
+## 10 &quot;Buccaneers and Pirates of Our Coasts_33&quot;                         1   1.00e+0
 ## # … with 458 more rows</code></pre>
 <p>Astronomy for Amateurs_11 document has 0% probability of coming from topic 1(Buccaneers and Pirates of Our Coasts).</p>
 <pre class="r"><code>#separate out chapter and title
@@ -156,15 +156,15 @@ chapters_gamma</code></pre>
 ##    title                                                 chapter topic     gamma
 ##    &lt;chr&gt;                                                   &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
 ##  1 &quot;Beethoven, a character study\r\nTogether with Wagne…      19     1   4.05e-6
-##  2 Astronomy for Amateurs                                     11     1   7.54e-6
-##  3 Astronomy for Amateurs                                      4     1   9.32e-6
-##  4 Astronomy for Amateurs                                      9     1   1.05e-5
-##  5 Astronomy for Amateurs                                      3     1   8.14e-6
-##  6 Astronomy for Amateurs                                      8     1   8.58e-6
-##  7 Astronomy for Amateurs                                     10     1   8.42e-6
-##  8 Astronomy for Amateurs                                      2     1   9.93e-6
-##  9 The Psychology of Revolution                               53     1   7.75e-6
-## 10 Buccaneers and Pirates of Our Coasts                       33     1  10.00e-1
+##  2 &quot;Astronomy for Amateurs&quot;                                   11     1   7.54e-6
+##  3 &quot;Astronomy for Amateurs&quot;                                    4     1   9.32e-6
+##  4 &quot;Astronomy for Amateurs&quot;                                    9     1   1.05e-5
+##  5 &quot;Astronomy for Amateurs&quot;                                    3     1   8.14e-6
+##  6 &quot;Astronomy for Amateurs&quot;                                    8     1   8.58e-6
+##  7 &quot;Astronomy for Amateurs&quot;                                   10     1   8.42e-6
+##  8 &quot;Astronomy for Amateurs&quot;                                    2     1   9.93e-6
+##  9 &quot;The Psychology of Revolution&quot;                             53     1   7.75e-6
+## 10 &quot;Buccaneers and Pirates of Our Coasts&quot;                     33     1   1.00e+0
 ## # … with 458 more rows</code></pre>
 <pre class="r"><code># reorder titles and plot
 chapters_gamma %&gt;% mutate(title = reorder(title, gamma*topic)) %&gt;%
@@ -180,16 +180,16 @@ chapter_classifications</code></pre>
 <pre><code>## # A tibble: 117 x 4
 ##    title                                chapter topic gamma
 ##    &lt;chr&gt;                                  &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
-##  1 Buccaneers and Pirates of Our Coasts      33     1 1.000
-##  2 Buccaneers and Pirates of Our Coasts      11     1 1.000
-##  3 Buccaneers and Pirates of Our Coasts      31     1 1.000
+##  1 Buccaneers and Pirates of Our Coasts      33     1 1.00 
+##  2 Buccaneers and Pirates of Our Coasts      11     1 1.00 
+##  3 Buccaneers and Pirates of Our Coasts      31     1 1.00 
 ##  4 Buccaneers and Pirates of Our Coasts      32     1 0.981
-##  5 Buccaneers and Pirates of Our Coasts      30     1 1.000
-##  6 Buccaneers and Pirates of Our Coasts      20     1 1.000
-##  7 Buccaneers and Pirates of Our Coasts      21     1 1.000
-##  8 Buccaneers and Pirates of Our Coasts      23     1 1.000
-##  9 Buccaneers and Pirates of Our Coasts      15     1 1.000
-## 10 Buccaneers and Pirates of Our Coasts      16     1 1.000
+##  5 Buccaneers and Pirates of Our Coasts      30     1 1.00 
+##  6 Buccaneers and Pirates of Our Coasts      20     1 1.00 
+##  7 Buccaneers and Pirates of Our Coasts      21     1 1.00 
+##  8 Buccaneers and Pirates of Our Coasts      23     1 1.00 
+##  9 Buccaneers and Pirates of Our Coasts      15     1 1.00 
+## 10 Buccaneers and Pirates of Our Coasts      16     1 1.00 
 ## # … with 107 more rows</code></pre>
 <pre class="r"><code># consensus topics
 book_topics &lt;- chapter_classifications %&gt;% count(title, topic) %&gt;%
@@ -199,9 +199,9 @@ book_topics%&gt;% arrange((topic))</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   consensus                                                                topic
 ##   &lt;chr&gt;                                                                    &lt;int&gt;
-## 1 Buccaneers and Pirates of Our Coasts                                         1
-## 2 The Psychology of Revolution                                                 2
-## 3 Astronomy for Amateurs                                                       3
+## 1 &quot;Buccaneers and Pirates of Our Coasts&quot;                                       1
+## 2 &quot;The Psychology of Revolution&quot;                                               2
+## 3 &quot;Astronomy for Amateurs&quot;                                                     3
 ## 4 &quot;Beethoven, a character study\r\nTogether with Wagner&#39;s indebtedness to…     4</code></pre>
 <pre class="r"><code>#misidentified topics
 chapter_classifications %&gt;% inner_join(book_topics, by = &quot;topic&quot;) %&gt;%
@@ -271,16 +271,16 @@ wrong_words</code></pre>
 <pre><code>## # A tibble: 45 x 6
 ##    title                   chapter term   count .topic consensus                
 ##    &lt;chr&gt;                     &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                    
-##  1 Buccaneers and Pirates…      32 moon       3      3 Astronomy for Amateurs   
-##  2 Buccaneers and Pirates…      32 stars      2      3 Astronomy for Amateurs   
-##  3 &quot;Beethoven, a characte…       4 revol…     1      2 The Psychology of Revolu…
-##  4 The Psychology of Revo…      45 capta…     1      1 Buccaneers and Pirates o…
-##  5 The Psychology of Revo…      45 town       2      1 Buccaneers and Pirates o…
-##  6 Buccaneers and Pirates…      32 heave…     1      3 Astronomy for Amateurs   
-##  7 The Psychology of Revo…      45 vessel     1      1 Buccaneers and Pirates o…
-##  8 &quot;Beethoven, a characte…       4 armies     2      2 The Psychology of Revolu…
-##  9 Buccaneers and Pirates…       1 1          1      4 &quot;Beethoven, a character …
-## 10 &quot;Beethoven, a characte…       4 bonap…     3      2 The Psychology of Revolu…
+##  1 &quot;Buccaneers and Pirate…      32 moon       3      3 &quot;Astronomy for Amateurs&quot; 
+##  2 &quot;Buccaneers and Pirate…      32 stars      2      3 &quot;Astronomy for Amateurs&quot; 
+##  3 &quot;Beethoven, a characte…       4 revol…     1      2 &quot;The Psychology of Revol…
+##  4 &quot;The Psychology of Rev…      45 capta…     1      1 &quot;Buccaneers and Pirates …
+##  5 &quot;The Psychology of Rev…      45 town       2      1 &quot;Buccaneers and Pirates …
+##  6 &quot;Buccaneers and Pirate…      32 heave…     1      3 &quot;Astronomy for Amateurs&quot; 
+##  7 &quot;The Psychology of Rev…      45 vessel     1      1 &quot;Buccaneers and Pirates …
+##  8 &quot;Beethoven, a characte…       4 armies     2      2 &quot;The Psychology of Revol…
+##  9 &quot;Buccaneers and Pirate…       1 1          1      4 &quot;Beethoven, a character …
+## 10 &quot;Beethoven, a characte…       4 bonap…     3      2 &quot;The Psychology of Revol…
 ## # … with 35 more rows</code></pre>
 <pre class="r"><code>wrong_words %&gt;% count(title, consensus, term , wt = count) %&gt;% 
   ungroup() %&gt;% arrange(-n)</code></pre>
@@ -289,11 +289,11 @@ wrong_words</code></pre>
 ##    &lt;chr&gt;                                    &lt;chr&gt;                   &lt;chr&gt;  &lt;dbl&gt;
 ##  1 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… france     6
 ##  2 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… bonap…     3
-##  3 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  moon       3
+##  3 &quot;Buccaneers and Pirates of Our Coasts&quot;   Astronomy for Amateurs  moon       3
 ##  4 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… armies     2
 ##  5 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… louis      2
-##  6 Buccaneers and Pirates of Our Coasts     Astronomy for Amateurs  stars      2
-##  7 The Psychology of Revolution             Buccaneers and Pirates… town       2
+##  6 &quot;Buccaneers and Pirates of Our Coasts&quot;   Astronomy for Amateurs  stars      2
+##  7 &quot;The Psychology of Revolution&quot;           Buccaneers and Pirates… town       2
 ##  8 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… equal…     1
 ##  9 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… gover…     1
 ## 10 &quot;Beethoven, a character study\r\nTogeth… The Psychology of Revo… illus…     1
