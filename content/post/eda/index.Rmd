@@ -157,6 +157,7 @@ pie + coord_polar("y")
 
 ```
 
+Minutes Awakes are high. It was contributed largely by my reluctance to leave bed when alarm goes off in the morning.  
 
 Next, we compute the statistics with all variables numerically and graphically.
 ```{r warning=FALSE}
