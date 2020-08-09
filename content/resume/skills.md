@@ -17,13 +17,13 @@ subtitle = ""
 [[feature]]
   icon = "chart-bar"
   icon_pack = "fas"
-  name = "Machine Learning Techniques, Data Mining Strategies, Statistical Methodology, Algorithms, Data Visualization"
+  name = "Machine Learning Techniques, Data Mining Strategies, Statistics, Algorithms, Data Visualization"
   description = ""
   
 [[feature]]
   icon = "tools"
   icon_pack = "fas"
-  name = "R, SQL, GitHub, Tableau, Power BI"
+  name = "R, SQL, GitHub, Tableau, Power BI, Python"
   description = ""  
   
 [[feature]]

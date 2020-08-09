@@ -7,6 +7,7 @@ image:
   caption: '[Photo by Giammarco Boscaro
 on Unsplash](https://unsplash.com/photos/zeH-ljawHtg)'
   focal_point: Smart
+  size: Small
 categories:
 - reference
 tags:
@@ -19,7 +20,7 @@ tags:
 This is a data science library for reference, book, blog and dataset.
 
 **Reference**
-* [R for Data Science](https://r4ds.had.co.nz/)
+* [ Data Science Books](https://bookdown.org/)
 * [ModernDive](https://moderndive.com/)
 * [Mastering Shiny](https://mastering-shiny.org/)
 * [Spatial Data Science with R](https://rspatial.org/),[R-Spatial](https://www.r-spatial.org/)

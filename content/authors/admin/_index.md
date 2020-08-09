@@ -24,11 +24,10 @@ superuser: true
 title: Min Tamang
 ---
 
-My name is Min R Tamang. I am a Quality Engineer at [Kite Hill](https://www.kite-hill.com/) and a graduate with a Master of Science degree in Statistics and Data Science from Cal State East Bay. I also earned Bachelor's degree in Biological Science from Southeast Missouri State University. A few skills I have acquired while working on my degree and through professional experience includes:
-* Skilled at prioritizing and managing multiple projects simultaneously to ensure sensitive deadlines are met.
-* Experienced in analyzing data, building model, preparing and presenting proposals, and offering viable recommendations to key stakeholders.
-* Extensive knowledge and understanding of gathering, researching, and documenting analytical information, as well as utilizing numerous technical systems to review key information.
+My name is Min R Tamang. I am a Quality Engineer at [Kite Hill](https://www.kite-hill.com/) and a graduate with a Master of Science degree in Statistics and Data Science from Cal State East Bay. Additionally, I earned Bachelor's degree in Biological Science from Southeast Missouri State University. 
 
-This is a data science blog built with R package [blogdown](https://cran.r-project.org/web/packages/blogdown/index.html), [Hugo](https://gohugo.io/),[GitHub](https://github.com/knitdata/minrblog), and deployed through [Netlify](https://www.netlify.com/). 
+I worked in different industries doing quality control roles in laboratory and manufacturing setting. At my jobs, I got opportunities to analyze data and present insights to the peers which led me to discover my true passion in Data Science - the field that is a blend of my school favorite subject, Mathematics and professionally discovered interest, programming.
 
-I live in the Bay Area, California. Currently, I am looking to connect with others in my field to gain and share insight and ideas. If you would like to connect or have a feedback, please leave a comment. 
+I live in the Bay Area, California. I love hiking, listening Data Science podcast and audible. Currently, I am looking to connect with others in my field to gain and share insight and ideas. If you would like to connect or have a feedback, please leave a comment. 
+
+This is a data science blog built with R package [blogdown](https://cran.r-project.org/web/packages/blogdown/index.html), [Hugo](https://gohugo.io/),[GitHub](https://github.com/knitdata/minrblog), and deployed through [Netlify](https://www.netlify.com/).
