@@ -61,7 +61,7 @@ This is a data science library for reference, book, blog and dataset.
 * [Linear Digressions](http://lineardigressions.com/)
 * [Towards Data Science](https://towardsdatascience.com/podcast/home)
 * [The Data Exchange](https://podcasts.apple.com/us/podcast/the-data-exchange-with-ben-lorica/id1487704458)
-* [Data Stories](https://datastori.es/)
+* [Super Data Science](https://www.superdatascience.com/podcast/)
 
 
 **Blog**
@@ -88,6 +88,7 @@ This is a data science library for reference, book, blog and dataset.
 * [The Art of Statistics](https://www.audible.com/pd/The-Art-of-Statistics-Audiobook/1549100378?ref=a_library_t_c5_libItem_&pf_rd_p=13bed4e9-e83d-4210-8510-a695400e0d63&pf_rd_r=F0Q90GYT8066APNJM4SX)
 * [Big Data](https://www.audible.com/pd/Big-Data-How-Data-Analytics-Is-Transforming-the-World-Audiobook/1629976091?ref=a_library_t_c5_libItem_&pf_rd_p=13bed4e9-e83d-4210-8510-a695400e0d63&pf_rd_r=T3H9CPCF9D9RT63J6GV5)
 * [The Signal & Noise](https://www.audible.com/pd/The-Signal-and-the-Noise-Audiobook/B009DQN090?qid=1591637489&sr=1-1&ref=a_search_c3_lProduct_1_1&pf_rd_p=e81b7c27-6880-467a-b5a7-13cef5d729fe&pf_rd_r=K0HKY76HT1QAZ973R931)
+* [Data Mining Techniques](https://www.audible.com/pd/Data-Mining-Techniques-Third-Edition-Audiobook/B07L9D4X66?ref=a_library_t_c5_libItem_&pf_rd_p=592f90bd-7f7b-4bfc-afa2-b002e52e7228&pf_rd_r=B1KVW9P7KTBF58A59AB8)
 
 
 

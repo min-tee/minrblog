@@ -65,7 +65,7 @@ subtitle = ""
 2017-2020
 
 *	Built the company’s quality system program that allowed the company to be certified and assured that customers that the company offer safe and quality products based on industry standards and guidelines.
-*	Created a regression model that predicted content in the product broken down into fats, solids, and proteins. The model resulted in providing over 90% accuracy in detection of values improved internal efficiencies and reduced operational costs. Incorporated a model into dashboard with quality data.
+*	Created a regression model that predicted content in the product broken down into fats, solids, and proteins. The model resulted in providing high accuracy in detection of values improved internal efficiencies and reduced operational costs. Incorporated a model into dashboard with quality data.
  
 
 
