@@ -31,6 +31,17 @@ date_format = "Jan 2006"
 [[item]]
   organization = "Udemy"
   organization_url = "https://www.udemy.com/"
+  title = "Python for Data Science and Machine Learning Bootcamp"
+  url = ""
+  certificate_url = "https://www.udemy.com/certificate/UC-8613ad98-46f2-4e59-b9dc-7a5ae4694198/"
+  date_start = "2020-07-12"
+  date_end = ""
+  description = ""
+
+
+[[item]]
+  organization = "Udemy"
+  organization_url = "https://www.udemy.com/"
   title = "R Programming for Statistics and Data Science"
   url = ""
   certificate_url = "https://www.udemy.com/certificate/UC-Z5X0VNMN/"
