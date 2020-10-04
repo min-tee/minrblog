@@ -54,7 +54,7 @@ subtitle = ""
 #### Quality Engineer, Kite Hill 
 2020-present
 
-* Implemented Statistical Process Control (SPC) such as X Bar and R Chart systems to calculate Z-Scores to improve product quality and reduce costs, along with designing product specifications. 
+* Design and implement Statistical Process Control (SPC) and Statistical Quality Control (SQC) tools to improve product quality and reduce costs.  
 * Serve as the company liaison in meeting and communicating with over 70 suppliers related to acquiring quality materials. Member of the product launch team, in charge of technical document requirements, product trial and shelf life data analysis, and the marketing and packaging concepts for the product.
 
 
@@ -65,14 +65,14 @@ subtitle = ""
 2017-2020
 
 *	Built the company’s quality system program that allowed the company to be certified and assured that customers that the company offer safe and quality products based on industry standards and guidelines.
-*	Created a regression model that predicted content in the product broken down into fats, solids, and proteins. The model resulted in providing high accuracy in detection of values improved internal efficiencies and reduced operational costs. Incorporated a model into dashboard with quality data.
+*	Utilized data mining techniques on operational and quality data to observe and predict patterns. The results helped improve internal efficiencies and reduce operational costs. 
  
 
 
 #### Quality Assurance Technologist, Ghirardelli
 2014-2016
 
-* Implemented standard operating procedures, conducted quality inspections, and performed data analysis. Presented quality reports and findings at team meetings that included senior leadership members. 
+* Implemented technical procedures, conducted quality inspections, and performed data analysis. Presented quality reports and findings at team meetings that included senior leadership members. 
 
 
 #### Quality Control Microbiologist, Dean Foods
