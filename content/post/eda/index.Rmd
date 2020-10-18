@@ -7,7 +7,7 @@ categories:
   - Data Viz
 tags:
   - Data Viz
-subtitle: ''
+subtitle: '[EDA in Python](https://github.com/knitdata/Python/blob/master/Exploratory_Data_Analysis_with_Fitbit_Data.ipynb)'
 summary: ''
 authors: []
 lastmod: '2020-07-28T20:16:34-07:00'
