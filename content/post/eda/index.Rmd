@@ -17,7 +17,7 @@ image:
   preview_only: true
 projects: []
 ---
-[F**Exploratory Data Analysis in Python**](https://github.com/knitdata/Python/blob/master/Exploratory_Data_Analysis_with_Fitbit_Data.ipynb)
+[**Exploratory Data Analysis in Python**](https://github.com/knitdata/Python/blob/master/Exploratory_Data_Analysis_with_Fitbit_Data.ipynb)
 
 I thought it would be awesome to analyze my own data, therefore in June 2019, I started tracking activities with Fitbit. Fitbit isn't a perfect measure of activities, but it can provide an overall idea of how active you are and how you sleep.  
 
