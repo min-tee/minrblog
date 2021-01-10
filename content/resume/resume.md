@@ -55,7 +55,7 @@ subtitle = ""
 2020-present
 
 * Design and implement Statistical Process Control (SPC) and Statistical Quality Control (SQC) tools to improve product quality and reduce costs.  
-* Serve as the company liaison in meeting and communicating with over 70 suppliers related to acquiring quality materials. Member of the product launch team, in charge of technical document requirements, product trial and shelf life data analysis, and the marketing and packaging concepts for the product.
+* Serve as the company liaison in meeting and communicating with over 90 suppliers related to acquiring quality materials. Member of the product launch team, in charge of technical document requirements, product trial and shelf life data analysis, and the marketing and packaging concepts for the product.
 
 
 
@@ -87,6 +87,6 @@ subtitle = ""
 
 ## Education
 
-* Cal State East Bay - MS in Statistics & Data Science, 2020(Cum Laude)
+* Cal State East Bay - MS in Statistics with Data Science Concentration, 2020(Cum Laude)
 * Southeast Missouri State University - B.Sc. in Biological Science, 2011(Cum Laude)
 

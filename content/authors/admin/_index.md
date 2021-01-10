@@ -24,7 +24,7 @@ superuser: true
 title: Min Tamang
 ---
 
-My name is Min R Tamang. I am a Quality Engineer at [Kite Hill](https://www.kite-hill.com/) and a graduate with a Master of Science degree in Statistics and Data Science from Cal State East Bay. Additionally, I earned Bachelor's degree in Biological Science from Southeast Missouri State University. 
+My name is Min R Tamang. I am a Quality Engineer at [Kite Hill](https://www.kite-hill.com/) and a graduate of Master of Science degree in Statistics with Data Science Concentration from Cal State East Bay. Additionally, I earned Bachelor's degree in Biological Science from Southeast Missouri State University. 
 
 I worked in different industries doing quality control roles in laboratory and manufacturing setting. At my jobs, I got opportunities to analyze data and present insights to the peers which led me to discover my true passion in Data Science - the field that is a blend of my school favorite subject, Mathematics and professionally discovered interest, programming.
 
