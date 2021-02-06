@@ -19,6 +19,17 @@ date_format = "Jan 2006"
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 
 [[item]]
+  organization = "Amazon Web Service"
+  organization_url = ""
+  title = "AWS Certified Machine Learning – Specialty"
+  url = ""
+  certificate_url = "https://www.youracclaim.com/badges/2eb2bf98-9db2-411f-8ff5-ee9d59727a49/linked_in"
+  date_start = "2021-02-04"
+  date_end = ""
+  description = ""
+
+
+[[item]]
   organization = "Udemy"
   organization_url = "https://www.udemy.com/"
   title = "Data Science and Machine Learning Bootcamp with R"
