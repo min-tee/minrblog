@@ -1,8 +1,7 @@
 ---
 title: "AWS Certified Machine Learning – Specialty (MLS-C01)"
-summary: How I prepared and passed the exam.
-authors: [minr]
-date: 2019-11-18T21:13:14-05:00
+subtitle: "How I prepared and passed the exam."
+date: 2021-02-15
 categories: ["Machine Learning"]
 tags: ["Machine Learning", "AWS"]
 
@@ -19,7 +18,6 @@ MLS-C01 is one of the advanced level certifications that AWS offers, and it is i
 
 * Select and justify the appropriate ML approach for a given business problem. 
 * Identify appropriate AWS services to implement ML solutions. 
-
 * Design and implement scalable, cost-optimized, reliable, and secure ML solutions.
 
 
@@ -56,7 +54,7 @@ Below are the topics related to this domain.
 
 *Automatic Scaling, Instant Types, Batch Transformation, Incremental and Spot Training, Inference (Elastic Inference, Inference Pipeline), SageMaker Neo, Edge Devices, Model Monitor(CloudWatch), High level AI Services, ECR, Availability Zone (AZ), Security (Encryption, VPC, IAM, CloudTrail).*
 
-**Study Materials**
+## Study Materials
 
 **1. Udemy Course**
 
@@ -71,11 +69,11 @@ If there is one resource I would recommend, it would be AWS’s own materials in
 
 Practice exams are important. First, it gives you a ballpark idea of where you stand in terms of preparation. It doesn’t mean you will do better or worse, but it’s a good indicator. Secondly, it encourages you to think strategically from exam perspective while studying; unlike when you study, you just try to understand or remember. I found this about a lot when I took first practice test, which I did poorly. I thought I knew a lot about materials. However, I was wrong, mainly due to not having enough practices in exam scenario. Having expectations of how questions are asked adds another viewpoint to the study. I used these Udemy courses() for practice. Additionally, I tried every practice tests or quizzes found online and AWS courses. Link to the 35 questions. 
 
-**Strategies and Tips** 
+**Strategies and Tips**
 
 Most questions are based on use case scenario where you will be asked a question on a real business problem. Some questions are a paragraph long, some even longer. Don’t be intimated by the length of questions.  Try to understand the questions by making mental note of key phrases and qualifiers such as efficient, cost effective, no-maintenance and coming up with possible answers before looking at the options. You are not allowed to take physical notes. Use technique of elimination to reduce answer choices. You should be able to eliminate one or two options without much effort. Some options will not make sense, they are there just as a distraction. Elimination option is even more useful when you encounter questions from the topic you are not familiar with. If you can eliminate one or two options, you increase chance of getting answer right from 25% to 33% or 50%. If you plan for other AWS exams like AWS Certified Cloud Practitioner, take those first. In addition to providing foundation to the ML Specialty exam, you get 50% discount on the next exam. 
 
-**Scheduling Exams**
+**Scheduling Exam**
 
 You can go to a link [AWS Certification](https://www.aws.training/Certification) and create account to schedule for exam. Pick eligible exams from the list, PSI or Pearson VUE. Exam dates are readily available.  I chose Pearson VUE online version. You can check-in 30 minutes before start time. It should be fairly easy process given you have read instructions and guidelines prior. You could take exam once check-in is complete, your time starts moment you see questions on the screen. It’s a three-hour exam. Remember, you are not allowed to take notes or use calculator. During exam, you can flag or skip questions for later review. Take advantages of those options. Don’t spend too much trying to answer hard question. Flag it and comeback later. Stamina is key, take all necessary steps to be productive. 
 
