@@ -12,24 +12,24 @@ output:
     toc_depth: 1  
 ---
 
-In November 2020, I decided to pursue cloud certification with not much prior knowledge about it. Through research on industry demands, I found **AWS Certified Machine Learning – Specialty (MLS-C01)** to be the closest on my path at the time. I passed the exam with less than 3 months of preparation. In this post, I will provide you an overview of resources and strategies I used for passing the exam.  I hope it will serve you well on your certification journey.
+In November 2020, I decided to pursue cloud certification with not much prior knowledge about it. Through research on industry demands, I found **AWS Certified Machine Learning – Specialty (MLS-C01)** to be the closest on my path at the time. I passed the exam with less than 3 months of preparation. In this post, I will provide you an overview of resources and strategies I used for passing the exam.  I hope it will serve you well on your certification journey. 
 
-MLS-C01 is one of the advanced level certifications that AWS offers, and it is intended for individuals who perform a developmental or data science role. According to AWS, it validates an examinee’s ability to build, train, tune, and deploy machine learning (ML) models using the AWS Cloud, specifically: 
+MLS-C01 is one of the advanced level certifications that AWS offers, and it is intended for individuals who perform a development or data science role. According to AWS, it validates an examinee’s ability to build, train, tune, and deploy machine learning (ML) models using the AWS Cloud, specifically: 
 
 * Select and justify the appropriate ML approach for a given business problem. 
 * Identify appropriate AWS services to implement ML solutions. 
 * Design and implement scalable, cost-optimized, reliable, and secure ML solutions.
 
 
-AWS recommends having 1-2 years of hands-on experience developing, architecting, or running ML/Deep Learning (DL) workloads on the AWS cloud. Although I had experience building ML/DL models using local machine with tools such as R and Python, I did not have their recommended experiences on the cloud. My hands-on experience with on AWS occurred during exam preparation. 
+AWS recommends having 1-2 years of hands-on experience developing, architecting, or running ML/Deep Learning (DL) workloads on the AWS cloud. Although I had experience building ML/DL models on local machine with tools such as R and Python, I did not have their recommended experiences on the cloud. My most hands-on experience with on AWS occurred during exam preparation. 
 
-One of the challenging aspects of this exam is study materials. There are numerous online resources and materials you can easily find. Sometimes you get drowned in the resources without progress. The key is to prepare strategically with target exam date in sight and cover important documents. Trying to get a perfect score is not the best approach.  This is a pass-fail exam. Score of the exam is confidential to you.
+One of the challenging aspects of this exam is study materials. There are numerous online resources and materials you can easily find. Sometimes you get drowned in the resources without progress. The key is to prepare strategically with target exam date in sight and cover important documents. You can’t prepare enough for this exam; study materials can be unlimited. Trying to get a perfect score is not the best approach. This is a pass-fail exam. Score is confidential to you.If you know the guidelines and topics you have chosen with enough practice; you should feel good about it. 
 
 **Exam Overview**
 
 Exam contains 65 scenario-based multiple choice and multiple response questions. Unanswered questions are scored as incorrect; there is no penalty for guessing. Your results for the examination are reported as a score from 100–1,000, with a minimum passing score of 750. You will know pass/fail message immediately after submission (for online) and receive the official badge and certificate within 5 days. 
 
-You will be tested on domains of data engineering, Exploratory Data Analysis (EDA), Machine Learning and Deep Leaning using AWS services.  Unlike other AWS certifications, in addition to AWS services, this exam also focuses on non-AWS aspects i.e., ML principle and EDA. The list below are the main content domains and their weightings for the exam. It is not a comprehensive listing of the content and service on this examination.
+You will be tested on domains of Data Engineering, Exploratory Data Analysis (EDA), Machine Learning and Deep Leaning using AWS services.  Unlike other AWS certifications, in addition to AWS services, this exam also focuses on non-AWS aspects i.e.ML principle and EDA. The list below are the main content domains and their weightings for the exam. **It is not a comprehensive listing of the content and service on this examination.**
 
 **Domain 1: Data Engineering (20%)**
 
@@ -54,20 +54,19 @@ Below are the topics related to this domain.
 
 *Automatic Scaling, Instant Types, Batch Transformation, Incremental and Spot Training, Inference (Elastic Inference, Inference Pipeline), SageMaker Neo, Edge Devices, Model Monitor(CloudWatch), High level AI Services, ECR, Availability Zone (AZ), Security (Encryption, VPC, IAM, CloudTrail).*
 
-## Study Materials
+**Study Materials**
 
 **1. Udemy Course**
 
-The first step I took for the journey was Udemy course (link). This course provides a high-level overview of exam and study materials. This is a great course to get started with. I watched it three times. First, I just watched through the course to feel for the exam. Most of the data engineering section was new for me although I did have some experience in building data pipelines. Second, I watched lectures with notes, referenced materials and hands-on practices. Third, I revisited the course a week before the exam – by that time I had taken practice exams, studied AWS documentations and other referenced materials. I felt good about content and exam. 
-This course was just the beginning. By no means this course is adequate, but I knew what I needed to study. I would like to reiterate, you can’t prepare enough for this exam, study materials can be unlimited. If you know the guidelines and topics you have chosen with enough practice; you should feel good about it. 
+The first step I took for the journey was Udemy course, AWS Certified Machine Learning Specialty 2021 - Hands On!. This course provides a high-level overview of exam and study materials. This is a great course to get started with. I watched it three times. First, I just watched through the course to feel for the exam. Most of the data engineering section was new for me although I did have some experience in building data pipelines. Second, I watched lectures with notes, referenced materials and hands-on practices. Third, I revisited the course a week before the exam – by that time I had taken practice exams, studied AWS documentations and other referenced materials. I felt good about content and exam. This course was just a beginning. By no means this course is adequate, but I knew what I needed to study. 
 
 **2. AWS Documentations**
 
-If there is one resource I would recommend, it would be AWS’s own materials including documentations, product overview, use case and FAQs, E-Learning courses such as Exam Readiness: AWS Certified Machine Learning – Specialty, AWS Cloud Practitioner Essentials (CPE). CPE provides overview of AWS cloud, independent of specific technical roles. I highly recommend this course to those who are new to the Cloud concepts and AWS Services. You won’t be quizzed on the CPE but AWS cloud knowledge on topics such as security, architecture is useful in understanding services and system you will be asked in the exam. AWS blogs are additional sources if you want to understand specific algorithms or service use cases in details. 
+If there is one resource I have to recommend, it would be AWS’s own materials including documentations, product overview, use case and FAQs, E-Learning courses. I highly recommend AWS Cloud Practitioner Essentials (CPE) course to those who are new to the cloud concepts and AWS Services. It provides overview of AWS cloud, independent of specific technical roles. You won’t be quizzed on the CPE but AWS cloud knowledge on topics such as security, architecture is useful in understanding services and system you will be asked in the exam. AWS blogs are additional sources if you want to understand specific algorithms or service use cases in details. 
 
 **3. Practice Exams**
 
-Practice exams are important. First, it gives you a ballpark idea of where you stand in terms of preparation. It doesn’t mean you will do better or worse, but it’s a good indicator. Secondly, it encourages you to think strategically from exam perspective while studying; unlike when you study, you just try to understand or remember. I found this about a lot when I took first practice test, which I did poorly. I thought I knew a lot about materials. However, I was wrong, mainly due to not having enough practices in exam scenario. Having expectations of how questions are asked adds another viewpoint to the study. I used these Udemy courses() for practice. Additionally, I tried every practice tests or quizzes found online and AWS courses. Link to the 35 questions. 
+Practice exams are important. First, it gives you an idea where you stand in terms of preparation. It doesn’t mean you will do better or worse, but it’s a good indicator. Secondly, it encourages you to think strategically from exam perspective while studying; typically, you just try to understand or remember. I found this about a lot when I took first practice test, which I did poorly. I thought I knew a lot about materials. I was wrong, mainly due to not having enough practices in exam scenario. Having expectations of how questions are asked adds another viewpoint to the study. I used Udemy courses for practice. Additionally, I tried every online practice test including AWS course quiz.
 
 **Strategies and Tips**
 
@@ -75,7 +74,7 @@ Most questions are based on use case scenario where you will be asked a question
 
 **Scheduling Exam**
 
-You can go to a link [AWS Certification](https://www.aws.training/Certification) and create account to schedule for exam. Pick eligible exams from the list, PSI or Pearson VUE. Exam dates are readily available.  I chose Pearson VUE online version. You can check-in 30 minutes before start time. It should be fairly easy process given you have read instructions and guidelines prior. You could take exam once check-in is complete, your time starts moment you see questions on the screen. It’s a three-hour exam. Remember, you are not allowed to take notes or use calculator. During exam, you can flag or skip questions for later review. Take advantages of those options. Don’t spend too much trying to answer hard question. Flag it and comeback later. Stamina is key, take all necessary steps to be productive. 
+You can go to a link [AWS Certification](https://www.aws.training/Certification) and create account to schedule for exam. Pick eligible exams from the list, PSI or Pearson VUE. Exam dates are readily available.  I chose Pearson VUE online version. You can check-in 30 minutes before start time. It should be fairly easy process given you have read instructions and guidelines prior. You could take exam once check-in is complete. Your time starts moment you see questions on the screen. It’s a three-hour exam. Remember, you are not allowed to take notes or use calculator. During exam, you can flag or skip questions for later review. Take advantages of those options. Don’t spend too much trying to answer hard question. Flag it and comeback later. Stamina is key, take all necessary steps to be productive. 
 
 All in all, I found this certification exam to be challenging but certainly doable with right strategy and study material. I hope this post has been helpful in your preparation for MLS-C01.Thank you for reading. Wish you all the best on your AWS Cloud Certification Journey! 
 
