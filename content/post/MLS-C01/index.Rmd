@@ -14,7 +14,7 @@ output:
 
 In February 2021, I passed **AWS Certified Machine Learning – Specialty (MLS-C01)** exam with less than 3 months of preparation. In this post, I will provide you an overview of resources and strategies I used for passing the exam.  I hope it will serve you well on your certification journey. 
 
-MLS-C01 is one of the advanced level certifications that AWS offers, and it is intended for individuals who perform a development or data science role. According to AWS, it validates an examinee’s ability to build, train, tune, and deploy machine learning (ML) models using the AWS Cloud, specifically: 
+MLS-C01 is one of the advanced level certifications that AWS offers, and it is intended for individuals who perform a development or data science role. According to AWS, it validates an examinee’s ability to build, train, tune, and deploy Machine Learning (ML) models using the AWS Cloud, specifically: 
 
 * Select and justify the appropriate ML approach for a given business problem. 
 * Identify appropriate AWS services to implement ML solutions. 
