@@ -18,12 +18,7 @@
   url = "#projects"
   weight = 30
 
-[[main]]
-  name = "Resume"
-  url = "resume"
-  weight = 50
-  
-  
+
 [[main]]
   name = "Library"
   url = "library"
