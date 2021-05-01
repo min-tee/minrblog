@@ -24,10 +24,6 @@ superuser: true
 title: Min Tamang
 ---
 
-My name is Min  Tamang. I am a QA Engineer at [Kite Hill](https://www.kite-hill.com/) and a graduate of Master of Science degree in Statistics with Data Science Concentration from Cal State East Bay. Additionally, I earned Bachelor's degree in Biological Science from Southeast Missouri State University. 
-
-I worked in different industries doing quality assurance roles in laboratory and manufacturing setting. At my jobs, I  got opportunities to utilize data analysis for problem solving and present insights to the peers which led me to discover my true passion in Data Science - the field that is a blend of my school favorite subject, Mathematics and professionally discovered interest, programming.
-
-I live in the Bay Area, California. I love hiking, listening Data Science podcast and audible. Currently, I am looking to connect with others in my field to gain and share insight and ideas. If you would like to connect, please leave a comment. 
+My background is in Applied Statistics, Data Science and QA engineering. I live in the Bay Area, California. I love hiking, reading, listening Data Science podcast and audible. I am looking to connect with the data people to gain and share insight and ideas. If you would like to connect, please leave a comment. 
 
 This is a data science blog built with R package [blogdown](https://cran.r-project.org/web/packages/blogdown/index.html), [Hugo](https://gohugo.io/),[GitHub](https://github.com/knitdata/minrblog), and deployed through [Netlify](https://www.netlify.com/).
