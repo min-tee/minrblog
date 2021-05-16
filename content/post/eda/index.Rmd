@@ -184,11 +184,6 @@ dygraph(ft_timeSeries, main = "Time Series Plot")
 ### 3.4 Correlation 
 Finally, let's see if variables are correlated. Note: correlation doesn't imply causation.
 
-```{r}
-#fitbit_data2 <- fitbit_data1 %>% select(-Day,-Month,-Date )
-#cp <- cor(fitbit_data2)
-#corrplot(cp, method = "pie")
-```
 
 ```{r}
 ggcorrplot(cor(fitbit_data2), hc.order = TRUE)
