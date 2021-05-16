@@ -186,6 +186,7 @@ Finally, let's see if variables are correlated. Note: correlation doesn't imply 
 
 
 ```{r}
+fitbit_data2 <- fitbit_data1 %>% select(-Day,-Month,-Date )
 ggcorrplot(cor(fitbit_data2), hc.order = TRUE)
 ```
 
